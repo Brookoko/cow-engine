@@ -6,4 +6,8 @@
         <RootNamespace>cow_engine</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Cowject\Cowject.csproj" />
+    </ItemGroup>
+
 </Project>
