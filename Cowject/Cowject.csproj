@@ -54,6 +54,7 @@
         <Compile Include="Exceptions\BindingException.cs" />
         <Compile Include="Exceptions\InjectionException.cs" />
         <Compile Include="Attributes.cs" />
+        <Compile Include="IModule.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Signals\BaseSignal.cs" />
         <Compile Include="Signals\Signal.cs" />

@@ -1,15 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net48</TargetFramework>
-        <RootNamespace>cow_engine</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
       <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
-      <ProjectReference Include="..\ImageWorker\ImageWorker.csproj" />
     </ItemGroup>
 
 </Project>
