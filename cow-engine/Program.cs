@@ -36,12 +36,14 @@
         {
             var container = new DiContainer();
             container.Bind<IArgumentsParser>().To<ArgumentsParser>().ToSingleton();
-            container.Bind<IObjWorker>().To<ObjWorker>().ToSingleton();
+            container.Bind<IIoWorker>().To<IoWorker>().ToSingleton();
             container.Bind<IRenderer>().To<DummyRenderer>().ToSingleton();
             container.Bind<IIntegrator>().To<DummyIntegrator>().ToSingleton();
             
             var imageModule = new ImageModule();
             imageModule.Prepare(container);
+            var objModule = new ObjModule();
+            objModule.Prepare(container);
             
             return container;
         }

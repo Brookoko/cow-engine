@@ -3,7 +3,7 @@ namespace CowEngine.ImageWorker
     using System;
     using System.IO;
 
-    internal interface IIoWorker
+    public interface IIoWorker
     {
         byte[] Read(string path);
         

@@ -2,6 +2,8 @@ using System.IO;
 
 namespace ObjLoader.Loader.Loaders
 {
+    using System.Text.RegularExpressions;
+
     public abstract class LoaderBase
     {
         private StreamReader _lineStreamReader;
@@ -27,7 +29,7 @@ namespace ObjLoader.Loader.Loaders
 
             var fields = currentLine.Trim().Split(null, 2);
             var keyword = fields[0].Trim();
-            var data = fields[1].Trim();
+            var data = Regex.Replace(fields[1].Trim(), @"\s+", " ");
 
             ParseLine(keyword, data);
         }
