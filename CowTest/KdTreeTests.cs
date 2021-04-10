@@ -11,7 +11,7 @@ namespace CowTest
     using CowLibrary;
     using ObjLoader.Loader.Loaders;
 
-    public class Tests
+    public class KdTreeTests
     {
         private ObjWorker objWorker;
         
@@ -27,7 +27,7 @@ namespace CowTest
         }
         
         [Test]
-        public void TestOneNode()
+        public void _01TestOneNode()
         {
             var triangles = new List<Triangle>()
             {
@@ -42,7 +42,7 @@ namespace CowTest
         }
         
         [Test]
-        public void TestThreeNodes()
+        public void _02TestThreeNodes()
         {
             var triangles = new List<Triangle>()
             {
@@ -78,7 +78,7 @@ namespace CowTest
         }
         
         [Test]
-        public void TestModel()
+        public void _03TestModel()
         {
             var watch = new Stopwatch();
             var obj = objWorker.Parse("C:\\Projects\\cow-engine\\assets\\cow.obj");

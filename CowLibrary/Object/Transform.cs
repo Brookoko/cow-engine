@@ -16,8 +16,8 @@ namespace CowLibrary
             set
             {
                 _position = value;
-                CalculateWorldToLocalMatrix();
-                _localPosition = worldToLocalMatrix.MultiplyPoint(value);
+                _localPosition = parent == null ? value : parent.localToWorldMatrix.MultiplyPoint(value);
+                CalculateMatrix();
             }
         }
 
@@ -27,8 +27,8 @@ namespace CowLibrary
             set
             {
                 _rotation = value;
-                CalculateWorldToLocalMatrix();
-                _localRotation = Quaternion.Inverse(parent.rotation) * _rotation;
+                _localRotation = parent == null ? value : Quaternion.Inverse(parent.rotation) * _rotation;
+                CalculateMatrix();
             }
         }
         
@@ -38,8 +38,8 @@ namespace CowLibrary
             set
             {
                 _lossyScale = value;
-                CalculateWorldToLocalMatrix();
-                _localScale = worldToLocalMatrix.MultiplyVector(value);
+                _localScale = parent == null ? value : parent.localToWorldMatrix.MultiplyPoint(value);
+                CalculateMatrix();
             }
         }
         
@@ -49,8 +49,8 @@ namespace CowLibrary
             set
             {
                 _localPosition = value;
-                CalculateLocalToWorldMatrix();
-                _position = localToWorldMatrix.MultiplyPoint(value);
+                _position = parent == null ? value : parent.worldToLocalMatrix.MultiplyPoint(value);
+                CalculateMatrix();
             }
         }
         
@@ -60,8 +60,8 @@ namespace CowLibrary
             set
             {
                 _localRotation = value;
-                CalculateLocalToWorldMatrix();
-                _rotation = parent.rotation * _localRotation;
+                _rotation = parent == null ? value : parent.rotation * value;
+                CalculateMatrix();
             }
         }
         
@@ -71,40 +71,34 @@ namespace CowLibrary
             set
             {
                 _localScale = value;
-                CalculateLocalToWorldMatrix();
-                _lossyScale = localToWorldMatrix.MultiplyVector(_localScale);
+                _lossyScale = parent == null ? value : parent.worldToLocalMatrix.MultiplyVector(value);
+                CalculateMatrix();
             }
         }
         
-        public Matrix4x4 localToWorldMatrix;
-        public Matrix4x4 worldToLocalMatrix;
+        public Matrix4x4 localToWorldMatrix = Matrix4x4.Identity;
+        public Matrix4x4 worldToLocalMatrix = Matrix4x4.Identity;
         
         private Transform _parent;
         
-        private Vector3 _position;
-        private Quaternion _rotation;
-        private Vector3 _lossyScale;
+        private Vector3 _position = Vector3.Zero;
+        private Quaternion _rotation = Quaternion.Identity;
+        private Vector3 _lossyScale = Vector3.One;
         
-        private Vector3 _localPosition;
-        private Quaternion _localRotation;
-        private Vector3 _localScale;
+        private Vector3 _localPosition = Vector3.Zero;
+        private Quaternion _localRotation = Quaternion.Identity;
+        private Vector3 _localScale = Vector3.One;
         
         public void SetParent(Transform newParent)
         {
             _parent = newParent;
-            CalculateWorldToLocalMatrix();
-            CalculateLocalToWorldMatrix();
+            CalculateMatrix();
         }
         
-        private void CalculateWorldToLocalMatrix()
+        private void CalculateMatrix()
         {
             worldToLocalMatrix = Matrix4x4Extensions.TRS(_position, _rotation, _lossyScale);
-        }
-        
-        private void CalculateLocalToWorldMatrix()
-        {
-            var localToParentMatrix = Matrix4x4Extensions.TRS(_localPosition, _localRotation, _localScale);
-            localToWorldMatrix = parent.localToWorldMatrix * localToParentMatrix;
+            Matrix4x4.Invert(worldToLocalMatrix, out localToWorldMatrix);
         }
     }
 }
