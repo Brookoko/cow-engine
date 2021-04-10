@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjWorker", "ObjWorker\ObjW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PngWorker", "PngWorker\PngWorker.csproj", "{CB3D6C31-3441-4E45-B908-6C26FD6E33FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowTest", "CowTest\CowTest.csproj", "{198991F7-5494-482F-831C-DAB464C2320D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{CB3D6C31-3441-4E45-B908-6C26FD6E33FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB3D6C31-3441-4E45-B908-6C26FD6E33FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB3D6C31-3441-4E45-B908-6C26FD6E33FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{198991F7-5494-482F-831C-DAB464C2320D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{198991F7-5494-482F-831C-DAB464C2320D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{198991F7-5494-482F-831C-DAB464C2320D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{198991F7-5494-482F-831C-DAB464C2320D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
