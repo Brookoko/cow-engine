@@ -37,6 +37,7 @@
             var container = new DiContainer();
             container.Bind<IArgumentsParser>().To<ArgumentsParser>().ToSingleton();
             container.Bind<IIoWorker>().To<IoWorker>().ToSingleton();
+            container.Bind<IRaycaster>().To<DummyRaycaster>().ToSingleton();
             container.Bind<IRenderer>().To<DummyRenderer>().ToSingleton();
             container.Bind<IIntegrator>().To<DummyIntegrator>().ToSingleton();
             
