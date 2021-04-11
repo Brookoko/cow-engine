@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cow-engine", "cow-engine\cow-engine.csproj", "{1D66E099-E162-43EC-A4E1-6D022756C6F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowEngine", "CowEngine\CowEngine.csproj", "{1D66E099-E162-43EC-A4E1-6D022756C6F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cowject", "Cowject\Cowject.csproj", "{0A750299-CA71-4742-B2FC-8BD47F8D80FC}"
 EndProject

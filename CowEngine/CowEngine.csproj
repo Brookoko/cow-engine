@@ -3,7 +3,12 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net48</TargetFramework>
-        <RootNamespace>cow_engine</RootNamespace>
+        <RootNamespace>CowEngine</RootNamespace>
+        <AssemblyName>CowEngine</AssemblyName>
+        <PackageId>CowEngine</PackageId>
+        <Authors>CowEngine</Authors>
+        <Company>CowEngine</Company>
+        <Product>CowEngine</Product>
     </PropertyGroup>
 
     <ItemGroup>
