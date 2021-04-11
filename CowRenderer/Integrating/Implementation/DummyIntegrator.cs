@@ -1,7 +1,6 @@
-namespace CowEngine
+namespace CowRenderer.Integration.Impl
 {
     using CowLibrary;
-    using CowLibrary.Structure;
 
     public class DummyIntegrator : IIntegrator
     {

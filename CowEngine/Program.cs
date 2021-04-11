@@ -3,7 +3,12 @@
     using System;
     using Cowject;
     using CowLibrary;
-    using CowLibrary.Structure;
+    using CowRenderer.Integration;
+    using CowRenderer.Integration.Impl;
+    using CowRenderer.Raycasting;
+    using CowRenderer.Raycasting.Impl;
+    using CowRenderer.Rendering;
+    using CowRenderer.Rendering.Impl;
     using ImageWorker;
     
     public class Program
@@ -11,6 +16,7 @@
         public static void Main(string[] args)
         {
             var container = SetupContainer();
+            
             var argumentParser = container.Get<IArgumentsParser>();
             var objWorker = container.Get<IObjWorker>();
             var renderer = container.Get<IRenderer>();

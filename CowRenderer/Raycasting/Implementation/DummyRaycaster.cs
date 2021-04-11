@@ -1,7 +1,6 @@
-namespace CowEngine
+namespace CowRenderer.Raycasting.Impl
 {
     using CowLibrary;
-    using CowLibrary.Structure;
 
     public class DummyRaycaster : IRaycaster
     {
