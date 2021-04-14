@@ -42,6 +42,7 @@
         <Compile Include="Integrating\IIntegrator.cs" />
         <Compile Include="Integrating\Implementation\BwIntegrator.cs" />
         <Compile Include="Integrating\Implementation\DummyIntegrator.cs" />
+        <Compile Include="Integrating\Implementation\NormalsIntegrator.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Raycasting\Implementation\DummyRaycaster.cs" />
         <Compile Include="Raycasting\Implementation\SimpleRaycaster.cs" />
