@@ -75,6 +75,10 @@ namespace CowLibrary
                 CalculateMatrix();
             }
         }
+
+        public Vector3 Forward => new Vector3(localToWorldMatrix.M13, localToWorldMatrix.M23, localToWorldMatrix.M33);
+        public Vector3 Right => new Vector3(localToWorldMatrix.M11, localToWorldMatrix.M21, localToWorldMatrix.M31);
+        public Vector3 Up => new Vector3(localToWorldMatrix.M12, localToWorldMatrix.M22, localToWorldMatrix.M32);
         
         public Matrix4x4 localToWorldMatrix = Matrix4x4.Identity;
         public Matrix4x4 worldToLocalMatrix = Matrix4x4.Identity;

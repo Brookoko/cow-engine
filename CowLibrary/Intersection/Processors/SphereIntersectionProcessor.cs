@@ -14,6 +14,7 @@ namespace CowLibrary.Processors
                     point = intersectionPoint,
                     normal = intersectionPoint - sphere.center
                 };
+                return true;
             }
 
             intersectionSurfel = null;
@@ -32,9 +33,9 @@ namespace CowLibrary.Processors
                          ray.direction.Y * ray.direction.Y +
                          ray.direction.Z * ray.direction.Z;
             var halfBCoeff = ray.direction.X * f1 + ray.direction.X * f2 + ray.direction.Z * f3;
-            var cCoeff = f1 * f1 + f2 * f2 + f3 * f3 + sphere.radius * sphere.radius;
+            var cCoeff = f1 * f1 + f2 * f2 + f3 * f3 - sphere.radius * sphere.radius;
 
-            var discriminant = Math.Sqrt(halfBCoeff * halfBCoeff - aCoeff * cCoeff);
+            var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;
             if (discriminant < 0)
             {
                 intersectionPoint = Vector3.Zero;

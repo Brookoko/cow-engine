@@ -1,13 +1,12 @@
 ﻿namespace CowEngine
 {
     using System;
+    using System.Numerics;
     using Cowject;
     using CowLibrary;
-    using CowRenderer.Integration;
+    using CowRenderer;
     using CowRenderer.Integration.Impl;
-    using CowRenderer.Raycasting;
     using CowRenderer.Raycasting.Impl;
-    using CowRenderer.Rendering;
     using CowRenderer.Rendering.Impl;
     using ImageWorker;
     
@@ -25,7 +24,7 @@
             try
             {
                 var (source, output) = argumentParser.Parse(args);
-                var model = objWorker.Parse(source);
+                var model = new RenderableObject(new Sphere(Vector3.Zero, 1), new Material()); //objWorker.Parse(source);
                 var scene = PrepareScene(model);
                 var image = renderer.Render(scene);
                 imageWorker.SaveImage(image, output);
@@ -43,9 +42,9 @@
             var container = new DiContainer();
             container.Bind<IArgumentsParser>().To<ArgumentsParser>().ToSingleton();
             container.Bind<IIoWorker>().To<IoWorker>().ToSingleton();
-            container.Bind<IRaycaster>().To<DummyRaycaster>().ToSingleton();
-            container.Bind<IRenderer>().To<DummyRenderer>().ToSingleton();
-            container.Bind<IIntegrator>().To<DummyIntegrator>().ToSingleton();
+            container.Bind<IRaycaster>().To<SimpleRaycaster>().ToSingleton();
+            container.Bind<IRenderer>().To<SimpleRenderer>().ToSingleton();
+            container.Bind<IIntegrator>().To<BwIntegrator>().ToSingleton();
             
             var imageModule = new ImageModule();
             imageModule.Prepare(container);

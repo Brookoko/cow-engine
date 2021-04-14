@@ -1,4 +1,4 @@
-namespace CowRenderer.Rendering
+namespace CowRenderer
 {
     using CowLibrary;
 

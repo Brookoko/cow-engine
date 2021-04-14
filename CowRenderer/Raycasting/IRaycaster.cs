@@ -1,4 +1,4 @@
-namespace CowRenderer.Raycasting
+namespace CowRenderer
 {
     using CowLibrary;
 
