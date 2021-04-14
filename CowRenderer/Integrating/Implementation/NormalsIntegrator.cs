@@ -1,7 +1,5 @@
 namespace CowRenderer.Integration.Impl
 {
-    using System;
-    using System.Numerics;
     using CowLibrary;
 
     public class NormalsIntegrator : IIntegrator
