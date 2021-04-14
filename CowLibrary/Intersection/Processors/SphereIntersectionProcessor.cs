@@ -3,7 +3,7 @@ namespace CowLibrary.Processors
     using System;
     using System.Numerics;
 
-    public class SphereIntersectionProcessor
+    public static class SphereIntersectionProcessor
     {
         public static bool CheckForIntersection(Sphere sphere, Ray ray, out Surfel intersectionSurfel)
         {

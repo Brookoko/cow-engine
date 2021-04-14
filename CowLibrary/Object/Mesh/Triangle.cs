@@ -2,6 +2,7 @@ namespace CowLibrary
 {
     using System;
     using System.Numerics;
+    using Processors;
 
     public class Triangle : Mesh
     {
@@ -45,11 +46,8 @@ namespace CowLibrary
             var n = Vector3.Cross(v0v2, v0v1);
             n0 = n1 = n2 = n;
         }
-        
+
         public override bool Intersect(Ray ray, out Surfel surfel)
-        {
-            surfel = null;
-            return false;
-        }
+            => TriangleIntersectionProcessor.CheckForIntersection(this, ray, out surfel);
     }
 }

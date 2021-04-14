@@ -49,7 +49,7 @@ namespace CowRenderer.Rendering.Impl
             {
                 for (var y = 0; y < outputResolution.Item2; y++)
                 {
-                    outputImage[y, x] = integrator.GetColor(sourceScene, surfels[x, y]);
+                    outputImage[outputResolution.Item2 - y - 1, outputResolution.Item1 - x -1] = integrator.GetColor(sourceScene, surfels[x, y]);
                 }
             }
 
