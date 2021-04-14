@@ -18,13 +18,13 @@ namespace CowRenderer.Integration.Impl
             }
             
             var camera = scene.camera;
-            var cameraDirection = camera.transform.position - surfel.point;
-            var angle = Math.Acos(Vector3.Dot(cameraDirection, surfel.normal)) * MathConstants.Rad2Deg;
+            var surfelToCameraDirection = camera.transform.position - surfel.point;
+            var angle = surfelToCameraDirection.AngleTo(surfel.normal);
             if (angle > 90)
             {
                 return negativeColor;
             }
-
+            
             return Color.LerpUnclamped(lerpingColors.Item1, lerpingColors.Item2, (float) angle / 90);
         }
     }

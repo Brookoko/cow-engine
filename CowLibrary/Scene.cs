@@ -7,10 +7,10 @@ namespace CowLibrary
     {
         public readonly Camera camera = new PerspectiveCamera()
         {
-            xResolution = 256,
-            yReslution = 256,
-            HorizontalFov = 90,
-            transform = new Transform(){ position = new Vector3(0,0,-2)},
+            xResolution = 1920,
+            yReslution = 1080,
+            HorizontalFov = 75,
+            transform = new Transform(){ position = new Vector3(0,0,-4)},
         };
         
         public readonly List<RenderableObject> objects = new List<RenderableObject>();

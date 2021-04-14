@@ -43,10 +43,7 @@ namespace CowLibrary
             var yaw = ((screenPoint.X / xResolution - 0.5f) * HorizontalFov) * MathConstants.Deg2Rad;
             var pitch = - ((screenPoint.Y / yReslution - 0.5f) * VerticalFov) * MathConstants.Deg2Rad;
             var rotation = Quaternion.CreateFromYawPitchRoll(yaw, pitch, 0);
-            var rotationX = Quaternion.CreateFromAxisAngle(Vector3.UnitY, yaw);
-            var rotationY = Quaternion.CreateFromAxisAngle(Vector3.UnitX, pitch);
             var transformedDirection = Vector3.Transform(transform.Forward, rotation);
-            // transformedDirection = Vector3.Transform(transformedDirection, rotationY);
             return transform.position + transformedDirection;
         }
     }
