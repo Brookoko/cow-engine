@@ -41,7 +41,6 @@
     <ItemGroup>
         <Compile Include="Integrating\IIntegrator.cs" />
         <Compile Include="Integrating\Implementation\BwIntegrator.cs" />
-        <Compile Include="Integrating\Implementation\BoundingBoxIntegrator.cs" />
         <Compile Include="Integrating\Implementation\DistanceIntegrator.cs" />
         <Compile Include="Integrating\Implementation\DummyIntegrator.cs" />
         <Compile Include="Integrating\Implementation\NormalsIntegrator.cs" />
