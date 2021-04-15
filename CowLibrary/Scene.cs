@@ -10,8 +10,8 @@ namespace CowLibrary
     {
         public Camera camera = new PerspectiveCamera()
         {
-            width = 1920/8,
-            height = 1080/8,
+            width = 1920/5,
+            height = 1080/5,
             fov = 60,
         };
         
@@ -23,12 +23,12 @@ namespace CowLibrary
         
         public void PrepareScene()
         {
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(3, 3, 15), Vector3.Zero);
+            boundingBox = GetBoundingBoxFor(objects);
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(8.5f, 0, 11f), boundingBox.center);
             foreach (var obj in objects)
             {
                 obj.Prepare();
             }
-            boundingBox = GetBoundingBoxFor(objects);
         }
         
         private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
