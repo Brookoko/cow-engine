@@ -56,9 +56,9 @@
         private static Scene PrepareScene(RenderableObject model)
         {
             var scene = new Scene();
-            // model = new RenderableObject(new Box(new Vector3(0, 0, 0), 1), new Material());
-            // model = new RenderableObject(new Sphere(new Vector3(0, 0, 0), 1f), new Material());
-            var light = new PointLight(new Color(20, 100, 200), 1f, 8);
+            // model = new RenderableObject(new Box(new Vector3(0, 0, 0), 1),new Material() { color = new Color(200,0,0)});
+            //model = new RenderableObject(new Sphere(new Vector3(0, 0, 0), 1f), new Material() { color = new Color(200,0,0)});
+            var light = new PointLight(new Color(20, 100, 200), 1f, 16);
             light.transform.position = new Vector3(0, 2, 0);
             
             scene.lights.Add(light);
