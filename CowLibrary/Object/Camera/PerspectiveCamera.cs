@@ -5,23 +5,26 @@ namespace CowLibrary
 
     public class PerspectiveCamera : Camera
     {
+        /// <summary> Horizontal field of view </summary>
         public float fov
         {
             get => _fov;
             set
             {
                 _fov = value;
-                tan = (float) Math.Tan(MathConstants.Deg2Rad * value * 2);
+                tan = (float) Math.Tan(MathConstants.Deg2Rad * value / 2);
             }
         }
         
         private float _fov;
         private float tan;
         
+        /// <summary> Creates camera-space ray from camera through screen space point </summary>
+        /// <param name="screenPoint"> Scree space coordinates </param>
         public override Ray ScreenPointToRay(Vector2 screenPoint)
         {
-            var x = (2 * (screenPoint.X + 0.5f) / width - 1) * AspectRatio * tan;
-            var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) * tan;
+            var x = (1 - 2 * (screenPoint.X + 0.5f) / width) * tan;
+            var y = (2 * (screenPoint.Y + 0.5f) / height - 1) / AspectRatio * tan;
             var dir = new Vector3(x, y, -nearPlane).Normalize();
             return new Ray(Vector3.Zero, dir);
         }
