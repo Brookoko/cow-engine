@@ -1,6 +1,7 @@
 namespace CowLibrary
 {
     using System;
+    using System.Numerics;
 
     public readonly struct Color
     {
@@ -38,6 +39,16 @@ namespace CowLibrary
                 (byte) Math.Ceiling(color1.g + (color2.g - color1.g) * a),
                 (byte) Math.Ceiling(color1.b + (color2.b - color1.b) * a),
                 (byte) Math.Ceiling(color1.a + (color2.a - color1.a) * a)
+            );
+        }
+        
+        public static Color LerpUnclamped(Color color1, Color color2, Vector3 a)
+        {
+            return new Color(
+                (byte) Math.Ceiling(color1.r + (color2.r - color1.r) * a.X),
+                (byte) Math.Ceiling(color1.g + (color2.g - color1.g) * a.Y),
+                (byte) Math.Ceiling(color1.b + (color2.b - color1.b) * a.Z),
+                (byte) Math.Ceiling(color1.a + (color2.a - color1.a) * 1f)
             );
         }
     }
