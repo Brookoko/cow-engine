@@ -1,5 +1,7 @@
 namespace CowLibrary
 {
+    using System.Numerics;
+
     public class RenderableObject
     {
         public readonly Transform transform = new Transform();
@@ -12,9 +14,9 @@ namespace CowLibrary
             this.material = material;
         }
         
-        public void Prepare()
+        public void Prepare(Matrix4x4 m)
         {
-            mesh.Apply(transform.localToWorldMatrix);
+            mesh.Apply(transform.localToWorldMatrix * m);
         }
     }
 }

@@ -83,6 +83,16 @@ namespace CowLibrary
             {
                 _localToWorldMatrix = value;
                 Matrix4x4.Invert(_localToWorldMatrix, out _worldToLocalMatrix);
+                _localPosition = new Vector3(_localToWorldMatrix.M14, _localToWorldMatrix.M24, _localToWorldMatrix.M34);
+                _localRotation = Quaternion.CreateFromRotationMatrix(_localToWorldMatrix);
+                _localScale = new Vector3(
+                    new Vector3(_localToWorldMatrix.M11, _localToWorldMatrix.M21, _localToWorldMatrix.M31).Length(),
+                    new Vector3(_localToWorldMatrix.M12, _localToWorldMatrix.M22, _localToWorldMatrix.M32).Length(),
+                    new Vector3(_localToWorldMatrix.M13, _localToWorldMatrix.M23, _localToWorldMatrix.M33).Length()
+                );
+                _position = parent == null ? _localPosition : parent.worldToLocalMatrix.MultiplyPoint(_localPosition);
+                _rotation = parent == null ? _localRotation : parent.rotation * _localRotation;
+                _lossyScale = parent == null ? _localScale : parent.worldToLocalMatrix.MultiplyVector(_localScale);
             }
         }
         
