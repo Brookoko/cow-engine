@@ -21,15 +21,16 @@ namespace CowRenderer.Rendering.Impl
 
         private Surfel[,] GetPixelsRaycastSurfels(Scene scene, Camera targetCamera)
         {
-            var cameraSize = (xResolution: targetCamera.width, yReslution: targetCamera.height);
-            var resultSurfels = new Surfel[cameraSize.xResolution, cameraSize.yReslution];
-            for (var x = 0; x < cameraSize.xResolution; x++)
+            var w = targetCamera.width;
+            var h = targetCamera.height;
+            var resultSurfels = new Surfel[h, w];
+            for (var y = 0; y < h; y++)
             {
-                for (var y = 0; y < cameraSize.yReslution; y++)
+                for (var x = 0; x < w; x++)
                 {
                     var cameraRay = targetCamera.ScreenPointToRay(new Vector2(x, y));
                     var isSurfelHit = Raycaster.Raycast(scene, cameraRay, out var surfel);
-                    resultSurfels[x, y] = surfel;
+                    resultSurfels[y, x] = surfel;
                 }
             }
             return resultSurfels;
@@ -37,14 +38,15 @@ namespace CowRenderer.Rendering.Impl
 
         private Image IntegratePixelsSurfels(Scene sourceScene, Surfel[,] surfels)
         {
-            var outputResolution = (surfels.GetLength(0), surfels.GetLength(1));
-            var outputImage = new Image(outputResolution.Item1, outputResolution.Item2);
+            var w = surfels.GetLength(1);
+            var h = surfels.GetLength(0);
+            var outputImage = new Image(w, h);
             
-            for (var x = 0; x < outputResolution.Item1; x++)
+            for (var y = 0; y < h; y++)
             {
-                for (var y = 0; y < outputResolution.Item2; y++)
+                for (var x = 0; x < w; x++)
                 {
-                    outputImage[outputResolution.Item2 - y - 1, outputResolution.Item1 - x -1] = Integrator.GetColor(sourceScene, surfels[x, y]);
+                    outputImage[y, x] = Integrator.GetColor(sourceScene, surfels[y, x]);
                 }
             }
 
