@@ -57,7 +57,6 @@ namespace CowLibrary
             v2 = matrix.MultiplyPoint(v2);
             if (Matrix4x4.Invert(matrix, out var m))
             {
-                m = Matrix4x4.Transpose(m);
                 n0 = m.MultiplyVector(n0);
                 n1 = m.MultiplyVector(n1);
                 n2 = m.MultiplyVector(n2);
