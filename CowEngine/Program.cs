@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Numerics;
     using Cowject;
     using CowLibrary;
     using CowRenderer;
@@ -59,29 +58,8 @@
         private static Scene PrepareScene(RenderableObject model)
         {
             var scene = new Scene();
-            model = new RenderableObject(new Sphere(new Vector3(2, 0, 0), 1f), new Material());
+            //model = new RenderableObject(new Sphere(new Vector3(0, 0, 0), 1f), new Material());
             scene.objects.Add(model);
-            // var adjustedCamera = new PerspectiveCamera()
-            // {
-            //     xResolution = 1024,
-            //     yReslution = 1024,
-            //     HorizontalFov = 90,
-            //     transform = new Transform()
-            // };
-            //
-            // var overallBoundingBox = GetBoundingBoxFor(scene.objects);
-            // var verticalDistance = (overallBoundingBox.max.Z - overallBoundingBox.center.Z) * 5f /
-            //                        (Math.Tan(adjustedCamera.VerticalFov / 2f));
-            // var horizontalDistance = (overallBoundingBox.max.X - overallBoundingBox.center.X) * 5f /
-            //                          (Math.Tan(adjustedCamera.HorizontalFov / 2f));
-            // adjustedCamera.transform.position = new Vector3(
-            //     overallBoundingBox.center.X,
-            //     (float) (overallBoundingBox.center.Y + Math.Max(verticalDistance, horizontalDistance)),
-            //     overallBoundingBox.center.Z
-            //     );
-            //
-            // adjustedCamera.transform.rotation = Quaternion.CreateFromYawPitchRoll(0, -90 * MathConstants.Deg2Rad, 0);
-            // scene.camera = adjustedCamera;
             scene.PrepareScene();
             return scene;
         }

@@ -14,7 +14,7 @@ namespace CowRenderer.Rendering.Impl
         public SimpleRenderer()
         {
             raycaster = new SimpleRaycaster();
-            integrator = new NormalsIntegrator();
+            integrator = new NormalsToCameraIntegrator();
         }
 
         public Image Render(Scene scene)
