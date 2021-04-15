@@ -1,18 +1,18 @@
 namespace CowLibrary.Processors
 {
     using System;
-    using System.Numerics;
 
     public static class SphereIntersectionProcessor
     {
         public static bool CheckForIntersection(Sphere sphere, Ray ray, out Surfel intersectionSurfel)
         {
-            if (FindIntersectionPoint(sphere, ray, out var intersectionPoint))
+            if (FindIntersectionPoint(sphere, ray, out var intersectionDistance))
             {
                 intersectionSurfel = new Surfel()
                 {
-                    point = intersectionPoint,
-                    normal = (intersectionPoint - sphere.center).Normalize()
+                    point = ray.origin + intersectionDistance * ray.direction,
+                    normal = (ray.origin+ intersectionDistance * ray.direction - sphere.center).Normalize(),
+                    t = intersectionDistance
                 };
                 return true;
             }
@@ -21,7 +21,7 @@ namespace CowLibrary.Processors
             return false;
         }
 
-        private static bool FindIntersectionPoint(Sphere sphere, Ray ray, out Vector3 intersectionPoint)
+        private static bool FindIntersectionPoint(Sphere sphere, Ray ray, out float intersectionDistance)
         {
             // sphere (center (x0,y0,z0), radius R): (x - x0)^2 + (y - y0)^2 + (z-z0)^2 = R^2
             // ray (origin (x0,y0,z0), direction (x1,y1,z1)) : x = x0 + x1 * k; y = y0 + y1*k; z = z0 + z1*k
@@ -38,14 +38,14 @@ namespace CowLibrary.Processors
             var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;
             if (discriminant < 0)
             {
-                intersectionPoint = Vector3.Zero;
+                intersectionDistance = 0;
                 return false;
             }
 
             if (discriminant == 0)
             {
                 var k = (float) Math.Sqrt(aCoeff * cCoeff);
-                intersectionPoint = ray.origin + k * ray.direction;
+                intersectionDistance = k;
                 return true;
             }
 
@@ -57,11 +57,11 @@ namespace CowLibrary.Processors
             k2 = k2 > 0 ? k2 : k1;
             if (k2 < 0)
             {
-                intersectionPoint = Vector3.Zero;
+                intersectionDistance = 0;
                 return false;
             }
 
-            intersectionPoint = ray.origin + (float) Math.Min(k1, k2) * ray.direction;
+            intersectionDistance = (float) Math.Min(k1, k2);
             return true;
         }
     }

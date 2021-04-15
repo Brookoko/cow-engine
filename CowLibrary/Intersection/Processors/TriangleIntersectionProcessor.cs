@@ -5,16 +5,17 @@ namespace CowLibrary.Processors
 
     public static class TriangleIntersectionProcessor
     {
-        private const double Tollerance = 0.00000001d;
+        private const double Tolerance = 0.00001d;
         
         public static bool CheckForIntersection(Triangle triangle, Ray ray, out Surfel intersectionSurfel)
         {
-            if (FindIntersectionPoint(triangle, ray, out var intersectionPoint))
+            if (FindIntersectionPoint(triangle, ray, out var intersectionDistance))
             {
                 intersectionSurfel = new Surfel()
                 {
-                    point = intersectionPoint,
-                    normal = (triangle.n0 + triangle.n1 + triangle.n2)/3
+                    point = ray.origin + ray.direction * intersectionDistance,
+                    normal = triangle.n0,
+                    t = intersectionDistance
                 };
                 return true;
             }
@@ -25,7 +26,7 @@ namespace CowLibrary.Processors
 
         // https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
         // Möller–Trumbore intersection algorithm
-        private static bool FindIntersectionPoint(Triangle triangle, Ray ray, out Vector3 intersectionPoint)
+        private static bool FindIntersectionPoint(Triangle triangle, Ray ray, out float distance)
         {
             var vertex0 = triangle.v0;
             var vertex1 = triangle.v1;
@@ -38,9 +39,9 @@ namespace CowLibrary.Processors
 
             h = Vector3.Cross(ray.direction, edge2);
             a = Vector3.Dot(edge1, h);
-            if (Math.Abs(a) < Tollerance)
+            if (Math.Abs(a) < Tolerance)
             {
-                intersectionPoint = Vector3.Zero;
+                distance = 0;
                 return false;
             }
 
@@ -49,7 +50,7 @@ namespace CowLibrary.Processors
             u = f * Vector3.Dot(s, h);
             if (u < 0 || u > 1)
             {
-                intersectionPoint = Vector3.Zero;
+                distance = 0;
                 return false;
             }
 
@@ -57,18 +58,18 @@ namespace CowLibrary.Processors
             v = f * Vector3.Dot(ray.direction, q);
             if (v < 0 || u + v > 1)
             {
-                intersectionPoint = Vector3.Zero;
+                distance = 0;
                 return false;
             }
 
             var t = f * Vector3.Dot(edge2, q);
-            if (t > Tollerance)
+            if (t > Tolerance)
             {
-                intersectionPoint = ray.origin + ray.direction * (float) t;
+                distance = (float) t;
                 return true;
             }
 
-            intersectionPoint = Vector3.Zero;
+            distance = 0;
             return false;
         }
     }
