@@ -153,5 +153,19 @@ namespace CowLibrary
             
             return matrix;
         }
+        
+        public static Vector3 ExtractTranslation(this Matrix4x4 m)
+        {
+            return new Vector3(m.M14, m.M24, m.M34);
+        }
+        
+        public static Vector3 ExtractScale(this Matrix4x4 m)
+        {
+            return new Vector3(
+                new Vector3(m.M11, m.M21, m.M31).Length(),
+                new Vector3(m.M12, m.M22, m.M32).Length(),
+                new Vector3(m.M13, m.M23, m.M33).Length()
+            );
+        }
     }
 }
