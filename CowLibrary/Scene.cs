@@ -23,7 +23,7 @@ namespace CowLibrary
         
         public void PrepareScene()
         {
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 2f, 0), new Vector3(0, 0, 0), Vector3.UnitZ);
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0, 10), new Vector3(0, 0, 0), Vector3.UnitY);
             var m = camera.transform.worldToLocalMatrix;
             camera.transform.position = Vector3.Zero;
             foreach (var obj in objects)

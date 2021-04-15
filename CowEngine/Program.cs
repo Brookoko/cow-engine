@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Numerics;
     using Cowject;
     using CowLibrary;
     using CowRenderer;
@@ -58,7 +59,8 @@
         private static Scene PrepareScene(RenderableObject model)
         {
             var scene = new Scene();
-            //model = new RenderableObject(new Sphere(new Vector3(0, 0, 0), 1f), new Material());
+            // model = new RenderableObject(new Box(new Vector3(0, 0, 0), 1), new Material());
+            // model = new RenderableObject(new Sphere(new Vector3(0, 0, 0), 1f), new Material());
             scene.objects.Add(model);
             scene.PrepareScene();
             return scene;
