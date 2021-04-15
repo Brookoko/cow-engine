@@ -65,9 +65,9 @@
         private static Scene PrepareScene(RenderableObject model)
         {
             var scene = new Scene();
-            var light = new PointLight(new Color(20, 100, 200), 1f, 80);
-            light.transform.position = new Vector3(10, -20, -25);
-            
+            var light = new PointLight(new Color(135, 15, 220), 1f, 80);
+            light.transform.position = new Vector3(10, 20, 25);
+
             scene.lights.Add(light);
             scene.objects.Add(model);
             scene.PrepareScene();

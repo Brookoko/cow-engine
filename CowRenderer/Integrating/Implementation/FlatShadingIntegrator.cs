@@ -1,13 +1,11 @@
 namespace CowRenderer.Integration.Impl
 {
     using System;
+    using System.Numerics;
     using CowLibrary;
 
     public class FlatShadingIntegrator : IIntegrator
     {
-        private readonly Color black = new Color(0, 0, 0);
-        private readonly Color white = new Color(255, 255, 255);
-
         private readonly Color nullColor = new Color(245, 245, 245);
         
         public Color GetColor(Scene scene, Surfel surfel)
@@ -22,12 +20,13 @@ namespace CowRenderer.Integration.Impl
             foreach (var light in scene.lights)
             {
                 var direction = light.GetDirection(surfel.point);
-                var angle = surfel.normal.AngleRadTo(-direction);
-                angle = Math.Min(Math.Max(angle, 0), Math.PI / 2);
+                var dotProduct = Vector3.Dot(direction, surfel.normal);
+                dotProduct = Math.Max(dotProduct, 0);
                 var intensity =  light.GetIntensity(surfel.point);
-                luminosity += (float) Math.Cos(angle) * intensity;
+                var lightLuminosity = dotProduct * intensity;
+                luminosity += lightLuminosity;
             }
-
+            
             return baseColor * luminosity;
         }
     }

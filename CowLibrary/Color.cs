@@ -62,14 +62,34 @@ namespace CowLibrary
             );
         }
 
+        public static Color MinComponents(Color color1, Color color2)
+        {
+            return new Color
+            (
+                Math.Min(color1.r, color2.r),
+                Math.Min(color1.g, color2.g),
+                Math.Min(color1.b, color2.b)
+            );
+        }
+
         public static Color operator *(Color color, float value)
         {
             return new Color(
             (byte) (color.r * value),
             (byte) (color.g * value),
             (byte) (color.b * value),
-            (byte) (color.a * value)
-                );
+            (byte) (color.a * value));
+        }
+        
+        public static Color operator +(Color color1, Color color2)
+        {
+            return new Color
+            (
+                (byte)( color1.r + color2.r),
+                (byte)( color1.g + color2.g),
+                (byte)( color1.b + color2.b),
+                (byte)( color1.a + color2.a)
+            );
         }
     }
 }
