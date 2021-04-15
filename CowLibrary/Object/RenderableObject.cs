@@ -14,9 +14,9 @@ namespace CowLibrary
             this.material = material;
         }
         
-        public void Prepare(Matrix4x4 m)
+        public void Apply(Matrix4x4 matrix)
         {
-            mesh.Apply(transform.localToWorldMatrix * m);
+            mesh.Apply(transform.localToWorldMatrix * matrix);
         }
     }
 }

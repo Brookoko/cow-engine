@@ -2,6 +2,7 @@ namespace CowLibrary
 {
     using System.Collections.Generic;
     using System.Numerics;
+    using Lights;
 
     public class Scene
     {
@@ -11,6 +12,8 @@ namespace CowLibrary
             height = 512,
             fov = 60,
         };
+        
+        public readonly List<Light> lights = new List<Light>();
         
         public readonly List<RenderableObject> objects = new List<RenderableObject>();
         
@@ -22,7 +25,11 @@ namespace CowLibrary
             var m = camera.transform.worldToLocalMatrix;
             foreach (var obj in objects)
             {
-                obj.Prepare(m);
+                obj.Apply(m);
+            }
+            foreach (var light in lights)
+            {
+                light.Apply(m);
             }
         }
     }
