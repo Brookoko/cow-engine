@@ -76,12 +76,39 @@ namespace CowLibrary
             }
         }
 
+        public Matrix4x4 localToWorldMatrix
+        {
+            get => _localToWorldMatrix;
+            set
+            {
+                _localToWorldMatrix = value;
+                Matrix4x4.Invert(_localToWorldMatrix, out _worldToLocalMatrix);
+            }
+        }
+        
+        public Matrix4x4 worldToLocalMatrix
+        {
+            get => _worldToLocalMatrix;
+            set
+            {
+                _worldToLocalMatrix = value;
+                Matrix4x4.Invert(_worldToLocalMatrix, out _localToWorldMatrix);
+                _position = new Vector3(_worldToLocalMatrix.M14, _worldToLocalMatrix.M24, _worldToLocalMatrix.M34);
+                _rotation = Quaternion.CreateFromRotationMatrix(_worldToLocalMatrix);
+                _lossyScale = new Vector3(
+                    new Vector3(_worldToLocalMatrix.M11, _worldToLocalMatrix.M21, _worldToLocalMatrix.M31).Length(),
+                    new Vector3(_worldToLocalMatrix.M12, _worldToLocalMatrix.M22, _worldToLocalMatrix.M32).Length(),
+                    new Vector3(_worldToLocalMatrix.M13, _worldToLocalMatrix.M23, _worldToLocalMatrix.M33).Length()
+                    );
+                _localPosition = parent == null ? _position : parent.localToWorldMatrix.MultiplyPoint(_position);
+                _localRotation = parent == null ? _rotation : Quaternion.Inverse(parent.rotation) * _rotation;
+                _localScale = parent == null ? _lossyScale : parent.localToWorldMatrix.MultiplyPoint(_lossyScale);
+            }
+        }
+        
         public Vector3 Forward => new Vector3(localToWorldMatrix.M13, localToWorldMatrix.M23, localToWorldMatrix.M33);
         public Vector3 Right => new Vector3(localToWorldMatrix.M11, localToWorldMatrix.M21, localToWorldMatrix.M31);
         public Vector3 Up => new Vector3(localToWorldMatrix.M12, localToWorldMatrix.M22, localToWorldMatrix.M32);
-        
-        public Matrix4x4 localToWorldMatrix = Matrix4x4.Identity;
-        public Matrix4x4 worldToLocalMatrix = Matrix4x4.Identity;
         
         private Transform _parent;
         
@@ -93,6 +120,9 @@ namespace CowLibrary
         private Quaternion _localRotation = Quaternion.Identity;
         private Vector3 _localScale = Vector3.One;
         
+        private Matrix4x4 _localToWorldMatrix = Matrix4x4.Identity;
+        private Matrix4x4 _worldToLocalMatrix = Matrix4x4.Identity;
+        
         public void SetParent(Transform newParent)
         {
             _parent = newParent;
@@ -101,8 +131,8 @@ namespace CowLibrary
         
         private void CalculateMatrix()
         {
-            worldToLocalMatrix = Matrix4x4Extensions.TRS(_position, _rotation, _lossyScale);
-            Matrix4x4.Invert(worldToLocalMatrix, out localToWorldMatrix);
+            _worldToLocalMatrix = Matrix4x4Extensions.TRS(_position, _rotation, _lossyScale);
+            Matrix4x4.Invert(_worldToLocalMatrix, out _localToWorldMatrix);
         }
     }
 }

@@ -4,9 +4,9 @@ namespace CowLibrary
 
     public class Box : Mesh
     {
-        public readonly Vector3 center;
-        public readonly Vector3 min;
-        public readonly Vector3 max;
+        public Vector3 center;
+        public Vector3 min;
+        public Vector3 max;
 
         public override Box BoundingBox => this;
 
@@ -29,6 +29,13 @@ namespace CowLibrary
         {
             surfel = null;
             return false;
+        }
+        
+        public override void Apply(Matrix4x4 matrix)
+        {
+            center = matrix.MultiplyPoint(center);
+            max = matrix.MultiplyVector(max);
+            min = matrix.MultiplyVector(min);
         }
     }
 }

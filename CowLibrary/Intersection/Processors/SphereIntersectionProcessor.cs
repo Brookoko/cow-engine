@@ -12,7 +12,7 @@ namespace CowLibrary.Processors
                 intersectionSurfel = new Surfel()
                 {
                     point = intersectionPoint,
-                    normal = intersectionPoint - sphere.center
+                    normal = (intersectionPoint - sphere.center).Normalize()
                 };
                 return true;
             }
@@ -32,7 +32,7 @@ namespace CowLibrary.Processors
             var aCoeff = ray.direction.X * ray.direction.X +
                          ray.direction.Y * ray.direction.Y +
                          ray.direction.Z * ray.direction.Z;
-            var halfBCoeff = ray.direction.X * f1 + ray.direction.X * f2 + ray.direction.Z * f3;
+            var halfBCoeff = ray.direction.X * f1 + ray.direction.Y * f2 + ray.direction.Z * f3;
             var cCoeff = f1 * f1 + f2 * f2 + f3 * f3 - sphere.radius * sphere.radius;
 
             var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;

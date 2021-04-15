@@ -36,8 +36,8 @@ namespace CowTest
                 new Triangle(new Vector3(1, 0, 0), new Vector3(2, 2, 0), new Vector3(3, 0, 0)),
             };
             var tree = new KdTree(triangles);
-            Assert.AreEqual(new Vector3(-3, 0, 0), tree.Box.min);
-            Assert.AreEqual(new Vector3(3, 2, 0), tree.Box.max);
+            Assert.AreEqual(new Vector3(-3, 0, 0), tree.root.mesh.BoundingBox.min);
+            Assert.AreEqual(new Vector3(3, 2, 0), tree.root.mesh.BoundingBox.max);
             Assert.AreEqual(tree.root.children.Count, 0);
         }
         
@@ -72,8 +72,8 @@ namespace CowTest
                 new Triangle(new Vector3(1, 0, 0), new Vector3(2, 2, 0), new Vector3(3, 0, 0)),
             };
             var tree = new KdTree(triangles);
-            Assert.AreEqual(new Vector3(-3, 0, 0), tree.Box.min);
-            Assert.AreEqual(new Vector3(3, 2, 0), tree.Box.max);
+            Assert.AreEqual(new Vector3(-3, 0, 0), tree.root.mesh.BoundingBox.min);
+            Assert.AreEqual(new Vector3(3, 2, 0), tree.root.mesh.BoundingBox.max);
             Assert.AreEqual(tree.root.children.Count, 3);
         }
         

@@ -6,7 +6,7 @@ namespace CowLibrary
     public class Sphere : Mesh
     {
         public readonly float radius;
-        public readonly Vector3 center;
+        public Vector3 center;
         
         public override Box BoundingBox { get; }
 
@@ -19,5 +19,10 @@ namespace CowLibrary
 
         public override bool Intersect(Ray ray, out Surfel surfel) => 
             SphereIntersectionProcessor.CheckForIntersection(this, ray, out surfel);
+        
+        public override void Apply(Matrix4x4 matrix)
+        {
+            center = matrix.MultiplyPoint(center);
+        }
     }
 }

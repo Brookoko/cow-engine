@@ -6,9 +6,9 @@ namespace CowLibrary
 
     public class Triangle : Mesh
     {
-        public readonly Vector3 v0;
-        public readonly Vector3 v1;
-        public readonly Vector3 v2;
+        public Vector3 v0;
+        public Vector3 v1;
+        public Vector3 v2;
         
         public Vector3 n0;
         public Vector3 n1;
@@ -49,5 +49,19 @@ namespace CowLibrary
 
         public override bool Intersect(Ray ray, out Surfel surfel)
             => TriangleIntersectionProcessor.CheckForIntersection(this, ray, out surfel);
+        
+        public override void Apply(Matrix4x4 matrix)
+        {
+            v0 = matrix.MultiplyPoint(v0);
+            v1 = matrix.MultiplyPoint(v1);
+            v2 = matrix.MultiplyPoint(v2);
+            if (Matrix4x4.Invert(matrix, out var m))
+            {
+                m = Matrix4x4.Transpose(m);
+                n0 = m.MultiplyVector(n0);
+                n1 = m.MultiplyVector(n1);
+                n2 = m.MultiplyVector(n2);
+            }
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace CowRenderer.Rendering.Impl
 
         private Surfel[,] GetPixelsRaycastSurfels(Scene scene, Camera targetCamera)
         {
-            var cameraSize = (targetCamera.xResolution, targetCamera.yReslution);
+            var cameraSize = (xResolution: targetCamera.width, yReslution: targetCamera.height);
             var resultSurfels = new Surfel[cameraSize.xResolution, cameraSize.yReslution];
             for (var x = 0; x < cameraSize.xResolution; x++)
             {

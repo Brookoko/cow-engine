@@ -8,8 +8,6 @@ namespace CowLibrary
     {
         private const int MinNumberOfTriangles = 8;
         
-        public Box Box => root.mesh.BoundingBox;
-        
         public readonly KdNode root;
         
         public KdTree(List<Triangle> triangles)

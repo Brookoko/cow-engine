@@ -46,5 +46,13 @@ namespace CowLibrary
             }
             return intersected;
         }
+        
+        public override void Apply(Matrix4x4 matrix)
+        {
+            foreach (var triangle in triangles)
+            {
+                triangle.Apply(matrix);
+            }
+        }
     }
 }

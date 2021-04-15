@@ -11,5 +11,10 @@ namespace CowLibrary
             this.mesh = mesh;
             this.material = material;
         }
+        
+        public void Prepare()
+        {
+            mesh.Apply(transform.localToWorldMatrix);
+        }
     }
 }

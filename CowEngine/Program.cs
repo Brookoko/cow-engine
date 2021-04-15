@@ -59,6 +59,7 @@
         private static Scene PrepareScene(RenderableObject model)
         {
             var scene = new Scene();
+            model = new RenderableObject(new Sphere(new Vector3(0f, 0, 0), 1f), new Material());
             scene.objects.Add(model);
             // var adjustedCamera = new PerspectiveCamera()
             // {
@@ -81,6 +82,7 @@
             //
             // adjustedCamera.transform.rotation = Quaternion.CreateFromYawPitchRoll(0, -90 * MathConstants.Deg2Rad, 0);
             // scene.camera = adjustedCamera;
+            scene.PrepareScene();
             return scene;
         }
 
