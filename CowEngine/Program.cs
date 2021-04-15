@@ -1,8 +1,6 @@
 ﻿namespace CowEngine
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Numerics;
     using Cowject;
     using CowLibrary;
@@ -12,6 +10,8 @@
 
     public class Program
     {
+        private static Watch watch = new Watch();
+        
         public static void Main(string[] args)
         {
             var container = SetupContainer();
@@ -26,7 +26,11 @@
                 var (source, output) = argumentParser.Parse(args);
                 var model = objWorker.Parse(source);
                 var scene = PrepareScene(model);
+                
+                watch.Start();
                 var image = renderer.Render(scene);
+                watch.Stop("Render");
+                
                 imageWorker.SaveImage(image, output);
             }
             catch (Exception e)
@@ -56,8 +60,6 @@
         private static Scene PrepareScene(RenderableObject model)
         {
             var scene = new Scene();
-            // model = new RenderableObject(new Box(new Vector3(0, 0, 0), 1),new Material() { color = new Color(200,0,0)});
-            //model = new RenderableObject(new Sphere(new Vector3(0, 0, 0), 1f), new Material() { color = new Color(200,0,0)});
             var light = new PointLight(new Color(20, 100, 200), 1f, 16);
             light.transform.position = new Vector3(0, 2, 0);
             
@@ -65,24 +67,6 @@
             scene.objects.Add(model);
             scene.PrepareScene();
             return scene;
-        }
-
-        private static Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
-        {
-            var min = renderableObjects.First().mesh.BoundingBox.min;
-            var max = renderableObjects.First().mesh.BoundingBox.max;
-            foreach (var renderableObject in renderableObjects)
-            {
-                var boundingBox = renderableObject.mesh.BoundingBox;
-                min.X = Math.Min(min.X, boundingBox.min.X);
-                min.Y = Math.Min(min.Y, boundingBox.min.Y);
-                min.Z = Math.Min(min.Z, boundingBox.min.Z);
-                max.X = Math.Max(max.X, boundingBox.max.X);
-                max.Y = Math.Max(max.Y, boundingBox.max.Y);
-                max.Z = Math.Max(max.Z, boundingBox.max.Z);
-            }
-
-            return new Box(min, max);
         }
     }
 }
