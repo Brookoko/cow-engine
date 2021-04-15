@@ -7,6 +7,7 @@ namespace CowLibrary
     public class KdTree
     {
         private const int MinNumberOfTriangles = 8;
+        private const int MaxDepth = 32;
         
         public readonly KdNode root;
         
@@ -18,7 +19,7 @@ namespace CowLibrary
         private KdNode BuildNode(List<Triangle> triangles, int depth)
         {
             var node = new KdNode(triangles);
-            return triangles.Count <= MinNumberOfTriangles ? node : Split(node, depth);
+            return triangles.Count <= MinNumberOfTriangles || depth >= MaxDepth ? node : Split(node, depth);
         }
         
         private KdNode Split(KdNode node, int depth)

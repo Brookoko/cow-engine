@@ -129,12 +129,12 @@ namespace CowLibrary
         
         private void ExtractValuesFromMatrix()
         {
-            _localPosition = _localToWorldMatrix.ExtractTranslation();
-            _localRotation = Quaternion.CreateFromRotationMatrix(_localToWorldMatrix);
-            _localPosition = _localToWorldMatrix.ExtractScale();
-            _position = _worldToLocalMatrix.ExtractTranslation();
-            _rotation = Quaternion.CreateFromRotationMatrix(_worldToLocalMatrix);
-            _lossyScale =_worldToLocalMatrix.ExtractScale();
+            _position = _localToWorldMatrix.ExtractTranslation();
+            _rotation = Quaternion.CreateFromRotationMatrix(_localToWorldMatrix);
+            _lossyScale = _localToWorldMatrix.ExtractScale();
+            _localPosition = parent == null ? _position : parent.localToWorldMatrix.MultiplyPoint(_position);
+            _localRotation = parent == null ? _rotation : Quaternion.Inverse(parent.rotation) * _rotation;
+            _localScale = parent == null ? _lossyScale : parent.localToWorldMatrix.MultiplyPoint(_lossyScale);
         }
     }
 }

@@ -23,17 +23,10 @@ namespace CowLibrary
         
         public void PrepareScene()
         {
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0, 1.5f), new Vector3(0, 0, 0), Vector3.UnitY);
-            camera.transform.rotation = Quaternion.CreateFromYawPitchRoll((float) Math.PI, -90 * MathConstants.Deg2Rad,0);
-            var m = camera.transform.worldToLocalMatrix;
-            camera.transform.position = new Vector3(0, 0, 0);
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(3, 3, 15), Vector3.Zero);
             foreach (var obj in objects)
             {
-                obj.Apply(m);
-            }
-            foreach (var light in lights)
-            {
-                light.Apply(m);
+                obj.Prepare();
             }
             boundingBox = GetBoundingBoxFor(objects);
         }

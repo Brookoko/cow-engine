@@ -122,6 +122,11 @@ namespace CowLibrary
             return translate * rotation * scale;
         }
         
+        public static Matrix4x4 LookAt(Vector3 from, Vector3 to)
+        {
+            return LookAt(from, to, Vector3.UnitY);
+        }
+        
         public static Matrix4x4 LookAt(Vector3 from, Vector3 to, Vector3 up)
         {
             var forward = (from - to).Normalize();

@@ -47,8 +47,8 @@ namespace CowLibrary
                 surfel = null;
                 return false;
             }
-            tmin = tymin > tmin ? tymin : tmin;
-            tmax = tymax < tmax ? tymax : tmax;
+            tmin = Math.Max(tmin, tymin);
+            tmax = Math.Min(tmax, tymax);
 
             var zmin = invdir.Z >= 0 ? min.Z : max.Z;
             var zmax = invdir.Z >= 0 ? max.Z : min.Z;
@@ -60,14 +60,29 @@ namespace CowLibrary
                 surfel = null;
                 return false;
             }
-            tmin = tzmin > tmin ? tzmin : tmin;
-            tmax = tzmax < tmax ? tzmax : tmax;
+            tmin = Math.Max(tmin, tzmin);
+            tmax = Math.Min(tmax, tzmax);
 
-            var p = ray.GetPoint(tmin);
+            float t;
+            if (tmin < 0)
+            {
+                if (tmax < 0)
+                {
+                    surfel = null;
+                    return false;
+                }
+                t = tmax;
+            }
+            else
+            {
+                t = Math.Min(tmin, tmax);
+            }
+            
+            var p = ray.GetPoint(t);
             
             surfel = new Surfel()
             {
-                t = tmin,
+                t = t,
                 point = p,
                 normal = GetNormal(p),
             };
@@ -101,8 +116,9 @@ namespace CowLibrary
         public override void Apply(Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);
-            max = center + matrix.MultiplyVector(max);
-            min = center + matrix.MultiplyVector(min);
+            size = matrix.MultiplyVector(size);
+            min = center - size;
+            max = center + size;
         }
     }
 }

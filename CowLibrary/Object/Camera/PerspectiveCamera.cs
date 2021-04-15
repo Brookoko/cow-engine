@@ -25,8 +25,9 @@ namespace CowLibrary
         {
             var x = (1 - 2 * (screenPoint.X + 0.5f) / width) * tan;
             var y = (2 * (screenPoint.Y + 0.5f) / height - 1) / AspectRatio * tan;
-            var dir = new Vector3(x, y, -nearPlane).Normalize();
-            return new Ray(Vector3.Zero, dir);
+            var dir = new Vector3(x, y, -nearPlane);
+            dir = transform.localToWorldMatrix.MultiplyVector(dir).Normalize();
+            return new Ray(transform.position, dir);
         }
     }
 }

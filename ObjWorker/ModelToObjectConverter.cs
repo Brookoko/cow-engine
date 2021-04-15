@@ -40,7 +40,7 @@ namespace CowEngine
                 }
                 triangles.Add(t);
             }
-            return new TriangleMesh(triangles);
+            return new OptimizedMesh(triangles);
         }
 
         private (Vector3 v0, Vector3 v1, Vector3 v2) GetVertices(LoadResult result, Face face)

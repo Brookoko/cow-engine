@@ -11,10 +11,5 @@ namespace CowLibrary.Lights
         public abstract Vector3 GetDirection(Vector3 point);
         
         public abstract float GetIntensity(Vector3 point);
-        
-        public void Apply(Matrix4x4 matrix)
-        {
-            transform.localToWorldMatrix *= matrix;
-        }
     }
 }

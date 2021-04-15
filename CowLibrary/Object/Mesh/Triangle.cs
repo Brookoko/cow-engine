@@ -61,6 +61,7 @@ namespace CowLibrary
                 n1 = m.MultiplyVector(n1);
                 n2 = m.MultiplyVector(n2);
             }
+            BoundingBox.Apply(matrix);
         }
     }
 }
