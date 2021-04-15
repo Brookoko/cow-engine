@@ -15,6 +15,7 @@ namespace CowRenderer.Raycasting.Impl
                     {
                         continue;
                     }
+                    hitSurfel.material = renderableObject.material;
                     closestSurfel = hitSurfel;
                 }
             }

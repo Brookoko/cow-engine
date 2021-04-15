@@ -7,6 +7,6 @@ namespace CowLibrary
         public float t;
         public Vector3 point;
         public Vector3 normal;
-        public Color color;
+        public Material material;
     }
 }

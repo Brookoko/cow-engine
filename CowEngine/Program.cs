@@ -6,10 +6,8 @@
     using System.Numerics;
     using Cowject;
     using CowLibrary;
+    using CowLibrary.Lights;
     using CowRenderer;
-    using CowRenderer.Integration.Impl;
-    using CowRenderer.Raycasting.Impl;
-    using CowRenderer.Rendering.Impl;
     using ImageWorker;
 
     public class Program
@@ -44,12 +42,11 @@
             var container = new DiContainer();
             container.Bind<IArgumentsParser>().To<ArgumentsParser>().ToSingleton();
             container.Bind<IIoWorker>().To<IoWorker>().ToSingleton();
-            container.Bind<IRaycaster>().To<SimpleRaycaster>().ToSingleton();
-            container.Bind<IRenderer>().To<SimpleRenderer>().ToSingleton();
-            container.Bind<IIntegrator>().To<BwIntegrator>().ToSingleton();
 
             var imageModule = new ImageModule();
             imageModule.Prepare(container);
+            var rendererModule = new RendererModule();
+            rendererModule.Prepare(container);
             var objModule = new ObjModule();
             objModule.Prepare(container);
 
@@ -61,6 +58,10 @@
             var scene = new Scene();
             // model = new RenderableObject(new Box(new Vector3(0, 0, 0), 1), new Material());
             // model = new RenderableObject(new Sphere(new Vector3(0, 0, 0), 1f), new Material());
+            var light = new PointLight(new Color(20, 100, 200), 1f, 8);
+            light.transform.position = new Vector3(0, 2, 0);
+            
+            scene.lights.Add(light);
             scene.objects.Add(model);
             scene.PrepareScene();
             return scene;

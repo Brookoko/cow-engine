@@ -5,7 +5,9 @@ namespace CowLibrary
     public class RenderableObject
     {
         public readonly Transform transform = new Transform();
+        
         public readonly Mesh mesh;
+        
         public readonly Material material;
         
         public RenderableObject(Mesh mesh, Material material)

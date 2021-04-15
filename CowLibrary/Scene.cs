@@ -10,8 +10,8 @@ namespace CowLibrary
     {
         public Camera camera = new PerspectiveCamera()
         {
-            width = 1920/4,
-            height = 1080/4,
+            width = 1920/8,
+            height = 1080/8,
             fov = 60,
         };
         
@@ -23,9 +23,10 @@ namespace CowLibrary
         
         public void PrepareScene()
         {
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0, 10), new Vector3(0, 0, 0), Vector3.UnitY);
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0, 1.5f), new Vector3(0, 0, 0), Vector3.UnitY);
+            camera.transform.rotation = Quaternion.CreateFromYawPitchRoll((float) Math.PI, -90 * MathConstants.Deg2Rad,0);
             var m = camera.transform.worldToLocalMatrix;
-            camera.transform.position = Vector3.Zero;
+            camera.transform.position = new Vector3(0, 0, 0);
             foreach (var obj in objects)
             {
                 obj.Apply(m);

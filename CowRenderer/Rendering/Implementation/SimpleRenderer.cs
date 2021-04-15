@@ -1,21 +1,16 @@
 namespace CowRenderer.Rendering.Impl
 {
     using System.Numerics;
+    using Cowject;
     using CowLibrary;
-    using Integration.Impl;
-    using Raycasting.Impl;
 
     public class SimpleRenderer : IRenderer
     {
-        private readonly IRaycaster raycaster;
+        [Inject]
+        public  IRaycaster Raycaster { get; set; }
 
-        private readonly IIntegrator integrator;
-
-        public SimpleRenderer()
-        {
-            raycaster = new SimpleRaycaster();
-            integrator = new NormalsToCameraIntegrator();
-        }
+        [Inject]
+        private IIntegrator Integrator { get; set; }
 
         public Image Render(Scene scene)
         {
@@ -33,7 +28,7 @@ namespace CowRenderer.Rendering.Impl
                 for (var y = 0; y < cameraSize.yReslution; y++)
                 {
                     var cameraRay = targetCamera.ScreenPointToRay(new Vector2(x, y));
-                    var isSurfelHit = raycaster.Raycast(scene, cameraRay, out var surfel);
+                    var isSurfelHit = Raycaster.Raycast(scene, cameraRay, out var surfel);
                     resultSurfels[x, y] = surfel;
                 }
             }
@@ -49,7 +44,7 @@ namespace CowRenderer.Rendering.Impl
             {
                 for (var y = 0; y < outputResolution.Item2; y++)
                 {
-                    outputImage[outputResolution.Item2 - y - 1, outputResolution.Item1 - x -1] = integrator.GetColor(sourceScene, surfels[x, y]);
+                    outputImage[outputResolution.Item2 - y - 1, outputResolution.Item1 - x -1] = Integrator.GetColor(sourceScene, surfels[x, y]);
                 }
             }
 

@@ -17,7 +17,7 @@ namespace CowEngine
         public RenderableObject Convert(LoadResult result)
         {
             var mesh = ExtractMesh(result, result.Groups[0]);
-            var material = new Material {color = new Color(255, 255, 255)};
+            var material = new Material {color = new Color(130, 15, 220)};
             var obj = new RenderableObject(mesh, material);
             return obj;
         }

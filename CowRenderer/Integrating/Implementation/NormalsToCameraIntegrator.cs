@@ -26,7 +26,7 @@ namespace CowRenderer.Integration.Impl
             }
             else
             {
-                return Color.LerpUnclamped(lerpingColors.Item1, lerpingColors.Item2, (float) (angle - 90) / 90);
+                return Color.LerpUnclamped(negativeColors.Item1, negativeColors.Item2, (float) (angle - 90) / 90);
             }
         }
     }

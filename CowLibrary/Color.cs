@@ -51,5 +51,25 @@ namespace CowLibrary
                 (byte) Math.Ceiling(color1.a + (color2.a - color1.a) * 1f)
             );
         }
+
+        public static Color MaxComponents(Color color1, Color color2)
+        {
+            return new Color
+            (
+                Math.Max(color1.r, color2.r),
+                Math.Max(color1.g, color2.g),
+                Math.Max(color1.b, color2.b)
+            );
+        }
+
+        public static Color operator *(Color color, float value)
+        {
+            return new Color(
+            (byte) (color.r * value),
+            (byte) (color.g * value),
+            (byte) (color.b * value),
+            (byte) (color.a * value)
+                );
+        }
     }
 }
