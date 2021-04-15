@@ -14,7 +14,7 @@ namespace CowLibrary.Processors
                 intersectionSurfel = new Surfel()
                 {
                     point = ray.origin + ray.direction * intersectionDistance,
-                    normal = triangle.n0,
+                    normal = triangle.n0.Normalize(),
                     t = intersectionDistance
                 };
                 return true;
