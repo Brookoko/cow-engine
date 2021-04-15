@@ -1,6 +1,7 @@
 ﻿namespace CowEngine
 {
     using System;
+    using System.Collections.Generic;
     using System.Numerics;
     using Cowject;
     using CowLibrary;
@@ -10,7 +11,14 @@
 
     public class Program
     {
-        private static Watch watch = new Watch();
+        private static readonly Watch watch = new Watch();
+        
+        private static readonly List<IModule> modules = new List<IModule>()
+        {
+            new ImageModule(),
+            new RendererModule(),
+            new ObjModule()
+        };
         
         public static void Main(string[] args)
         {
@@ -46,14 +54,11 @@
             var container = new DiContainer();
             container.Bind<IArgumentsParser>().To<ArgumentsParser>().ToSingleton();
             container.Bind<IIoWorker>().To<IoWorker>().ToSingleton();
-
-            var imageModule = new ImageModule();
-            imageModule.Prepare(container);
-            var rendererModule = new RendererModule();
-            rendererModule.Prepare(container);
-            var objModule = new ObjModule();
-            objModule.Prepare(container);
-
+            foreach (var module in modules)
+            {
+                module.Prepare(container);
+            }
+            
             return container;
         }
 
