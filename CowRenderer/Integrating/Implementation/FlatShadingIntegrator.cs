@@ -8,7 +8,7 @@ namespace CowRenderer.Integration.Impl
         private readonly Color black = new Color(0, 0, 0);
         private readonly Color white = new Color(255, 255, 255);
 
-        private readonly Color nullColor = new Color(210, 210, 210);
+        private readonly Color nullColor = new Color(245, 245, 245);
         
         public Color GetColor(Scene scene, Surfel surfel)
         {
