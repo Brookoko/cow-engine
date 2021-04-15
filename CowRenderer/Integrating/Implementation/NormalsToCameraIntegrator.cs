@@ -1,32 +1,33 @@
 namespace CowRenderer.Integration.Impl
 {
-    using System.Numerics;
     using CowLibrary;
 
     public class NormalsToCameraIntegrator : IIntegrator
     {
-        private readonly Color negativeColor = new Color(255, 255, 255);
+        private readonly Color nullColor = new Color(255, 255, 255);
 
-        private readonly Color errorColor = new Color(0, 0, 0);
+        private readonly (Color,Color) negativeColors = (new Color(255, 0, 0), new Color(0, 0, 0));
 
-        private readonly (Color, Color) lerpingColors = (new Color(255,0,0), new Color(0,0,250));  
+        private readonly (Color, Color) lerpingColors = (new Color(20,207,220), new Color(15,50,210));  
         
         public Color GetColor(Scene scene, Surfel surfel)
         {
             if (surfel == null)
             {
-                return negativeColor;
+                return nullColor;
             }
             
             var camera = scene.camera;
-            var surfelToCameraDirection = /*camera.transform.position*/ Vector3.Zero - surfel.point;
+            var surfelToCameraDirection = camera.transform.position - surfel.point;
             var angle = surfelToCameraDirection.AngleTo(surfel.normal);
-            // if (angle > 90)
-            // {
-            //     return errorColor;
-            // }
-            
-            return Color.LerpUnclamped(lerpingColors.Item1, lerpingColors.Item2, (float) angle / 180);
+            if (angle <= 90)
+            {
+                return Color.LerpUnclamped(lerpingColors.Item1, lerpingColors.Item2, (float) angle / 90);
+            }
+            else
+            {
+                return Color.LerpUnclamped(lerpingColors.Item1, lerpingColors.Item2, (float) (angle - 90) / 90);
+            }
         }
     }
 }
