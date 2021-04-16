@@ -37,7 +37,7 @@
                 
                 watch.Start();
                 var image = renderer.Render(scene);
-                watch.Stop("Render");
+                watch.Stop();
                 
                 imageWorker.SaveImage(image, output);
             }

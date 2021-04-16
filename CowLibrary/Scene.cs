@@ -10,8 +10,8 @@ namespace CowLibrary
     {
         public Camera camera = new PerspectiveCamera()
         {
-            width = 1920 / 5,
-            height = 1080 / 5,
+            width = 1920 / 4,
+            height = 1080 / 4,
             fov = 60,
         };
         

@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ImageWorker\ImageWorker.csproj" />
+      <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
     </ItemGroup>
-
 </Project>

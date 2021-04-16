@@ -4,6 +4,7 @@ namespace CowEngine.ImageWorker
     using System.Collections.Generic;
     using System.Linq;
     using Cowject;
+    using Png;
 
     internal interface IImageEncoderProvider
     {
@@ -12,19 +13,10 @@ namespace CowEngine.ImageWorker
     
     public class ImageEncoderProvider : IImageEncoderProvider
     {
-        [Inject]
-        internal IPluginProvider PluginProvider { get; set; }
-        
-        private List<IImageEncoder> encoders;
-        
-        [PostConstruct]
-        public void Prepare()
+        private readonly List<IImageEncoder> encoders = new List<IImageEncoder>()
         {
-            encoders = PluginProvider.Types
-                .Where(t => typeof(IImageEncoder).IsAssignableFrom(t) && !t.IsInterface)
-                .Select(t => (IImageEncoder) Activator.CreateInstance(t))
-                .ToList();
-        }
+            new PngWorker()
+        };
         
         public IImageEncoder FindEncoder(string extension)
         {
