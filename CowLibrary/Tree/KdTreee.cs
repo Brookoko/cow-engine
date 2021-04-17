@@ -7,7 +7,7 @@ namespace CowLibrary
     public class KdTree
     {
         private const int MinNumberOfTriangles = 8;
-        private const int MaxDepth = 32;
+        private const int MaxDepth = 10;
         
         public readonly KdNode root;
         
@@ -52,15 +52,24 @@ namespace CowLibrary
         
         private (List<Triangle> left, List<Triangle> right, List<Triangle> middle) SplitTriangle(List<Triangle> triangles, int depth, float v)
         {
-            var leftTriangles = triangles
-                .Where(t => GetDimension(t.BoundingBox.max, depth) <= v)
-                .ToList();
-            var rightTriangles = triangles
-                .Where(t => GetDimension(t.BoundingBox.min, depth) >= v)
-                .ToList();
-            var middleTriangles = triangles
-                .Where(t => !leftTriangles.Contains(t) && !rightTriangles.Contains(t))
-                .ToList();
+            var leftTriangles = new List<Triangle>();
+            var rightTriangles = new List<Triangle>();
+            var middleTriangles = new List<Triangle>();
+            foreach (var t in triangles)
+            {
+                if (GetDimension(t.BoundingBox.max, depth) <= v)
+                {
+                    leftTriangles.Add(t);
+                }
+                else if (GetDimension(t.BoundingBox.min, depth) >= v)
+                {
+                    rightTriangles.Add(t);
+                }
+                else
+                {
+                    middleTriangles.Add(t);
+                }
+            }
             return (leftTriangles, rightTriangles, middleTriangles);
         }
         
