@@ -53,6 +53,7 @@ namespace CowLibrary
             {
                 triangle.Apply(matrix);
             }
+            BoundingBox.Apply(matrix);
         }
     }
 }

@@ -10,6 +10,11 @@ namespace CowLibrary
         public readonly byte b;
         public readonly byte a;
 
+        public Color(float r, float g, float b, float a = 255):
+            this((byte) (r * 255), (byte) (g * 255), (byte) (b * 255), (byte) (a * 255))
+        {
+        }
+        
         public Color(byte v) : this(v, v, v)
         {
         }
