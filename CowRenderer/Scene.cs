@@ -1,10 +1,11 @@
-namespace CowLibrary
+namespace CowRenderer
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
-    using Lights;
+    using CowLibrary;
+    using CowLibrary.Lights;
 
     public class Scene
     {

@@ -20,5 +20,6 @@
         <Project>{0f5fd226-ebc5-457c-b740-b2673fcb6b9b}</Project>
         <Name>CowLibrary</Name>
       </ProjectReference>
+      <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
     </ItemGroup>
 </Project>

@@ -22,7 +22,7 @@ namespace CowTest
             {
                 IoWorker = new IoWorker(),
                 ObjLoaderFactory = new ObjLoaderFactory(),
-                ModelToObjectConverter = new ModelToObjectConverter()
+                ModelToObjectConverter = new ModelToMeshConverter()
             };
         }
         
@@ -81,8 +81,8 @@ namespace CowTest
         public void _03TestModel()
         {
             var watch = new Stopwatch();
-            var obj = objWorker.Parse("C:\\Projects\\cow-engine\\assets\\cow.obj");
-            var triangles = (obj.mesh as TriangleMesh).triangles;
+            var mesh = objWorker.Parse("C:\\Projects\\cow-engine\\assets\\cow.obj");
+            var triangles = (mesh as TriangleMesh).triangles;
             watch.Start();
             var tree = new KdTree(triangles);
             watch.Stop();

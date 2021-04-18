@@ -25,7 +25,7 @@
             var container = SetupContainer();
 
             var argumentParser = container.Get<IArgumentsParser>();
-            var objWorker = container.Get<IObjWorker>();
+            var objWorker = container.Get<IRenderableObjectWorker>();
             var renderer = container.Get<IRenderer>();
             var imageWorker = container.Get<IImageWorker>();
 
@@ -33,7 +33,7 @@
             {
                 var (source, output) = argumentParser.Parse(args);
                 var model = objWorker.Parse(source);
-                var scene = PrepareScene(model);
+                var scene = PrepareScene(container, model);
                 
                 watch.Start();
                 var image = renderer.Render(scene);
@@ -62,9 +62,10 @@
             return container;
         }
 
-        private static Scene PrepareScene(RenderableObject model)
+        private static Scene PrepareScene(DiContainer container, RenderableObject model)
         {
             var scene = new Scene();
+            container.Inject(scene);
             var light = new PointLight(new Color(135, 15, 220), 1f, 80);
             light.transform.position = new Vector3(10, 20, 25);
 

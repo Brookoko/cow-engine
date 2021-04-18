@@ -9,7 +9,8 @@ namespace CowEngine
         {
             container.Bind<IObjWorker>().To<ObjWorker>().ToSingleton();
             container.Bind<IObjLoaderFactory>().To<ObjLoaderFactory>().ToSingleton();
-            container.Bind<IModelToObjectConverter>().To<ModelToObjectConverter>().ToSingleton();
+            container.Bind<IModelToObjectConverter>().To<ModelToMeshConverter>().ToSingleton();
+            container.Bind<IRenderableObjectWorker>().To<RenderableObjectWorker>().ToSingleton();
         }
     }
 }

@@ -9,17 +9,14 @@ namespace CowEngine
 
     public interface IModelToObjectConverter
     {
-        RenderableObject Convert(LoadResult result);
+        Mesh Convert(LoadResult result);
     }
     
-    public class ModelToObjectConverter : IModelToObjectConverter
+    public class ModelToMeshConverter : IModelToObjectConverter
     {
-        public RenderableObject Convert(LoadResult result)
+        public Mesh Convert(LoadResult result)
         {
-            var mesh = ExtractMesh(result, result.Groups[0]);
-            var material = new Material {color = new Color(130, 15, 220)};
-            var obj = new RenderableObject(mesh, material);
-            return obj;
+            return ExtractMesh(result, result.Groups[0]);
         }
         
         private Mesh ExtractMesh(LoadResult result, Group group)
