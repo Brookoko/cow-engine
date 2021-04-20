@@ -2,10 +2,13 @@ namespace CowLibrary
 {
     using System;
     using System.Numerics;
-    using Processors;
 
     public class Triangle : Mesh
     {
+        private const double e = 0.00001;
+        
+        public override Box BoundingBox => box;
+        
         public Vector3 v0;
         public Vector3 v1;
         public Vector3 v2;
@@ -13,8 +16,6 @@ namespace CowLibrary
         public Vector3 n0;
         public Vector3 n1;
         public Vector3 n2;
-        
-        public override Box BoundingBox => box;
         
         private Box box;
         
@@ -54,7 +55,44 @@ namespace CowLibrary
         }
 
         public override bool Intersect(Ray ray, out Surfel surfel)
-            => TriangleIntersectionProcessor.CheckForIntersection(this, ray, out surfel);
+        {
+            var edge1 = v1 - v0;
+            var edge2 = v2 - v0;
+
+            var h = Vector3.Cross(ray.direction, edge2);
+            var a = Vector3.Dot(edge1, h);
+            if (Math.Abs(a) < e)
+            {
+                surfel = null;
+                return false;
+            }
+
+            var f = 1f / a;
+            var s = ray.origin - v0;
+            var u = f * Vector3.Dot(s, h);
+            if (u < 0 || u > 1)
+            {
+                surfel = null;
+                return false;
+            }
+
+            var q = Vector3.Cross(s, edge1);
+            var v = f * Vector3.Dot(ray.direction, q);
+            if (v < 0 || u + v > 1)
+            {
+                surfel = null;
+                return false;
+            }
+
+            var t = f * Vector3.Dot(edge2, q);
+            surfel = new Surfel()
+            {
+                point = ray.GetPoint(t),
+                normal = n0,
+                t = t
+            };
+            return true;
+        }
         
         public override void Apply(Matrix4x4 matrix)
         {
