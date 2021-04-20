@@ -1,4 +1,4 @@
-namespace CowRenderer.Integration.Impl
+namespace CowRenderer.Integration
 {
     using System;
     using System.Numerics;
