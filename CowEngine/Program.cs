@@ -32,12 +32,18 @@
             try
             {
                 var (source, output) = argumentParser.Parse(args);
+                
+                watch.Start();
                 var model = objWorker.Parse(source);
+                watch.Stop("Loading model");
+                
+                watch.Start();
                 var scene = PrepareScene(container, model);
+                watch.Stop("Preparing scene");
                 
                 watch.Start();
                 var image = renderer.Render(scene);
-                watch.Stop();
+                watch.Stop("Render");
                 
                 imageWorker.SaveImage(image, output);
             }

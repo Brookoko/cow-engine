@@ -6,8 +6,8 @@ namespace CowLibrary
 
     public class KdTree
     {
-        private const int MinNumberOfTriangles = 128;
-        private const int MaxDepth = 10;
+        private const int MinNumberOfTriangles = 8;
+        private const int MaxDepth = 16;
         
         public readonly KdNode root;
         

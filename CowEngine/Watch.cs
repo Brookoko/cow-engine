@@ -12,11 +12,11 @@ namespace CowEngine
             watch.Restart();
         }
         
-        public void Stop()
+        public void Stop(string info)
         {
             watch.Stop();
             var elapsed = watch.Elapsed;
-            Console.WriteLine($"Seconds: {elapsed.TotalSeconds}");
+            Console.WriteLine($"{info}: {elapsed.TotalSeconds}");
         }
     }
 }
