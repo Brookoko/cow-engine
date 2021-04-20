@@ -3,7 +3,7 @@ namespace CowRenderer
     using Cowject;
     using Integration.Impl;
     using Raycasting.Impl;
-    using Rendering.Impl;
+    using Rendering;
 
     public class RendererModule : IModule
     {
@@ -12,6 +12,8 @@ namespace CowRenderer
             container.Bind<IIntegrator>().To<FlatShadingIntegrator>().ToSingleton();
             container.Bind<IRaycaster>().To<SimpleRaycaster>().ToSingleton();
             container.Bind<IRenderer>().To<MultithreadRenderer>().ToSingleton();
+            container.Bind<ThreadRenderer>().To<SimpleThreadRenderer>();
+            container.Bind<RenderConfig>().To<RenderConfig>().ToSingleton();
         }
     }
 }

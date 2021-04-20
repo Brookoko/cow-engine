@@ -1,6 +1,5 @@
-namespace CowRenderer.Rendering.Impl
+namespace CowRenderer.Rendering
 {
-    using System;
     using System.Numerics;
     using System.Threading;
     using Cowject;
@@ -9,31 +8,37 @@ namespace CowRenderer.Rendering.Impl
     public class MultithreadRenderer : IRenderer
     {
         [Inject]
-        public  IRaycaster Raycaster { get; set; }
+        public RenderConfig RenderConfig { get; set; }
         
         [Inject]
-        private IIntegrator Integrator { get; set; }
-        
-        private const int NumberOfThread = 8;
+        public DiContainer DiContainer { get; set; }
         
         public Image Render(Scene scene)
         {
+            var numberOfThread = RenderConfig.numberOfThread;
+            var threads = new Thread[numberOfThread * numberOfThread];
+            
             var w = scene.camera.width;
             var h = scene.camera.height;
+            var xStep = w / numberOfThread;
+            var yStep = h / numberOfThread;
             var image = new Image(w, h);
-            var xStep = w / NumberOfThread;
-            var yStep = h / NumberOfThread;
-            var threads = new Thread[NumberOfThread * NumberOfThread];
-            for (var i = 0; i < NumberOfThread; i++)
+            
+            for (var i = 0; i < numberOfThread; i++)
             {
-                for (var j = 0; j < NumberOfThread; j++)
+                var fromX = i * xStep;
+                var toX = (i + 1) * xStep;
+                for (var j = 0; j < numberOfThread; j++)
                 {
-                    var from = new Vector2(i * xStep, j * yStep);
-                    var to = new Vector2((i + 1) * xStep, (j + 1) * yStep);
-                    var renderer = new ThreadRenderer(Raycaster, Integrator, scene, image, from, to);
+                    var from = new Vector2(fromX, j * yStep);
+                    var to = new Vector2(toX, (j + 1) * yStep);
+                    
+                    var renderer = DiContainer.Get<ThreadRenderer>();
+                    renderer.Init(scene, image, from, to);
+                    
                     var thread = new Thread(renderer.Render);
                     thread.Start();
-                    threads[i * NumberOfThread + j] = thread;
+                    threads[i * numberOfThread + j] = thread;
                 }
             }
             foreach (var thread in threads)

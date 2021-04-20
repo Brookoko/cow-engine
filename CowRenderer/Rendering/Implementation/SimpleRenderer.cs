@@ -1,4 +1,4 @@
-namespace CowRenderer.Rendering.Impl
+namespace CowRenderer.Rendering
 {
     using System.Numerics;
     using Cowject;

@@ -4,17 +4,16 @@ namespace CowRenderer
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
+    using Cowject;
     using CowLibrary;
     using CowLibrary.Lights;
 
     public class Scene
     {
-        public PerspectiveCamera camera = new PerspectiveCamera()
-        {
-            width = 1920,
-            height = 1080,
-            fov = 60,
-        };
+        [Inject]
+        public RenderConfig RenderConfig { get; set; }
+        
+        public PerspectiveCamera camera;
         
         public readonly List<Light> lights = new List<Light>();
         
@@ -22,12 +21,23 @@ namespace CowRenderer
 
         public void PrepareScene()
         {
+            camera = CreateCamera();
             var box = GetBoundingBoxFor(objects);
             PlaceCamera(box);
             foreach (var obj in objects)
             {
                 obj.Prepare();
             }
+        }
+        
+        private PerspectiveCamera CreateCamera()
+        {
+            return new PerspectiveCamera()
+            {
+                width = RenderConfig.width,
+                height = RenderConfig.height,
+                fov = RenderConfig.fov
+            };
         }
         
         private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
