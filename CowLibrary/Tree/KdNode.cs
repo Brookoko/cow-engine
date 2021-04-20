@@ -14,16 +14,17 @@ namespace CowLibrary
         
         public bool Intersect(Ray ray, out Surfel surfel)
         {
-            if (children.Count > 0)
+            if (children.Count == 0 && mesh.triangles.Count == 0)
             {
-                return IntersectChildren(ray, out surfel);
+                surfel = null;
+                return false;
             }
-            if (mesh.BoundingBox.Intersect(ray, out _))
+            if (!mesh.BoundingBox.Intersect(ray, out surfel))
             {
-                return mesh.Intersect(ray, out surfel);
+                surfel = null;
+                return false;
             }
-            surfel = null;
-            return false;
+            return children.Count > 0 ? IntersectChildren(ray, out surfel) : mesh.Intersect(ray, out surfel);
         }
         
         private bool IntersectChildren(Ray ray, out Surfel surfel)

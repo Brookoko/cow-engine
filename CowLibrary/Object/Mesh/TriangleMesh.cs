@@ -9,12 +9,18 @@ namespace CowLibrary
     {
         public readonly List<Triangle> triangles;
         
-        public override Box BoundingBox { get; }
+        public override Box BoundingBox => box;
+        
+        private Box box;
         
         public TriangleMesh(List<Triangle> triangles)
         {
             this.triangles = triangles;
-            
+            box = CreateBox();
+        }
+        
+        private Box CreateBox()
+        {
             var min = Vector3.One * float.MaxValue;
             var max = Vector3.One * float.MinValue;
             foreach (var box in triangles.Select(t => t.BoundingBox))
@@ -26,7 +32,7 @@ namespace CowLibrary
                 max.Y = Math.Max(max.Y, box.max.Y);
                 max.Z = Math.Max(max.Z, box.max.Z);
             }
-            BoundingBox = new Box(min, max);
+            return new Box(min, max);
         }
         
         public override bool Intersect(Ray ray, out Surfel surfel)
@@ -53,7 +59,7 @@ namespace CowLibrary
             {
                 triangle.Apply(matrix);
             }
-            BoundingBox.Apply(matrix);
+            box = CreateBox();
         }
     }
 }

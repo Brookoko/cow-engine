@@ -2,7 +2,7 @@ namespace CowLibrary
 {
     using System;
 
-    public static class MathConstants
+    public static class Const
     {
         public const float Deg2Rad = (float) (Math.PI / 180f);
 

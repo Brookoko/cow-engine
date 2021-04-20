@@ -9,10 +9,10 @@ namespace CowRenderer
 
     public class Scene
     {
-        public Camera camera = new PerspectiveCamera()
+        public PerspectiveCamera camera = new PerspectiveCamera()
         {
-            width = 1920 / 4,
-            height = 1080 / 4,
+            width = 1920,
+            height = 1080,
             fov = 60,
         };
         
@@ -20,12 +20,10 @@ namespace CowRenderer
         
         public readonly List<RenderableObject> objects = new List<RenderableObject>();
 
-        public Box boundingBox;
-        
         public void PrepareScene()
         {
-            boundingBox = GetBoundingBoxFor(objects);
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(8.5f, 0, 11f), boundingBox.center);
+            var box = GetBoundingBoxFor(objects);
+            PlaceCamera(box);
             foreach (var obj in objects)
             {
                 obj.Prepare();
@@ -48,6 +46,15 @@ namespace CowRenderer
             }
 
             return new Box(min, max);
+        }
+        
+        private void PlaceCamera(Box box)
+        {
+            var max = Math.Max(box.size.X * 1.3f, box.size.Y * 1.3f * camera.aspectRatio);
+            var tan = (float) Math.Tan(Const.Deg2Rad * camera.fov / 2);
+            var dist = max / tan;
+            
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0, dist), box.center);
         }
     }
 }

@@ -12,12 +12,17 @@ namespace CowLibrary
 
         public static double AngleTo(this Vector3 a, Vector3 b)
         {
-            return a.AngleRadTo(b) * MathConstants.Rad2Deg;
+            return a.AngleRadTo(b) * Const.Rad2Deg;
         }
 
         public static double AngleRadTo(this Vector3 a, Vector3 b)
         {
             return Math.Acos(Vector3.Dot(a, b) / (a.Length() * b.Length()));
+        }
+        
+        public static float Get(this Vector3 v, int i)
+        {
+            return i == 0 ? v.X : i == 1 ? v.Y : v.Z;
         }
     }
 }

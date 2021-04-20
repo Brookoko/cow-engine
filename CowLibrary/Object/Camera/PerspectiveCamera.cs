@@ -12,7 +12,7 @@ namespace CowLibrary
             set
             {
                 _fov = value;
-                tan = (float) Math.Tan(MathConstants.Deg2Rad * value / 2);
+                tan = (float) Math.Tan(Const.Deg2Rad * value / 2);
             }
         }
         
@@ -24,8 +24,8 @@ namespace CowLibrary
         public override Ray ScreenPointToRay(Vector2 screenPoint)
         {
             var x = (2 * (screenPoint.X + 0.5f) / width - 1) * tan;
-            var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / AspectRatio * tan;
-            var dir = new Vector3(x, y, -nearPlane);
+            var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / aspectRatio * tan;
+            var dir = new Vector3(x, y, -nearPlane).Normalize();
             dir = transform.localToWorldMatrix.MultiplyVector(dir).Normalize();
             return new Ray(transform.position, dir);
         }

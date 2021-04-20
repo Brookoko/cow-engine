@@ -4,7 +4,7 @@ namespace CowLibrary
 
     public abstract class Camera
     {
-        public float AspectRatio => (float) width / height;
+        public float aspectRatio => (float) width / height;
         
         public Transform transform = new Transform();
 

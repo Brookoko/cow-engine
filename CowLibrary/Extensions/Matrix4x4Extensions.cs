@@ -132,7 +132,40 @@ namespace CowLibrary
             var forward = (from - to).Normalize();
             var right = Vector3.Cross(up, forward);
             up = Vector3.Cross(forward, right);
-
+            return FromBasis(right, up, forward, from);
+        }
+        
+        public static Vector3 ExtractTranslation(this Matrix4x4 m)
+        {
+            return new Vector3(m.M14, m.M24, m.M34);
+        }
+        
+        public static Vector3 ExtractScale(this Matrix4x4 m)
+        {
+            return new Vector3(
+                new Vector3(m.M11, m.M21, m.M31).Length(),
+                new Vector3(m.M12, m.M22, m.M32).Length(),
+                new Vector3(m.M13, m.M23, m.M33).Length()
+            );
+        }
+        
+        public static Vector3 Right(this Matrix4x4 m)
+        {
+            return new Vector3(m.M11, m.M21, m.M31);
+        }
+        
+        public static Vector3 Up(this Matrix4x4 m)
+        {
+            return new Vector3(m.M12, m.M22, m.M32);
+        }
+        
+        public static Vector3 Forward(this Matrix4x4 m)
+        {
+            return new Vector3(m.M13, m.M23, m.M33);
+        }
+        
+        public static Matrix4x4 FromBasis(Vector3 right, Vector3 up, Vector3 forward, Vector3 from)
+        {
             Matrix4x4 matrix;
 
             matrix.M11 = right.X;
@@ -157,20 +190,6 @@ namespace CowLibrary
             matrix.M44 = 1;
             
             return matrix;
-        }
-        
-        public static Vector3 ExtractTranslation(this Matrix4x4 m)
-        {
-            return new Vector3(m.M14, m.M24, m.M34);
-        }
-        
-        public static Vector3 ExtractScale(this Matrix4x4 m)
-        {
-            return new Vector3(
-                new Vector3(m.M11, m.M21, m.M31).Length(),
-                new Vector3(m.M12, m.M22, m.M32).Length(),
-                new Vector3(m.M13, m.M23, m.M33).Length()
-            );
         }
     }
 }

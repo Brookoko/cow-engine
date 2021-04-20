@@ -16,7 +16,7 @@ namespace CowLibrary.Lights
         
         public override Vector3 GetDirection(Vector3 point)
         {
-            return transform.Forward;
+            return transform.forward;
         }
         
         public override float GetIntensity(Vector3 point)

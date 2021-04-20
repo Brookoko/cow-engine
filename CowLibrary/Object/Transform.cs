@@ -98,9 +98,9 @@ namespace CowLibrary
             }
         }
         
-        public Vector3 Forward => new Vector3(localToWorldMatrix.M13, localToWorldMatrix.M23, localToWorldMatrix.M33);
-        public Vector3 Right => new Vector3(localToWorldMatrix.M11, localToWorldMatrix.M21, localToWorldMatrix.M31);
-        public Vector3 Up => new Vector3(localToWorldMatrix.M12, localToWorldMatrix.M22, localToWorldMatrix.M32);
+        public Vector3 right => _localToWorldMatrix.Right();
+        public Vector3 up => _localToWorldMatrix.Up();
+        public Vector3 forward => _localToWorldMatrix.Forward();
         
         private Transform _parent;
         
@@ -123,8 +123,8 @@ namespace CowLibrary
         
         private void CalculateMatrix()
         {
-            _worldToLocalMatrix = Matrix4x4Extensions.TRS(_position, _rotation, _lossyScale);
-            Matrix4x4.Invert(_worldToLocalMatrix, out _localToWorldMatrix);
+            _localToWorldMatrix = Matrix4x4Extensions.TRS(_position, _rotation, _lossyScale);
+            Matrix4x4.Invert(_localToWorldMatrix, out _worldToLocalMatrix);
         }
         
         private void ExtractValuesFromMatrix()
