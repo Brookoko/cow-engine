@@ -11,7 +11,7 @@ namespace CowRenderer
         {
             container.Bind<IIntegrator>().To<FlatShadingIntegrator>().ToSingleton();
             container.Bind<IRaycaster>().To<SimpleRaycaster>().ToSingleton();
-            container.Bind<IRenderer>().To<SimpleRenderer>().ToSingleton();
+            container.Bind<IRenderer>().To<MultithreadRenderer>().ToSingleton();
         }
     }
 }

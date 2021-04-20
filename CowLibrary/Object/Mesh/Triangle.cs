@@ -41,9 +41,9 @@ namespace CowLibrary
         
         public void SetNormal(Vector3 n0, Vector3 n1, Vector3 n2)
         {
-            this.n0 = n0;
-            this.n1 = n1;
-            this.n2 = n2;
+            this.n0 = n0.Normalize();
+            this.n1 = n1.Normalize();
+            this.n2 = n2.Normalize();
         }
         
         public void CalculateNormal()
@@ -101,9 +101,9 @@ namespace CowLibrary
             v2 = matrix.MultiplyPoint(v2);
             if (Matrix4x4.Invert(matrix, out var m))
             {
-                n0 = m.MultiplyVector(n0);
-                n1 = m.MultiplyVector(n1);
-                n2 = m.MultiplyVector(n2);
+                n0 = m.MultiplyVector(n0).Normalize();
+                n1 = m.MultiplyVector(n1).Normalize();
+                n2 = m.MultiplyVector(n2).Normalize();
             }
             box = CreateBox();
         }
