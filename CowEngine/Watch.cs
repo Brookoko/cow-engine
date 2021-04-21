@@ -16,7 +16,7 @@ namespace CowEngine
         {
             watch.Stop();
             var elapsed = watch.Elapsed;
-            Console.WriteLine($"{info}: {elapsed.TotalSeconds}");
+            Console.WriteLine($"{info}: {elapsed.TotalSeconds}s");
         }
     }
 }

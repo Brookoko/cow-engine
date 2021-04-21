@@ -43,9 +43,11 @@
                 
                 watch.Start();
                 var image = renderer.Render(scene);
-                watch.Stop("Render");
+                watch.Stop("Rendering scene");
                 
+                watch.Start();
                 imageWorker.SaveImage(image, output);
+                watch.Stop("Saving render");
             }
             catch (Exception e)
             {
