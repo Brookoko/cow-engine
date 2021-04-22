@@ -6,19 +6,19 @@ namespace CowLibrary
     public class Triangle : Mesh
     {
         private const double e = 0.00000001;
-        
+
         public override Box BoundingBox => box;
-        
+
         public Vector3 v0;
         public Vector3 v1;
         public Vector3 v2;
-        
+
         public Vector3 n0;
         public Vector3 n1;
         public Vector3 n2;
-        
+
         private Box box;
-        
+
         public Triangle(Vector3 v0, Vector3 v1, Vector3 v2)
         {
             this.v0 = v0;
@@ -26,7 +26,7 @@ namespace CowLibrary
             this.v2 = v2;
             box = CreateBox();
         }
-        
+
         private Box CreateBox()
         {
             Vector3 min, max;
@@ -38,14 +38,14 @@ namespace CowLibrary
             max.Z = Math.Max(v0.Z, Math.Max(v1.Z, v2.Z));
             return new Box(min, max);
         }
-        
+
         public void SetNormal(Vector3 n0, Vector3 n1, Vector3 n2)
         {
             this.n0 = n0.Normalize();
             this.n1 = n1.Normalize();
             this.n2 = n2.Normalize();
         }
-        
+
         public void CalculateNormal()
         {
             var v0v1 = v1 - v0;
@@ -88,12 +88,12 @@ namespace CowLibrary
             surfel = new Surfel()
             {
                 point = ray.GetPoint(t),
-                normal = n0,
+                normal = n0 * (1 - u - v) + n1 * u + n2 * v,
                 t = t
             };
             return true;
         }
-        
+
         public override void Apply(Matrix4x4 matrix)
         {
             v0 = matrix.MultiplyPoint(v0);
@@ -105,6 +105,7 @@ namespace CowLibrary
                 n1 = m.MultiplyVector(n1).Normalize();
                 n2 = m.MultiplyVector(n2).Normalize();
             }
+
             box = CreateBox();
         }
     }
