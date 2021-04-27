@@ -39,18 +39,18 @@ namespace CowLibrary
             return $"Color R:{r} G:{g} B:{g} A:{a}";
         }
         
-        public static Color operator *(Color color, float value)
+        public static Color operator *(Color color, double value)
         {
             return new Color
             (
-                color.r * value,
-                color.g * value,
-                color.b * value,
-                color.a * value
+                (float) (color.r * value),
+                (float) (color.g * value),
+                (float) (color.b * value),
+                (float) (color.a * value)
             );
         }
         
-        public static Color operator *(float value, Color color) => color * value;
+        public static Color operator *(double value, Color color) => color * value;
         
         public static Color operator *(Color left, Color right)
         {

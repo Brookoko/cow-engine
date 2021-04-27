@@ -1,27 +1,30 @@
 namespace CowLibrary.Lights
 {
+    using System;
     using System.Numerics;
 
     public class PointLight : Light
     {
-        public override Color Color { get; }
-        
+        private readonly Color color;
         private readonly float intensity;
         
         public PointLight(Color color, float intensity)
         {
-            Color = color;
+            this.color = color;
             this.intensity = intensity;
         }
         
-        public override Vector3 GetDirection(Vector3 point)
+        public override ShadingInfo GetShadingInfo(Vector3 point)
         {
-            return (point - transform.position).Normalize();
-        }
-        
-        public override float GetIntensity(Vector3 point)
-        {
-            return intensity;
+            var direction = transform.position - point;
+            var sqrtDistance = direction.LengthSquared();
+            var distance = (float) Math.Sqrt(sqrtDistance);
+            return new ShadingInfo
+            {
+                direction = direction / distance,
+                distance = distance,
+                color = color * (intensity / (4 * Math.PI * sqrtDistance))
+            };
         }
     }
 }

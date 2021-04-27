@@ -4,24 +4,23 @@ namespace CowLibrary.Lights
 
     public class DirectionalLight : Light
     {
-        public override Color Color { get; }
-
+        private readonly Color color;
         private readonly float intensity;
         
         public DirectionalLight(Color color, float intensity)
         {
-            Color = color;
+            this.color = color;
             this.intensity = intensity;
         }
         
-        public override Vector3 GetDirection(Vector3 point)
+        public override ShadingInfo GetShadingInfo(Vector3 point)
         {
-            return transform.forward;
-        }
-        
-        public override float GetIntensity(Vector3 point)
-        {
-            return intensity;
+            return new ShadingInfo()
+            {
+                direction = -transform.forward,
+                distance = float.PositiveInfinity,
+                color = color * intensity
+            };
         }
     }
 }

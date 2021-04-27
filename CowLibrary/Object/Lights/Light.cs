@@ -4,12 +4,15 @@ namespace CowLibrary.Lights
 
     public abstract class Light
     {
-        public abstract Color Color { get; }
-        
         public readonly Transform transform = new Transform();
         
-        public abstract Vector3 GetDirection(Vector3 point);
-        
-        public abstract float GetIntensity(Vector3 point);
+        public abstract ShadingInfo GetShadingInfo(Vector3 point);
+    }
+    
+    public class ShadingInfo
+    {
+        public Vector3 direction;
+        public float distance;
+        public Color color;
     }
 }
