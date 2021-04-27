@@ -12,44 +12,56 @@ namespace CowLibrary
 
         public Vector3 position
         {
-            get => _position;
+            get
+            {
+                _position = parent == null ? _localPosition : parent.localToWorldMatrix.MultiplyPoint(_localPosition);
+                return _position;
+            }
             set
             {
                 _position = value;
-                _localPosition = parent == null ? value : parent.localToWorldMatrix.MultiplyPoint(value);
+                _localPosition = parent == null ? value : parent.worldToLocalMatrix.MultiplyPoint(value);
                 CalculateMatrix();
             }
         }
 
         public Quaternion rotation
         {
-            get => _rotation;
+            get
+            {
+                _rotation = parent == null ? _localRotation : parent.rotation * _localRotation;
+                return _rotation;
+            }
             set
             {
                 _rotation = value;
-                _localRotation = parent == null ? value : Quaternion.Inverse(parent.rotation) * _rotation;
+                _localRotation = parent == null ? value : Quaternion.Inverse(parent.rotation) * value;
                 CalculateMatrix();
             }
         }
-        
+
         public Vector3 lossyScale
         {
-            get => _lossyScale;
+            get
+            {
+                _lossyScale = parent == null ? _localScale : parent.localToWorldMatrix.MultiplyVector(_localScale);
+                return _lossyScale;
+            }
             set
             {
                 _lossyScale = value;
-                _localScale = parent == null ? value : parent.localToWorldMatrix.MultiplyPoint(value);
+                _localScale = parent == null ? value : parent.worldToLocalMatrix.MultiplyVector(value);
                 CalculateMatrix();
             }
         }
-        
+
         public Vector3 localPosition
         {
             get => _localPosition;
             set
             {
                 _localPosition = value;
-                _position = parent == null ? value : parent.worldToLocalMatrix.MultiplyPoint(value);
+                _position = parent == null ? value : parent.localToWorldMatrix.MultiplyPoint(value);
                 CalculateMatrix();
             }
         }
@@ -71,14 +83,18 @@ namespace CowLibrary
             set
             {
                 _localScale = value;
-                _lossyScale = parent == null ? value : parent.worldToLocalMatrix.MultiplyVector(value);
+                _lossyScale = parent == null ? value : parent.localToWorldMatrix.MultiplyVector(value);
                 CalculateMatrix();
             }
         }
 
         public Matrix4x4 localToWorldMatrix
         {
-            get => _localToWorldMatrix;
+            get
+            {
+                if (parent != null) CalculateMatrix();
+                return _localToWorldMatrix;
+            }
             set
             {
                 _localToWorldMatrix = value;
@@ -86,10 +102,14 @@ namespace CowLibrary
                 ExtractValuesFromMatrix();
             }
         }
-        
+
         public Matrix4x4 worldToLocalMatrix
         {
-            get => _worldToLocalMatrix;
+            get
+            {
+                if (parent != null) CalculateMatrix();
+                return _worldToLocalMatrix;
+            }
             set
             {
                 _worldToLocalMatrix = value;
@@ -97,7 +117,7 @@ namespace CowLibrary
                 ExtractValuesFromMatrix();
             }
         }
-        
+
         public Vector3 right => _localToWorldMatrix.Right();
         public Vector3 up => _localToWorldMatrix.Up();
         public Vector3 forward => _localToWorldMatrix.Forward();
@@ -123,7 +143,7 @@ namespace CowLibrary
         
         private void CalculateMatrix()
         {
-            _localToWorldMatrix = Matrix4x4Extensions.TRS(_position, _rotation, _lossyScale);
+            _localToWorldMatrix = Matrix4x4Extensions.TRS(position, rotation, lossyScale);
             Matrix4x4.Invert(_localToWorldMatrix, out _worldToLocalMatrix);
         }
         
@@ -132,9 +152,9 @@ namespace CowLibrary
             _position = _localToWorldMatrix.ExtractTranslation();
             _rotation = Quaternion.CreateFromRotationMatrix(_localToWorldMatrix);
             _lossyScale = _localToWorldMatrix.ExtractScale();
-            _localPosition = parent == null ? _position : parent.localToWorldMatrix.MultiplyPoint(_position);
+            _localPosition = parent == null ? _position : parent.worldToLocalMatrix.MultiplyPoint(_position);
             _localRotation = parent == null ? _rotation : Quaternion.Inverse(parent.rotation) * _rotation;
-            _localScale = parent == null ? _lossyScale : parent.localToWorldMatrix.MultiplyPoint(_lossyScale);
+            _localScale = parent == null ? _lossyScale : parent.worldToLocalMatrix.MultiplyPoint(_lossyScale);
         }
     }
 }

@@ -75,11 +75,11 @@
             var scene = new Scene();
             container.Inject(scene);
             
-            var light1 = new PointLight(new Color(135, 15, 220), 1f, 80);
+            var light1 = new SphereLight(new Color(135, 15, 220), 1f, 80);
             light1.transform.position = new Vector3(10, 20, 25);
             scene.lights.Add(light1);
             
-            var light2 = new PointLight(new Color(135, 15, 220), 1f, 80);
+            var light2 = new SphereLight(new Color(135, 15, 220), 1f, 80);
             light2.transform.position = new Vector3(-10, -20, -25);
             scene.lights.Add(light2);
             
