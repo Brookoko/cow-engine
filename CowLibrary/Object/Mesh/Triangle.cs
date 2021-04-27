@@ -5,7 +5,7 @@ namespace CowLibrary
 
     public class Triangle : Mesh
     {
-        private const double e = 0.00000001;
+        private const double e = 1e-10f;
 
         public override Box BoundingBox => box;
 

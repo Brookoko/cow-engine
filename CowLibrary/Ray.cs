@@ -1,6 +1,5 @@
 namespace CowLibrary
 {
-    using System;
     using System.Numerics;
 
     public class Ray
@@ -11,11 +10,6 @@ namespace CowLibrary
         public Ray(Vector3 origin, Vector3 direction)
         {
             this.origin = origin;
-            if (direction == Vector3.Zero)
-            {
-                throw new ArgumentException($"Ray direction must be non-zero vector.");
-            }
-            
             this.direction = direction.Normalize();
         }
         

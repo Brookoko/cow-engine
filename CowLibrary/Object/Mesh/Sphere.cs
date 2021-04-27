@@ -5,14 +5,13 @@ namespace CowLibrary
 
     public class Sphere : Mesh
     {
-        public readonly float radius;
-        public Vector3 center;
-        
         public override Box BoundingBox { get; }
 
-        public Sphere(Vector3 center, float radius)
+        private readonly float radius;
+        private Vector3 center = Vector3.Zero;
+        
+        public Sphere(float radius)
         {
-            this.center = center;
             this.radius = radius;
             BoundingBox = new Box(center, radius * 2);
         }
@@ -35,26 +34,28 @@ namespace CowLibrary
                 return false;
             }
 
+            float t;
             if (discriminant == 0)
             {
-                var k = (float) Math.Sqrt(aCoeff * cCoeff);
-                surfel = null;
-                return true;
+                t = (float) Math.Sqrt(aCoeff * cCoeff);
             }
-
-            var sqrDiscriminant = Math.Sqrt(discriminant);
-            var k1 = (-halfBCoeff + sqrDiscriminant) / aCoeff;
-            var k2 = (-halfBCoeff - sqrDiscriminant) / aCoeff;
-
-            k1 = k1 > 0 ? k1 : k2;
-            k2 = k2 > 0 ? k2 : k1;
-            if (k2 < 0)
+            else
             {
-                surfel = null;
-                return false;
-            }
+                var sqrDiscriminant = Math.Sqrt(discriminant);
+                var k1 = (-halfBCoeff + sqrDiscriminant) / aCoeff;
+                var k2 = (-halfBCoeff - sqrDiscriminant) / aCoeff;
 
-            var t = (float) Math.Min(k1, k2);
+                k1 = k1 > 0 ? k1 : k2;
+                k2 = k2 > 0 ? k2 : k1;
+                if (k2 < 0)
+                {
+                    surfel = null;
+                    return false;
+                }
+                
+                t = (float) Math.Min(k1, k2);
+            }
+            
             var p = ray.GetPoint(t);
             surfel = new Surfel()
             {
