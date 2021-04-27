@@ -10,7 +10,7 @@ namespace CowEngine.ImageWorker
             path = path.Replace('/', Path.DirectorySeparatorChar);
             if (!File.Exists(path))
             {
-                throw new Exception("File doesn't exist");
+                throw new Exception($"File {path} doesn't exist");
             }
             return File.ReadAllBytes(path);
         }

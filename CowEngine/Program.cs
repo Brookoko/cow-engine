@@ -11,8 +11,6 @@
 
     public class Program
     {
-        private static readonly Watch watch = new Watch();
-        
         private static readonly List<IModule> modules = new List<IModule>()
         {
             new ImageModule(),
@@ -25,38 +23,22 @@
             var container = SetupContainer();
 
             var argumentParser = container.Get<IArgumentsParser>();
-            var objWorker = container.Get<IRenderableObjectWorker>();
-            var renderer = container.Get<IRenderer>();
-            var imageWorker = container.Get<IImageWorker>();
-
+            
             try
             {
-                var (source, output) = argumentParser.Parse(args);
-                
-                watch.Start();
-                var model = objWorker.Parse(source);
-                watch.Stop("Loading model");
-                
-                watch.Start();
-                var scene = PrepareScene(container, model);
-                watch.Stop("Preparing scene");
-                
-                watch.Start();
-                var image = renderer.Render(scene);
-                watch.Stop("Rendering scene");
-                
-                watch.Start();
-                imageWorker.SaveImage(image, output);
-                watch.Stop("Saving render");
+                argumentParser.Parse(args,
+                    opts => RenderCompiledScene(container, opts.Output),
+                    opts => RenderModel(container, opts.Source, opts.Output)
+                    );
             }
             catch (Exception e)
             {
-                Console.WriteLine("Failed to render model. See next log for more detail");
+                Console.WriteLine("Failed to render model. See next log for more details");
                 Console.WriteLine(e);
                 throw;
             }
         }
-
+        
         private static DiContainer SetupContainer()
         {
             var container = new DiContainer();
@@ -66,10 +48,58 @@
             {
                 module.Prepare(container);
             }
-            
             return container;
         }
+        
+        private static int RenderCompiledScene(DiContainer container, string output)
+        {
+            var watch = new Watch();
+            var renderer = container.Get<IRenderer>();
+            var imageWorker = container.Get<IImageWorker>();
+            
+            watch.Start();
+            var scene = new Scene();
+            container.Inject(scene);
+            scene.PrepareScene();
+            watch.Stop("Preparing scene");
+            
+            watch.Start();
+            var image = renderer.Render(scene);
+            watch.Stop("Rendering scene");
+            
+            watch.Start();
+            imageWorker.SaveImage(image, output);
+            watch.Stop("Saving render");
+            
+            return 0;
+        }
 
+        private static int RenderModel(DiContainer container, string source, string output)
+        {
+            var watch = new Watch();
+            var objWorker = container.Get<IRenderableObjectWorker>();
+            var renderer = container.Get<IRenderer>();
+            var imageWorker = container.Get<IImageWorker>();
+            
+            watch.Start();
+            var model = objWorker.Parse(source);
+            watch.Stop("Loading model");
+            
+            watch.Start();
+            var scene = PrepareScene(container, model);
+            watch.Stop("Preparing scene");
+            
+            watch.Start();
+            var image = renderer.Render(scene);
+            watch.Stop("Rendering scene");
+            
+            watch.Start();
+            imageWorker.SaveImage(image, output);
+            watch.Stop("Saving render");
+            
+            return 0;
+        }
+        
         private static Scene PrepareScene(DiContainer container, RenderableObject model)
         {
             var scene = new Scene();
