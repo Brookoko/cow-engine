@@ -21,7 +21,7 @@ namespace CowRenderer.Integration
                 return negativeColor;
             }
 
-            return Color.LerpUnclamped(minColor, maxColor, (surfel.t - minDistance) / (maxDistance - minDistance));
+            return ColorExtensions.LerpUnclamped(minColor, maxColor, (surfel.t - minDistance) / (maxDistance - minDistance));
         }
     }
 }

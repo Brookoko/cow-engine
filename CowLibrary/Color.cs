@@ -1,99 +1,76 @@
 namespace CowLibrary
 {
     using System;
-    using System.Numerics;
 
     public readonly struct Color
     {
-        public readonly byte r;
-        public readonly byte g;
-        public readonly byte b;
-        public readonly byte a;
-
-        public Color(float r, float g, float b, float a = 255):
-            this((byte) (r * 255), (byte) (g * 255), (byte) (b * 255), (byte) (a * 255))
-        {
-        }
+        public readonly float r;
+        public readonly float g;
+        public readonly float b;
+        public readonly float a;
         
         public Color(byte v) : this(v, v, v)
         {
         }
 
-        public Color(byte r, byte g, byte b, byte a = 255)
+        public Color(byte r, byte g, byte b, byte a = 255) : this(r / 255f, g / 255f, b / 255f, a / 255f)
         {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = a;
         }
 
+        public Color(float v) : this(v, v, v)
+        {
+        }
+        
+        public Color(float r, float g, float b, float a = 1)
+        {
+            this.r = Math.Clamp(r, 0, 1);
+            this.g = Math.Clamp(g, 0, 1);
+            this.b = Math.Clamp(b, 0, 1);
+            this.a = Math.Clamp(a, 0, 1);
+        }
+        
         public byte[] ToBytes()
         {
-            return new[] {r, g, b};
+            return new[] {(byte) (r * 255), (byte) (g * 255), (byte) (b * 255)};
         }
 
         public override string ToString()
         {
             return $"Color R:{r} G:{g} B:{g} A:{a}";
         }
-
-        public static Color LerpUnclamped(Color color1, Color color2, float a)
+        
+        public static Color operator *(Color color, float value)
         {
-            return new Color(
-                (byte) Math.Ceiling(color1.r + (color2.r - color1.r) * a),
-                (byte) Math.Ceiling(color1.g + (color2.g - color1.g) * a),
-                (byte) Math.Ceiling(color1.b + (color2.b - color1.b) * a),
-                (byte) Math.Ceiling(color1.a + (color2.a - color1.a) * a)
+            return new Color
+            (
+                color.r * value,
+                color.g * value,
+                color.b * value,
+                color.a * value
             );
         }
         
-        public static Color LerpUnclamped(Color color1, Color color2, Vector3 a)
-        {
-            return new Color(
-                (byte) Math.Ceiling(color1.r + (color2.r - color1.r) * a.X),
-                (byte) Math.Ceiling(color1.g + (color2.g - color1.g) * a.Y),
-                (byte) Math.Ceiling(color1.b + (color2.b - color1.b) * a.Z),
-                (byte) Math.Ceiling(color1.a + (color2.a - color1.a) * 1f)
-            );
-        }
-
-        public static Color MaxComponents(Color color1, Color color2)
+        public static Color operator *(float value, Color color) => color * value;
+        
+        public static Color operator *(Color left, Color right)
         {
             return new Color
             (
-                Math.Max(color1.r, color2.r),
-                Math.Max(color1.g, color2.g),
-                Math.Max(color1.b, color2.b)
+                left.r * right.r,
+                left.g * right.g,
+                left.b * right.b,
+                left.a * right.a
             );
-        }
-
-        public static Color MinComponents(Color color1, Color color2)
-        {
-            return new Color
-            (
-                Math.Min(color1.r, color2.r),
-                Math.Min(color1.g, color2.g),
-                Math.Min(color1.b, color2.b)
-            );
-        }
-
-        public static Color operator *(Color color, float value)
-        {
-            return new Color(
-            (byte) (color.r * value),
-            (byte) (color.g * value),
-            (byte) (color.b * value),
-            (byte) (color.a * value));
         }
         
         public static Color operator +(Color color1, Color color2)
         {
             return new Color
             (
-                (byte)( color1.r + color2.r),
-                (byte)( color1.g + color2.g),
-                (byte)( color1.b + color2.b),
-                (byte)( color1.a + color2.a)
+                color1.r + color2.r,
+                color1.g + color2.g,
+                color1.b + color2.b,
+                color1.a + color2.a
             );
         }
     }

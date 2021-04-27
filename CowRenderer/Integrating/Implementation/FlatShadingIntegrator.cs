@@ -16,18 +16,17 @@ namespace CowRenderer.Integration
             }
 
             var baseColor = surfel.material.color;
-            var luminosity = 0f;
+            var result = new Color(0, 0, 0);
             foreach (var light in scene.lights)
             {
                 var direction = light.GetDirection(surfel.point);
-                var dotProduct = Vector3.Dot(direction, surfel.normal);
-                dotProduct = Math.Max(dotProduct, 0);
-                var intensity =  light.GetIntensity(surfel.point);
-                var lightLuminosity = dotProduct * intensity;
-                luminosity += lightLuminosity;
+                var dot = Vector3.Dot(-direction, surfel.normal);
+                dot = Math.Max(dot, 0);
+                var intensity = light.GetIntensity(surfel.point);
+                var lightColor = light.Color * (intensity * dot);
+                result += lightColor * baseColor;
             }
-            
-            return baseColor * luminosity;
+            return result;
         }
     }
 }

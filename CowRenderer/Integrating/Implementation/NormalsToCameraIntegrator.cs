@@ -20,14 +20,9 @@ namespace CowRenderer.Integration
             var camera = scene.camera;
             var surfelToCameraDirection = camera.transform.position - surfel.point;
             var angle = surfelToCameraDirection.AngleTo(surfel.normal);
-            if (angle <= 90)
-            {
-                return Color.LerpUnclamped(lerpingColors.Item1, lerpingColors.Item2, (float) angle / 90);
-            }
-            else
-            {
-                return Color.LerpUnclamped(negativeColors.Item1, negativeColors.Item2, (float) (angle - 90) / 90);
-            }
+            return angle <= 90 ?
+                ColorExtensions.LerpUnclamped(lerpingColors.Item1, lerpingColors.Item2, (float) angle / 90) :
+                ColorExtensions.LerpUnclamped(negativeColors.Item1, negativeColors.Item2, (float) (angle - 90) / 90);
         }
     }
 }
