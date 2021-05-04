@@ -15,7 +15,7 @@ namespace CowRenderer.Rendering
                 for (var x = 0; x < w; x++)
                 {
                     var cameraRay = camera.ScreenPointToRay(new Vector2(x + from.X, y + from.Y));
-                    Raycaster.Raycast(scene, cameraRay, out var surfel);
+                    Raycaster.Raycast(cameraRay, out var surfel);
                     surfels[y, x] = surfel;
                 }
             }

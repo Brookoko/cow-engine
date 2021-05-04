@@ -13,8 +13,12 @@ namespace CowRenderer.Rendering
         [Inject]
         public DiContainer DiContainer { get; set; }
         
+        [Inject]
+        public IRaycaster Raycaster { get; set; }
+        
         public Image Render(Scene scene)
         {
+            Raycaster.Init(scene);
             var numberOfThread = RenderConfig.numberOfThread;
             var threads = new Thread[numberOfThread * numberOfThread];
             

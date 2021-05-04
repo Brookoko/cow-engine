@@ -40,10 +40,7 @@ namespace Cowject
         {
             if (mappings.TryGetValue(type, out var map))
             {
-                mapping = map.FirstOrDefault(m =>
-                {
-                    return name == null || name.Equals(m.Name);
-                });
+                mapping = map.FirstOrDefault(m => name == null || name.Equals(m.Name));
                 return true;
             }
             mapping = null;

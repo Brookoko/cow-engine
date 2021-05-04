@@ -5,15 +5,17 @@ namespace CowLibrary
 
     public class Sphere : Mesh
     {
-        public override Box BoundingBox { get; }
-
+        public override Box BoundingBox => box;
+        
+        private Box box;
+        
         private readonly float radius;
         private Vector3 center = Vector3.Zero;
         
         public Sphere(float radius)
         {
             this.radius = radius;
-            BoundingBox = new Box(center, radius * 2);
+            box = new Box(center, radius * 2);
         }
 
         public override bool Intersect(Ray ray, out Surfel surfel)
@@ -69,6 +71,7 @@ namespace CowLibrary
         public override void Apply(Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);
+            box = new Box(center, radius * 2);
         }
     }
 }

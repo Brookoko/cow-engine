@@ -29,16 +29,16 @@ namespace CowRenderer.Integration
                 var shading = light.GetShadingInfo(surfel.point);
                 var dot = Vector3.Dot(shading.direction, surfel.normal);
                 dot = Math.Max(dot, 0);
-                var multiplier = TraceShadowRay(scene, surfel, shading.direction, shading.distance);
+                var multiplier = TraceShadowRay(surfel, shading.direction, shading.distance);
                 result += multiplier * baseColor * shading.color * dot;
             }
             return result;
         }
 
-        private float TraceShadowRay(Scene scene, Surfel surfel, Vector3 direction, float distance)
+        private float TraceShadowRay(Surfel surfel, Vector3 direction, float distance)
         {
             var position = surfel.point + surfel.normal * RenderConfig.bias;
-            var isHit = Raycaster.Raycast(scene, new Ray(position, direction), out var hit);
+            var isHit = Raycaster.Raycast(new Ray(position, direction), out var hit);
             return isHit && hit.t < distance ? 0 : 1;
         }
     }
