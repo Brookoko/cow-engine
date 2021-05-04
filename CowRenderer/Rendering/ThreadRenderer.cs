@@ -28,26 +28,6 @@ namespace CowRenderer
             this.to = to;
         }
         
-        public void Render()
-        {
-            var surfels = GetPixelsRaycastSurfels(scene.MainCamera);
-            IntegratePixelsSurfels(surfels);
-        }
-        
-        protected abstract Surfel[,] GetPixelsRaycastSurfels(Camera camera);
-        
-        private void IntegratePixelsSurfels(Surfel[,] surfels)
-        {
-            var w = surfels.GetLength(1);
-            var h = surfels.GetLength(0);
-            
-            for (var y = 0; y < h; y++)
-            {
-                for (var x = 0; x < w; x++)
-                {
-                    image[(int) (y + from.Y), (int) (x + from.X)] = Integrator.GetColor(scene, surfels[y, x]);
-                }
-            }
-        }
+        public abstract void Render();
     }
 }

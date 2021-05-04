@@ -52,6 +52,17 @@ namespace CowLibrary
         
         public static Color operator *(double value, Color color) => color * value;
         
+        public static Color operator /(Color color, double value)
+        {
+            return new Color
+            (
+                (float) (color.r / value),
+                (float) (color.g / value),
+                (float) (color.b / value),
+                (float) (color.a / value)
+            );
+        }
+        
         public static Color operator *(Color left, Color right)
         {
             return new Color

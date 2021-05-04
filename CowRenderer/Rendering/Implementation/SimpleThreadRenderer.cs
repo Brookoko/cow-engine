@@ -5,7 +5,13 @@ namespace CowRenderer.Rendering
 
     public class SimpleThreadRenderer : ThreadRenderer
     {
-        protected override Surfel[,] GetPixelsRaycastSurfels(Camera camera)
+        public override void Render()
+        {
+            var surfels = GetPixelsRaycastSurfels(scene.MainCamera);
+            IntegratePixelsSurfels(surfels);
+        }
+        
+        protected Surfel[,] GetPixelsRaycastSurfels(Camera camera)
         {
             var w = (int) (to.X - from.X);
             var h = (int) (to.Y - from.Y);
@@ -20,6 +26,20 @@ namespace CowRenderer.Rendering
                 }
             }
             return surfels;
+        }
+        
+        private void IntegratePixelsSurfels(Surfel[,] surfels)
+        {
+            var w = surfels.GetLength(1);
+            var h = surfels.GetLength(0);
+            
+            for (var y = 0; y < h; y++)
+            {
+                for (var x = 0; x < w; x++)
+                {
+                    image[(int) (y + from.Y), (int) (x + from.X)] = Integrator.GetColor(scene, surfels[y, x]);
+                }
+            }
         }
     }
 }
