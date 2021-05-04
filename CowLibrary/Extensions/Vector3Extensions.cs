@@ -24,5 +24,11 @@ namespace CowLibrary
         {
             return i == 0 ? v.X : i == 1 ? v.Y : v.Z;
         }
+        
+        public static Vector3 Reflect(this Vector3 v, Vector3 n)
+        {
+            var num = -2f * Vector3.Dot(n, v);
+            return new Vector3(num * n.X + v.X, num * n.Y + v.Y, num * n.Z + v.Z);
+        }
     }
 }

@@ -79,6 +79,7 @@ namespace CowLibrary
                     {
                         surfel = s;
                         surfel.material = obj.material;
+                        surfel.ray = ray.direction;
                     }
                 }
             }

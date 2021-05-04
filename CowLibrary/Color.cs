@@ -23,15 +23,15 @@ namespace CowLibrary
         
         public Color(float r, float g, float b, float a = 1)
         {
-            this.r = Math.Clamp(r, 0, 1);
-            this.g = Math.Clamp(g, 0, 1);
-            this.b = Math.Clamp(b, 0, 1);
-            this.a = Math.Clamp(a, 0, 1);
+            this.r = r;
+            this.g = g;
+            this.b = b;
+            this.a = a;
         }
         
         public byte[] ToBytes()
         {
-            return new[] {(byte) (r * 255), (byte) (g * 255), (byte) (b * 255)};
+            return new[] {(byte) (Math.Clamp(r, 0, 1) * 255), (byte) (Math.Clamp(g, 0, 1) * 255), (byte) (Math.Clamp(b, 0, 1) * 255)};
         }
 
         public override string ToString()

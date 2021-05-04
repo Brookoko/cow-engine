@@ -24,6 +24,7 @@ namespace CowRenderer.Raycasting
                         continue;
                     }
                     hitSurfel.material = renderableObject.material;
+                    hitSurfel.ray = ray.direction;
                     closestSurfel = hitSurfel;
                 }
             }

@@ -75,8 +75,7 @@ namespace CowLibrary
         
         private float GetDimension(Vector3 v, int depth)
         {
-            depth %= 3;
-            return depth == 0 ? v.X : depth == 1 ? v.Y : v.Z;
+            return v.Get(depth % 3);
         }
         
         public bool Intersect(Ray ray, out Surfel surfel)

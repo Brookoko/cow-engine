@@ -46,6 +46,7 @@ namespace Cowject
                     property.SetValue(obj, Get(propertyType, attribute.Name));
                 }
             }
+            PrepareComponent(obj);
             return obj;
         }
         

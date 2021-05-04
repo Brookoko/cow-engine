@@ -1,5 +1,6 @@
 namespace CowRenderer.Rendering
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Numerics;
     using CowLibrary;
@@ -25,7 +26,7 @@ namespace CowRenderer.Rendering
         
         private Surfel[] Raycast(Camera camera, int x, int y)
         {
-            var numberOfRay = RenderConfig.numberOfRay;
+            var numberOfRay = RenderConfig.numberOfRayPerPixel / 2;
             var surfels = new Surfel[numberOfRay * numberOfRay];
             for (var i = 0; i < numberOfRay; i++)
             {
@@ -43,8 +44,10 @@ namespace CowRenderer.Rendering
         
         private Color Integrate(Surfel[] surfels)
         {
-            return surfels.Select(s => Integrator.GetColor(scene, s))
-                .Aggregate(new Color(0), (acc, c) => acc + c / surfels.Length);
+            var color = surfels
+                .Select(s => Integrator.GetColor(scene, s))
+                .Aggregate(new Color(0), (acc, c) => acc + c);
+            return color / surfels.Length;
         }
     }
 }
