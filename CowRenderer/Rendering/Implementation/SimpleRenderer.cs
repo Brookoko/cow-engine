@@ -14,7 +14,7 @@ namespace CowRenderer.Rendering
 
         public Image Render(Scene scene)
         {
-            var camera = scene.camera;
+            var camera = scene.MainCamera;
             var pixelsRaycastSurfels = GetPixelsRaycastSurfels(scene, camera);
             return IntegratePixelsSurfels(scene, pixelsRaycastSurfels);
         }

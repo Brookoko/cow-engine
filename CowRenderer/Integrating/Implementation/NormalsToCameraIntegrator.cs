@@ -17,7 +17,7 @@ namespace CowRenderer.Integration
                 return nullColor;
             }
             
-            var camera = scene.camera;
+            var camera = scene.MainCamera;
             var surfelToCameraDirection = camera.transform.position - surfel.point;
             var angle = surfelToCameraDirection.AngleTo(surfel.normal);
             return angle <= 90 ?

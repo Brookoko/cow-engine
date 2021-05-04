@@ -30,7 +30,7 @@ namespace CowRenderer
         
         public void Render()
         {
-            var surfels = GetPixelsRaycastSurfels(scene.camera);
+            var surfels = GetPixelsRaycastSurfels(scene.MainCamera);
             IntegratePixelsSurfels(surfels);
         }
         

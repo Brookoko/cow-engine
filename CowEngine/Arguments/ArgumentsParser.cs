@@ -5,17 +5,18 @@ namespace CowEngine
 
     public interface IArgumentsParser
     {
-        void Parse(string[] args, Func<CompiledOptions, int> compileFlow, Func<ModelOptions, int> modelFlow);
+        void Parse(string[] args, Func<CompiledOptions, int> compileFlow, Func<ModelOptions, int> modelFlow, Func<SceneOptions, int> sceneFlow);
     }
     
     public class ArgumentsParser : IArgumentsParser
     {
-        public void Parse(string[] args, Func<CompiledOptions, int> compileFlow, Func<ModelOptions, int> modelFlow)
+        public void Parse(string[] args, Func<CompiledOptions, int> compileFlow, Func<ModelOptions, int> modelFlow, Func<SceneOptions, int> sceneFlow)
         {
-            Parser.Default.ParseArguments<CompiledOptions, ModelOptions>(args)
+            Parser.Default.ParseArguments<CompiledOptions, ModelOptions, SceneOptions>(args)
                 .MapResult(
                     compileFlow,
                     modelFlow,
+                    sceneFlow,
                     _ => 1
                 );
         }

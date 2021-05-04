@@ -6,28 +6,23 @@ namespace CowRenderer
     using System.Numerics;
     using Cowject;
     using CowLibrary;
-    using CowLibrary.Lights;
 
-    public class Scene
+    public class AutoAdjustScene : Scene
     {
         [Inject]
         public RenderConfig RenderConfig { get; set; }
-        
-        public PerspectiveCamera camera;
-        
-        public readonly List<Light> lights = new List<Light>();
-        
-        public readonly List<RenderableObject> objects = new List<RenderableObject>();
 
-        public void PrepareScene()
+        public override Camera MainCamera => camera;
+
+        private PerspectiveCamera camera;
+        
+        public override void PrepareScene()
         {
             camera = CreateCamera();
+            cameras.Add(camera);
             var box = GetBoundingBoxFor(objects);
             PlaceCamera(box);
-            foreach (var obj in objects)
-            {
-                obj.Prepare();
-            }
+            base.PrepareScene();
         }
         
         private PerspectiveCamera CreateCamera()

@@ -2,12 +2,10 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public abstract class Camera
+    public abstract class Camera : SceneObject
     {
         public float aspectRatio => (float) width / height;
         
-        public Transform transform = new Transform();
-
         public int width;
         public int height;
         

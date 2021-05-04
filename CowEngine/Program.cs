@@ -8,6 +8,7 @@
     using CowLibrary.Lights;
     using CowRenderer;
     using ImageWorker;
+    using SceneWorker;
 
     public class Program
     {
@@ -15,7 +16,8 @@
         {
             new ImageModule(),
             new RendererModule(),
-            new ObjModule()
+            new ObjModule(),
+            new SceneModule()
         };
         
         public static void Main(string[] args)
@@ -28,7 +30,8 @@
             {
                 argumentParser.Parse(args,
                     opts => RenderCompiledScene(container, opts.Output),
-                    opts => RenderModel(container, opts.Source, opts.Output)
+                    opts => RenderModel(container, opts.Source, opts.Output),
+                    opts => RenderScene(container, opts.Source, opts.Output)
                     );
             }
             catch (Exception e)
@@ -50,6 +53,32 @@
             }
             return container;
         }
+
+        private static int RenderScene(DiContainer container, string source, string output)
+        {
+            var watch = new Watch();
+            var sceneWorker = container.Get<ISceneWorker>();
+            var renderer = container.Get<IRenderer>();
+            var imageWorker = container.Get<IImageWorker>();
+            
+            watch.Start();
+            var scene = sceneWorker.Parse(source);
+            watch.Stop("Loading scene");
+            
+            watch.Start();
+            scene.PrepareScene();
+            watch.Stop("Preparing scene");
+            
+            watch.Start();
+            var image = renderer.Render(scene);
+            watch.Stop("Rendering scene");
+            
+            watch.Start();
+            imageWorker.SaveImage(image, output);
+            watch.Stop("Saving render");
+            
+            return 0;
+        }
         
         private static int RenderCompiledScene(DiContainer container, string output)
         {
@@ -58,7 +87,7 @@
             var imageWorker = container.Get<IImageWorker>();
             
             watch.Start();
-            var scene = new Scene();
+            var scene = new CompiledScene();
             container.Inject(scene);
             scene.PrepareScene();
             watch.Stop("Preparing scene");
@@ -102,7 +131,7 @@
         
         private static Scene PrepareScene(DiContainer container, RenderableObject model)
         {
-            var scene = new Scene();
+            var scene = new AutoAdjustScene();
             container.Inject(scene);
             
             var light = new PointLight(new Color(255, 255, 255), 100);

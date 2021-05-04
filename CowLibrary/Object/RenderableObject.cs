@@ -1,8 +1,7 @@
 namespace CowLibrary
 {
-    public class RenderableObject
+    public class RenderableObject : SceneObject
     {
-        public Transform transform = new Transform();
         public Mesh mesh;
         public Material material;
         
