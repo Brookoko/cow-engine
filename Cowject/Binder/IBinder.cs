@@ -8,6 +8,8 @@ namespace Cowject
         
         IBinder Bind(Type type);
         
+        IBinder WithName(object name);
+        
         IBinder To<T>() where T : class, new();
         
         IBinder To(Type type);

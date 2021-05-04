@@ -30,6 +30,12 @@ namespace Cowject
             return this;
         }
         
+        public IBinder WithName(object name)
+        {
+            mapping.Name = name;
+            return this;
+        }
+        
         public IBinder To<T>() where T : class, new()
         {
             return To(typeof(T));

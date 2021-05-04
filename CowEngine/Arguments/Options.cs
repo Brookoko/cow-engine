@@ -2,7 +2,7 @@ namespace CowEngine
 {
     using CommandLine;
 
-    [Verb("compiled", HelpText = "Render with compiled scene")]
+    [Verb("compiled", HelpText = "Render compiled scene")]
     public class CompiledOptions
     {
         [Option("output", Required = true, HelpText = "Output image")]
@@ -27,5 +27,12 @@ namespace CowEngine
         
         [Option("output", Required = true, HelpText = "Output image")]
         public string Output { get; set; }
+    }
+
+    public enum Options
+    {
+        Model,
+        Compiled,
+        Scene
     }
 }

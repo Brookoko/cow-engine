@@ -24,10 +24,18 @@ namespace Cowject
             var type = obj.GetType();
             parameters = parameters.ToList();
             var properties = type
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                .Where(property => CanInject(type, property));
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var property in properties)
             {
+                var attribute = property.GetCustomAttribute<InjectAttribute>();
+                if (attribute == null)
+                {
+                    continue;
+                }
+                if (!property.CanWrite)
+                {
+                    throw new InjectionException($"Failed to inject into readonly property: {type}");
+                }
                 var propertyType = property.PropertyType;
                 if (TryGetParameter(propertyType, parameters, out var value))
                 {
@@ -35,7 +43,7 @@ namespace Cowject
                 }
                 else
                 {
-                    property.SetValue(obj, Get(propertyType));
+                    property.SetValue(obj, Get(propertyType, attribute.Name));
                 }
             }
             return obj;
@@ -46,17 +54,6 @@ namespace Cowject
             value = parameters.FirstOrDefault(type.IsInstanceOfType);
             parameters.Remove(value);
             return value != null;
-        }
-        
-        private bool CanInject(Type type, PropertyInfo property)
-        {
-            var attribute = property.GetCustomAttribute<InjectAttribute>();
-            if (attribute == null) return false;
-            if (!property.CanWrite)
-            {
-                throw new InjectionException($"Failed to inject into readonly property: {type}");
-            }
-            return true;
         }
         
         public IBinder Bind<T>()
@@ -79,24 +76,24 @@ namespace Cowject
             mapping.RemoveBindingFor(type);
         }
 
-        public T Get<T>() where T : class
+        public T Get<T>(object name = null) where T : class
         {
-            return Get<T>(new object[] { });
+            return Get<T>(new object[] { }, name);
         }
         
-        public T Get<T>(IEnumerable<object> parameters) where T : class
+        public T Get<T>(IEnumerable<object> parameters, object name = null) where T : class
         {
-            return (T) Get(typeof(T), parameters);
+            return (T) Get(typeof(T), parameters, name);
         }
         
-        public object Get(Type type)
+        public object Get(Type type, object name = null)
         {
-            return Get(type, new object[] { });
+            return Get(type, new object[] { }, name);
         }
 
-        public object Get(Type type, IEnumerable<object> parameters)
+        public object Get(Type type, IEnumerable<object> parameters, object name = null)
         {
-            var mapped = mapping.GetMapping(type);
+            var mapped = mapping.GetMapping(type, name);
             var obj = InitializeComponent(mapped.ShouldInitialize, mapped.Instance ?? CreateInstance(mapped.Type), parameters);
             mapped.ShouldInitialize = mapped.Instance == null;
             return obj;

@@ -3,7 +3,14 @@ namespace CowEngine
     using System;
     using System.Diagnostics;
 
-    public class Watch
+    public interface IWatch
+    {
+        void Start();
+        
+        void Stop(string info);
+    }
+    
+    public class Watch : IWatch
     {
         private readonly Stopwatch watch = new Stopwatch();
         

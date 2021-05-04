@@ -7,6 +7,7 @@ namespace Cowject
     [MeansImplicitUse(ImplicitUseKindFlags.Assign)]
     public class InjectAttribute : Attribute
     {
+        public object Name;
     }
     
     [AttributeUsage(AttributeTargets.Method)]

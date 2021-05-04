@@ -43,14 +43,14 @@ namespace Cowject
             mapping.RemoveBindingFor(type);
         }
         
-        public T Get<T>() where T : class
+        public T Get<T>(object name = null) where T : class
         {
-            return (T) Get(typeof(T));
+            return (T) Get(typeof(T), name);
         }
         
-        public object Get(Type type)
+        public object Get(Type type, object name = null)
         {
-            return injector.Get(type);
+            return injector.Get(type, name);
         }
         
         public object Inject(object obj)
