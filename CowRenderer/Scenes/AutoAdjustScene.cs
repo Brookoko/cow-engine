@@ -22,6 +22,7 @@ namespace CowRenderer
             cameras.Add(camera);
             var box = GetBoundingBoxFor(objects);
             PlaceCamera(box);
+            PlacePlane(box);
             base.PrepareScene();
         }
         
@@ -59,7 +60,14 @@ namespace CowRenderer
             var tan = (float) Math.Tan(Const.Deg2Rad * camera.fov / 2);
             var dist = max / tan;
             
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0, dist), box.center);
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
+        }
+        
+        private void PlacePlane(Box box)
+        {
+            var plane = new RenderableObject(new Disk(10), new Material() {color = new Color(1f, 0, 0)});
+            plane.transform.position = box.min.Y * Vector3.UnitY;
+            objects.Add(plane);
         }
     }
 }

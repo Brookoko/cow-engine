@@ -51,7 +51,7 @@ namespace CowEngine
             DiContainer.Inject(scene);
             
             var light = new PointLight(new Color(255, 255, 255), 100);
-            light.transform.position = new Vector3(0, 0, 5f);
+            light.transform.position = new Vector3(0, 1, 5f);
             scene.lights.Add(light);
             
             scene.objects.Add(model);
