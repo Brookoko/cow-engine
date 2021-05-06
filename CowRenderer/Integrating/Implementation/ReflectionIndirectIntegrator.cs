@@ -1,5 +1,6 @@
 namespace CowRenderer.Integration
 {
+    using System.Numerics;
     using Cowject;
     using CowLibrary;
 
@@ -43,7 +44,8 @@ namespace CowRenderer.Integration
             var ray = new Ray(p, dir);
             if (Raycaster.Raycast(ray, out surfel))
             {
-                return directIntegrator.GetColor(scene, surfel) + TraceRecursive(scene, surfel, depth + 1);
+                var dot = Vector3.Dot(surfel.normal, dir);
+                return dot * (directIntegrator.GetColor(scene, surfel) + TraceRecursive(scene, surfel, depth + 1));
             }
             return new Color(0f);
         }

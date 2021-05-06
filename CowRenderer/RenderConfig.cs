@@ -9,8 +9,8 @@ namespace CowRenderer
         public float bias = 0.01f;
         
         public int numberOfThread = 8;
-        public int numberOfRayPerPixel = 2;
+        public int numberOfRayPerPixel = 4;
         public int rayDepth = 2;
-        public int numberOfIndirectRay = 8;
+        public int numberOfIndirectRay = 1;
     }
 }

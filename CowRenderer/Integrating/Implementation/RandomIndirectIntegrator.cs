@@ -48,7 +48,7 @@ namespace CowRenderer.Integration
                 if (Raycaster.Raycast(ray, out var hit))
                 {
                     var dot = Vector3.Dot(surfel.normal, dir);
-                    color += (directIntegrator.GetColor(scene, hit) + TraceRecursive(scene, hit, depth + 1));
+                    color += dot * (directIntegrator.GetColor(scene, hit) + TraceRecursive(scene, hit, depth + 1));
                 }
             }
             return color / RenderConfig.numberOfIndirectRay;
