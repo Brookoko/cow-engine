@@ -24,10 +24,10 @@ namespace CowRenderer
             var sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(new Color(0, 1f, 0), 0.5f));
             sphere.transform.position = new Vector3(-1, 0, 0);
             objects.Add(sphere);
-            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(new Color(1f, 1f, 1f), 1));
+            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(new Color(0, 0, 1f), 1));
             sphere.transform.position = new Vector3(1, 0, 0);
             objects.Add(sphere);
-            sphere = new RenderableObject(new Sphere(1), new FresnelMaterial(new Color(1f, 1f, 1f), 0.7f, 0.7f, 2.4f));
+            sphere = new RenderableObject(new Sphere(1), new FresnelMaterial(new Color(1f, 1f, 1f), 0.7f, 0.7f, 1.5f));
             sphere.transform.position = new Vector3(2f, 0, 3f);
             objects.Add(sphere);
             var box = GetBoundingBoxFor(objects);
