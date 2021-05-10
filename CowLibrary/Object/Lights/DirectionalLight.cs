@@ -22,5 +22,10 @@ namespace CowLibrary.Lights
                 color = color * intensity
             };
         }
+        
+        public override Color Sample(Surfel surfel, Vector3 wi)
+        {
+            return new Color(0f);
+        }
     }
 }

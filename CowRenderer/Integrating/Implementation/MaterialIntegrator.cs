@@ -45,7 +45,7 @@ namespace CowRenderer.Integration
             var dot = Vector3.Dot(surfel.normal, shading.direction);
             dot = Math.Max(dot, 0);
             var multiplier = TraceShadowRay(surfel, shading.direction, shading.distance);
-           return multiplier * color * shading.color * dot;
+            return multiplier * color * shading.color * dot;
         }
         
         private Color GetIndirectLighting(Surfel surfel, Light light, int depth)
@@ -78,7 +78,7 @@ namespace CowRenderer.Integration
             var sign = Math.Sign(Vector3.Dot(surfel.normal, direction));
             var position = surfel.point + sign * surfel.normal * RenderConfig.bias;
             var isHit = Raycaster.Raycast(new Ray(position, direction), out var hit);
-            return isHit ? GetLighting(hit, light, depth + 1) : new Color(0f);
+            return isHit ? GetLighting(hit, light, depth + 1) : light.Sample(surfel, direction);
         }
     }
 }

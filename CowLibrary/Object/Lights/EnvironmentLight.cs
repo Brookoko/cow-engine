@@ -1,5 +1,6 @@
 namespace CowLibrary.Lights
 {
+    using System;
     using System.Numerics;
 
     public class EnvironmentLight : Light
@@ -21,6 +22,13 @@ namespace CowLibrary.Lights
                 distance = float.PositiveInfinity,
                 color = color * intensity
             };
+        }
+        
+        public override Color Sample(Surfel surfel, Vector3 wi)
+        {
+            var dot = Vector3.Dot(surfel.normal, wi);
+            dot = Math.Max(dot, 0);
+            return surfel.material.color * color * intensity * dot;
         }
     }
 }

@@ -84,5 +84,30 @@ namespace CowLibrary
                 color1.a + color2.a
             );
         }
+        
+        public bool Equals(Color other)
+        {
+            return r.Equals(other.r) && g.Equals(other.g) && b.Equals(other.b) && a.Equals(other.a);
+        }
+        
+        public override bool Equals(object obj)
+        {
+            return obj is Color other && Equals(other);
+        }
+        
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(r, g, b, a);
+        }
+        
+        public static bool operator ==(Color left, Color right)
+        {
+            return left.Equals(right);
+        }
+        
+        public static bool operator !=(Color left, Color right)
+        {
+            return !left.Equals(right);
+        }
     }
 }
