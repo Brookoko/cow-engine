@@ -22,12 +22,19 @@ namespace CowLibrary
         
         public override float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
         {
+            float res;
             var f = fresnel.Evaluate(Vector3.Dot(surfel.normal, surfel.ray));
             if (sample.X < f)
             {
-                return reflection.Sample(surfel, out wi, sample, out pdf);
+                res = reflection.Sample(surfel, out wi, sample, out pdf);
+                pdf = f;
             }
-            return transmission.Sample(surfel, out wi, sample, out pdf);
+            else
+            {
+                res = transmission.Sample(surfel, out wi, sample, out pdf);
+                pdf = 1 - f;
+            }
+            return res;
         }
     }
 }
