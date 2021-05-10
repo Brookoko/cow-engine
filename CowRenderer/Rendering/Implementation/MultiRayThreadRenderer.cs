@@ -26,7 +26,7 @@ namespace CowRenderer.Rendering
         
         private Surfel[] Raycast(Camera camera, int x, int y)
         {
-            var numberOfRay = RenderConfig.numberOfRayPerPixel / 2;
+            var numberOfRay = RenderConfig.numberOfRayPerPixelDimension;
             var surfels = new Surfel[numberOfRay * numberOfRay];
             for (var i = 0; i < numberOfRay; i++)
             {

@@ -30,5 +30,26 @@ namespace CowLibrary
             var num = -2f * Vector3.Dot(n, v);
             return new Vector3(num * n.X + v.X, num * n.Y + v.Y, num * n.Z + v.Z);
         }
+        
+        public static Vector3 Faceforward(Vector3 n, Vector3 v)
+        {
+            return Vector3.Dot(n, v) < 0 ? n : -n;
+        }
+        
+        public static bool Refract(this Vector3 v, Vector3 n, float eta, out Vector3 w)
+        {
+            var cosThetaI = Vector3.Dot(n, v);
+            var sin2ThetaI = Math.Max(0, 1 - cosThetaI * cosThetaI);
+            var sin2ThetaT = eta * eta * sin2ThetaI;
+            if (sin2ThetaT >= 1)
+            {
+                w = Vector3.Zero;
+                return false;
+            }
+            var cosThetaT = (float) Math.Sqrt(1 - sin2ThetaT);
+            
+            w = eta * -v + (eta * cosThetaI - cosThetaT) * n;
+            return true;
+        }
     }
 }

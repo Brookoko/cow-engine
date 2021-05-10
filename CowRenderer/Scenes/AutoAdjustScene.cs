@@ -20,6 +20,16 @@ namespace CowRenderer
         {
             camera = CreateCamera();
             cameras.Add(camera);
+            objects.Clear();
+            var sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(new Color(0, 1f, 0), 0.5f));
+            sphere.transform.position = new Vector3(-1, 0, 0);
+            objects.Add(sphere);
+            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(new Color(1f, 1f, 1f), 1));
+            sphere.transform.position = new Vector3(1, 0, 0);
+            objects.Add(sphere);
+            sphere = new RenderableObject(new Sphere(1), new FresnelMaterial(new Color(1f, 1f, 1f), 0.7f, 0.7f, 2.4f));
+            sphere.transform.position = new Vector3(2f, 0, 3f);
+            objects.Add(sphere);
             var box = GetBoundingBoxFor(objects);
             PlaceCamera(box);
             PlacePlane(box);
@@ -60,12 +70,12 @@ namespace CowRenderer
             var tan = (float) Math.Tan(Const.Deg2Rad * camera.fov / 2);
             var dist = max / tan;
             
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, 7), box.center);
         }
         
         private void PlacePlane(Box box)
         {
-            var plane = new RenderableObject(new Disk(10), new Material() {color = new Color(1f, 0, 0)});
+            var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(new Color(1f, 0, 0), 1));
             plane.transform.position = box.min.Y * Vector3.UnitY;
             objects.Add(plane);
         }

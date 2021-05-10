@@ -16,7 +16,7 @@ namespace CowEngine
         public RenderableObject Parse(string source)
         {
             var mesh = ObjWorker.Parse(source);
-            var material = new Material {color = new Color(127, 0, 255)};
+            var material = new DiffuseMaterial(new Color(127, 0, 255), 1f);
             return new RenderableObject(mesh, material);
         }
     }

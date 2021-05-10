@@ -50,7 +50,7 @@ namespace CowEngine
             var scene = new AutoAdjustScene();
             DiContainer.Inject(scene);
             
-            var light = new EnvironmentLight(new Color(255, 255, 255), 3);
+            var light = new EnvironmentLight(new Color(255, 255, 255), 8);
             scene.lights.Add(light);
             
             scene.objects.Add(model);

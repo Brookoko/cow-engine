@@ -4,7 +4,7 @@ namespace CowEngine.ImageWorker
     {
         private readonly IBytesReader bytesReader = new SimpleBytesReader();
 
-        private readonly IBytesWriter bytesWriter = new FilesBypassingWriter("-");
+        private readonly IBytesWriter bytesWriter = new FilesBypassingWriter("_");
 
         public byte[] Read(string path) => bytesReader.Read(path);
 

@@ -19,7 +19,7 @@ namespace CowRenderer.Rendering
         public Image Render(Scene scene)
         {
             Raycaster.Init(scene);
-            var numberOfThread = RenderConfig.numberOfThread;
+            var numberOfThread = RenderConfig.numberOfThreadPerDimension;
             var threads = new Thread[numberOfThread * numberOfThread];
             
             var w = scene.MainCamera.width;

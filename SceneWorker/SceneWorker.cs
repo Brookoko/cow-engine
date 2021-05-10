@@ -85,7 +85,7 @@
         {
             var tran = ConvertTransform(parsedObject.Transform);
             var mesh = GetMesh(parsedObject);
-            var material = new Material(){color = new Color(1f)};
+            var material = new DiffuseMaterial(new Color(1f), 1f);
             return new RenderableObject()
             {
                 id = parsedObject.Id,

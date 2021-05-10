@@ -9,7 +9,7 @@ namespace CowRenderer
     {
         public void Prepare(DiContainer container)
         {
-            container.Bind<IIntegrator>().To<TracingIntegrator>().ToSingleton();
+            container.Bind<IIntegrator>().To<MaterialIntegrator>().ToSingleton();
             container.Bind<IRaycaster>().To<SimpleRaycaster>().ToSingleton();
             container.Bind<IRenderer>().To<MultithreadRenderer>().ToSingleton();
             container.Bind<ThreadRenderer>().To<MultiRayThreadRenderer>();
