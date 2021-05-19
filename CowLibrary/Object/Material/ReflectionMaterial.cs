@@ -6,7 +6,7 @@ namespace CowLibrary
     {
         private BRDF brdf;
         
-        public ReflectionMaterial(Color color, float r, float eta) : base(color)
+        public ReflectionMaterial(float r, float eta) : base(Color.White)
         {
             var fresnel = new DielectricFresnel(1, eta);
             brdf = new SpecularReflectionBRDF(r, fresnel);

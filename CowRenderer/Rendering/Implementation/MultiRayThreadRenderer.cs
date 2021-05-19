@@ -46,7 +46,7 @@ namespace CowRenderer.Rendering
         {
             var color = surfels
                 .Select(s => Integrator.GetColor(scene, s))
-                .Aggregate(new Color(0), (acc, c) => acc + c);
+                .Aggregate(Color.Black, (acc, c) => acc + c);
             return color / surfels.Length;
         }
     }

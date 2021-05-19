@@ -17,7 +17,7 @@ namespace CowLibrary.Lights
         {
             return new ShadingInfo()
             {
-                direction = -transform.forward,
+                direction = transform.forward,
                 distance = float.PositiveInfinity,
                 color = color * intensity
             };
@@ -25,7 +25,7 @@ namespace CowLibrary.Lights
         
         public override Color Sample(Surfel surfel, Vector3 wi)
         {
-            return new Color(0f);
+            return Color.Black;
         }
     }
 }

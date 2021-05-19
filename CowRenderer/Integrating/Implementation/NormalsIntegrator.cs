@@ -5,7 +5,7 @@ namespace CowRenderer.Integration
 
     public class NormalsIntegrator : IIntegrator
     {
-        private readonly Color negativeColor = new Color(255, 255, 255);
+        private readonly Color negativeColor = Color.White;
 
         public Color GetColor(Scene scene, Surfel surfel)
         {

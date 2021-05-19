@@ -4,7 +4,7 @@ namespace CowRenderer.Integration
 
     public class NormalsToCameraIntegrator : IIntegrator
     {
-        private readonly Color nullColor = new Color(255, 255, 255);
+        private readonly Color nullColor = Color.White;
 
         private readonly (Color,Color) negativeColors = (new Color(255, 0, 0), new Color(0, 0, 0));
 

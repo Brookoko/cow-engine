@@ -23,8 +23,8 @@ namespace CowLibrary
         /// <param name="screenPoint"> Scree space coordinates </param>
         public override Ray ScreenPointToRay(Vector2 screenPoint)
         {
-            var x = (2 * (screenPoint.X + 0.5f) / width - 1) * tan;
-            var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / aspectRatio * tan;
+            var x = (2 * screenPoint.X / width - 1) * tan;
+            var y = (1 - 2 * screenPoint.Y / height) / aspectRatio * tan;
             var dir = new Vector3(x, y, -nearPlane);
             dir = transform.localToWorldMatrix.MultiplyVector(dir).Normalize();
             return new Ray(transform.position, dir);

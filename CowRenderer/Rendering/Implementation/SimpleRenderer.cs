@@ -28,7 +28,7 @@ namespace CowRenderer.Rendering
             {
                 for (var x = 0; x < w; x++)
                 {
-                    var cameraRay = targetCamera.ScreenPointToRay(new Vector2(x, y));
+                    var cameraRay = targetCamera.ScreenPointToRay(new Vector2(x + 0.5f, y + 0.5f));
                     var isSurfelHit = Raycaster.Raycast(cameraRay, out var surfel);
                     resultSurfels[y, x] = surfel;
                 }

@@ -4,13 +4,13 @@ namespace CowRenderer.Integration
 
     public class DistanceIntegrator : IIntegrator
     {
-        private readonly Color negativeColor = new Color(255, 255, 255);
+        private readonly Color negativeColor = Color.White;
         
-        private readonly Color minColor = new Color(255, 0,0);
+        private readonly Color minColor = Color.Red;
 
         private readonly float minDistance = 0f;
         
-        private readonly Color maxColor = new Color(0, 0, 255);
+        private readonly Color maxColor = Color.Blue;
 
         private readonly float maxDistance = 2f;
 

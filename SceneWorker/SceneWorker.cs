@@ -1,6 +1,7 @@
 ﻿namespace SceneWorker
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
     using CowEngine;
@@ -8,15 +9,19 @@
     using CowLibrary;
     using CowLibrary.Lights;
     using CowRenderer;
+    using Google.Protobuf.Collections;
     using SceneFormat;
     using Camera = CowLibrary.Camera;
     using OrthographicCamera = CowLibrary.OrthographicCamera;
     using PerspectiveCamera = CowLibrary.PerspectiveCamera;
     using Scene = CowRenderer.Scene;
     using Sphere = CowLibrary.Sphere;
-    using Material = CowLibrary.Material;
+    using Plane = CowLibrary.Plane;
+    using Disk = CowLibrary.Disk;
     using Light = CowLibrary.Lights.Light;
     using Color = CowLibrary.Color;
+    using Material = CowLibrary.Material;
+    using SceneObject = SceneFormat.SceneObject;
     using Transform = CowLibrary.Transform;
     using Vector3 = System.Numerics.Vector3;
 
@@ -45,11 +50,12 @@
         private Scene ConvertToScene(SceneFormat.Scene parsedScene)
         {
             var scene = new ComplexScene();
-            scene.cameras.AddRange(parsedScene.Cameras.Select(ConvertToCamera));
-            scene.SetMainCamera(parsedScene.RenderOptions.CameraId);
             RenderConfig.width = parsedScene.RenderOptions.Width;
             RenderConfig.height = parsedScene.RenderOptions.Height;
-            scene.objects.AddRange(parsedScene.SceneObjects.Select(ConvertToObject));
+            scene.cameras.AddRange(parsedScene.Cameras.Select(ConvertToCamera));
+            scene.SetMainCamera(parsedScene.RenderOptions.CameraId);
+            var materials = ParseMaterials(parsedScene.Materials);
+            scene.objects.AddRange(parsedScene.SceneObjects.Select(obj => ConvertToObject(obj, materials)));
             scene.lights.AddRange(parsedScene.Lights.Select(ConvertToLight));
             return scene;
         }
@@ -81,11 +87,11 @@
             }
         }
         
-        private RenderableObject ConvertToObject(SceneFormat.SceneObject parsedObject)
+        private RenderableObject ConvertToObject(SceneFormat.SceneObject parsedObject, Dictionary<string, Material> materials)
         {
             var tran = ConvertTransform(parsedObject.Transform);
             var mesh = GetMesh(parsedObject);
-            var material = new DiffuseMaterial(new Color(1f), 1f);
+            var material = GetMaterial(parsedObject, materials);
             return new RenderableObject()
             {
                 id = parsedObject.Id,
@@ -100,11 +106,13 @@
             switch (parsedObject.MeshCase)
             {
                 case SceneFormat.SceneObject.MeshOneofCase.Sphere:
-                    return new Sphere(1);
+                    return new Sphere((float) parsedObject.Sphere.Radius);
                 case SceneFormat.SceneObject.MeshOneofCase.Cube:
-                    return new Box(Vector3.Zero, 1);
+                    return new Box(ConvertVector(parsedObject.Cube.Size) * 0.5f);
                 case SceneFormat.SceneObject.MeshOneofCase.Plane:
-                    throw new Exception("Plane is not supported yet");
+                    return new Plane();
+                case SceneFormat.SceneObject.MeshOneofCase.Disk:
+                    return new Disk((float) parsedObject.Disk.Radius);
                 case SceneFormat.SceneObject.MeshOneofCase.MeshedObject:
                     return ObjWorker.Parse(parsedObject.MeshedObject.Reference);
                 default:
@@ -112,29 +120,74 @@
             }
         }
 
+        private Material GetMaterial(SceneObject parsedObject, Dictionary<string, Material> materials)
+        {
+            switch (parsedObject.ObjectMaterialCase)
+            {
+                case SceneObject.ObjectMaterialOneofCase.MaterialId:
+                    if (materials.TryGetValue(parsedObject.MaterialId, out var material))
+                    {
+                        return material;
+                    }
+                    throw new Exception("Invalid material id");
+                case SceneObject.ObjectMaterialOneofCase.Material:
+                    return ConvertMaterial(parsedObject.Material);
+                default:
+                    throw new Exception("Unsupported material");
+            }
+        }
+        
         private Light ConvertToLight(SceneFormat.Light parsedLight)
         {
             var tran = ConvertTransform(parsedLight.Transform);
-            var intensity = (float) parsedLight.Intensity;
-            var color = CovertColor(parsedLight.Color);
+            var color = ConvertColor(parsedLight.Color);
             switch (parsedLight.LightCase)
             {
                 case SceneFormat.Light.LightOneofCase.Point:
-                    return new PointLight(color, intensity)
+                    return new PointLight(color, 1)
                     {
                         id = parsedLight.Id,
                         transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Directional:
-                    return new DirectionalLight(color, intensity)
+                    return new DirectionalLight(color, 1)
                     {
                         id = parsedLight.Id,
                         transform = tran,
+                    };
+                case SceneFormat.Light.LightOneofCase.Environment:
+                    return new EnvironmentLight(color, 1)
+                    {
+                        id = parsedLight.Id,
                     };
                 case SceneFormat.Light.LightOneofCase.Sphere:
                     throw new Exception("Sphere light is not supported yet");
                 default:
                     throw new Exception("Unsupported light");
+            }
+        }
+        
+        private Dictionary<string, Material> ParseMaterials(RepeatedField<SceneFormat.Material> materials)
+        {
+            var result = new Dictionary<string, Material>();
+            foreach (var material in materials)
+            {
+                var mat = ConvertMaterial(material);
+                result[material.Id] = mat;
+            }
+            return result;
+        }
+        
+        private Material ConvertMaterial(SceneFormat.Material material)
+        {
+            switch (material.MaterialCase)
+            {
+                case SceneFormat.Material.MaterialOneofCase.LambertReflection:
+                    return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color), 1);
+                case SceneFormat.Material.MaterialOneofCase.SpecularReflection:
+                    return new ReflectionMaterial(1, (float) material.SpecularReflection.Eta);
+                default:
+                    throw new Exception("Unsupported material");
             }
         }
         
@@ -145,29 +198,23 @@
             {
                 localPosition = ConvertVector(t.Position),
                 localRotation = ConvertToQuaternion(t.Rotation),
-                localScale = ConvertVector(t.Scale, Vector3.One),
+                localScale = ConvertVector(t.Scale),
             };
         }
         
         private Vector3 ConvertVector(SceneFormat.Vector3 v)
         {
-            return ConvertVector(v, Vector3.Zero);
-        }
-        
-        private Vector3 ConvertVector(SceneFormat.Vector3 v, Vector3 def)
-        {
-            return v == null ? def : new Vector3((float) v.X, (float) v.Y, (float) v.Z);
+            return new Vector3((float) v.X, (float) v.Y, (float) v.Z);
         }
         
         private Quaternion ConvertToQuaternion(SceneFormat.Vector3 v)
         {
-            return v == null ? Quaternion.Identity :
-                Quaternion.CreateFromYawPitchRoll((float) (v.Y * Const.Deg2Rad), (float) (v.X * Const.Deg2Rad), (float) (v.Z * Const.Deg2Rad));
+            return Quaternion.CreateFromYawPitchRoll((float) (v.Y * Const.Deg2Rad), (float) (v.X * Const.Deg2Rad), (float) (v.Z * Const.Deg2Rad));
         }
         
-        private Color CovertColor(SceneFormat.Color c)
+        private Color ConvertColor(SceneFormat.Color c)
         {
-            return c == null ? new Color(1f) : new Color((float) c.R, (float) c.G, (float) c.B);
+            return new Color((float) c.R, (float) c.G, (float) c.B);
         }
     }
 }

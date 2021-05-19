@@ -36,7 +36,7 @@ namespace CowLibrary
                     {
                         t = t,
                         point = ray.GetPoint(t),
-                        normal = normal
+                        normal = -normal
                     };
                     return true;
                 }

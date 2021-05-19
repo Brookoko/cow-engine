@@ -28,6 +28,13 @@ namespace CowLibrary
             max = center + size;
         }
 
+        public Box(Vector3 size)
+        {
+            this.size = size;
+            min = center - size;
+            max = center + size;
+        }
+        
         public override bool Intersect(Ray ray, out Surfel surfel)
         {
             var invdir = new Vector3(1 / ray.direction.X, 1 / ray.direction.Y, 1 / ray.direction.Z);
