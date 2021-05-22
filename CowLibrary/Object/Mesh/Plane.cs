@@ -47,7 +47,7 @@ namespace CowLibrary
         
         public override void Apply(Matrix4x4 matrix)
         {
-            normal = matrix.MultiplyVector(normal);
+            normal = matrix.MultiplyVector(normal).Normalize();
             point = matrix.MultiplyPoint(point);
             box = CreateBox();
         }
