@@ -24,7 +24,7 @@ namespace CowRenderer
             var sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(Color.Green, 0.5f));
             sphere.transform.position = new Vector3(-1, 0, 0);
             objects.Add(sphere);
-            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(Color.Blue, 1));
+            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(Color.White, 1));
             sphere.transform.position = new Vector3(1, 0, 0);
             objects.Add(sphere);
             sphere = new RenderableObject(new Sphere(1), new ReflectionMaterial(1f, 1.5f));

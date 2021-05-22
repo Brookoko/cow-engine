@@ -2,6 +2,7 @@ namespace CowRenderer.Integration
 {
     using System;
     using System.Diagnostics;
+    using System.Linq;
     using System.Numerics;
     using System.Runtime.InteropServices.ComTypes;
     using Cowject;
@@ -16,21 +17,15 @@ namespace CowRenderer.Integration
         [Inject]
         public RenderConfig RenderConfig { get; set; }
         
-        private readonly Color backgroundColor = new Color(245, 245, 245);
-        
         public Color GetColor(Scene scene, Surfel surfel)
         {
-            if (surfel == null)
+            if (surfel.material == null)
             {
-                return backgroundColor;
+                var environment = scene.lights.FirstOrDefault(l => l is EnvironmentLight);
+                return environment?.Sample(surfel.ray) ?? Color.Black;
             }
 
-            var result = new Color(0f);
-            foreach (var light in scene.lights)
-            {
-                result += GetLighting(surfel, light, 0);
-            }
-            return result;
+            return scene.lights.Aggregate(Color.Black, (current, light) => current + GetLighting(surfel, light, 0));
         }
 
         private Color GetLighting(Surfel surfel, Light light, int depth)
@@ -50,16 +45,17 @@ namespace CowRenderer.Integration
         
         private Color GetIndirectLighting(Surfel surfel, Light light, int depth)
         {
-            var result = new Color(0f);
-            for (var i = 0; i < RenderConfig.numberOfIndirectRay; i++)
+            var result = Color.Black;
+            var n = RenderConfig.numberOfRayPerLight;
+            for (var i = 0; i < n; i++)
             {
                 var f = surfel.material.Sample(surfel, out var wi, out var pdf);
                 if (pdf > 0)
                 {
-                    result += f * pdf * Trace(surfel, light, wi, depth);
+                    result += f * Trace(surfel, light, wi, depth);
                 }
             }
-            return result / RenderConfig.numberOfIndirectRay;
+            return result / RenderConfig.numberOfRayPerLight;
         }
         
         private float TraceShadowRay(Surfel surfel, Vector3 direction, float distance)
@@ -73,12 +69,18 @@ namespace CowRenderer.Integration
         {
             if (depth >= RenderConfig.rayDepth)
             {
-                return new Color(0f);
+                return Color.Black;
             }
             var sign = Math.Sign(Vector3.Dot(surfel.normal, direction));
             var position = surfel.point + sign * surfel.normal * RenderConfig.bias;
-            var isHit = Raycaster.Raycast(new Ray(position, direction), out var hit);
-            return isHit ? GetLighting(hit, light, depth + 1) : light.Sample(surfel, direction);
+            if (Raycaster.Raycast(new Ray(position, direction), out var hit))
+            {
+                return GetLighting(hit, light, depth + 1);
+            }
+            var lightning = light.Sample(direction);
+            var dot = Vector3.Dot(surfel.normal, direction);
+            dot = Math.Max(dot, 0);
+            return surfel.material.color * lightning * dot;
         }
     }
 }

@@ -41,7 +41,7 @@ namespace CowRenderer.Integration
             }
             var p = surfel.point + surfel.normal * RenderConfig.bias;
             var color = new Color(0f);
-            for (var i = 0; i < RenderConfig.numberOfIndirectRay; i++)
+            for (var i = 0; i < RenderConfig.numberOfRayPerLight; i++)
             {
                 var dir = Mathf.OnUnitHalfSphere(surfel.normal);
                 var ray = new Ray(p, dir);
@@ -51,7 +51,7 @@ namespace CowRenderer.Integration
                     color += dot * (directIntegrator.GetColor(scene, hit) + TraceRecursive(scene, hit, depth + 1));
                 }
             }
-            return color / RenderConfig.numberOfIndirectRay;
+            return color / RenderConfig.numberOfRayPerLight;
         }
     }
 }

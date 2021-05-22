@@ -61,7 +61,7 @@ namespace CowLibrary
         {
             var d = ConcentricSampleDisk(sample);
             var z = (float) Math.Sqrt(Math.Max(0, 1 - d.X * d.X - d.Y * d.Y));
-            return new Vector3(d.X, d.Y, z);
+            return new Vector3(d.X, z, d.Y);
         }
         
         public static Vector3 CosineSampleHemisphere(Vector3 up, Vector2 sample)

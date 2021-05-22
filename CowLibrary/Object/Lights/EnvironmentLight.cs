@@ -24,15 +24,9 @@ namespace CowLibrary.Lights
             };
         }
         
-        public override Color Sample(Surfel surfel, Vector3 wi)
+        public override Color Sample(Vector3 wi)
         {
-            if (Vector3.Dot(Vector3.UnitY, wi) < 0)
-            {
-                return new Color(0f);
-            }
-            var dot = Vector3.Dot(surfel.normal, wi);
-            dot = Math.Max(dot, 0);
-            return surfel.material.color * color * intensity * dot;
+            return color * intensity;
         }
     }
 }

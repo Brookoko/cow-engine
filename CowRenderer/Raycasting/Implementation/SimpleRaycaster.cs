@@ -29,8 +29,13 @@ namespace CowRenderer.Raycasting
                 }
             }
 
+            if (closestSurfel == null)
+            {
+                surfel = new Surfel() {ray = ray.direction};
+                return false;
+            }
             surfel = closestSurfel;
-            return closestSurfel != null;
+            return true;
         }
     }
 }

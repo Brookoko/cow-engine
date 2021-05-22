@@ -13,7 +13,12 @@ namespace CowRenderer.Raycasting
         
         public bool Raycast(Ray ray, out Surfel surfel)
         {
-            return tree.Intersect(ray, out surfel);
+            if (tree.Intersect(ray, out surfel))
+            {
+                return true;
+            }
+            surfel = new Surfel() {ray = ray.direction};
+            return false;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace CowLibrary.Lights
             };
         }
 
-        public override Color Sample(Surfel surfel, Vector3 wi)
+        public override Color Sample(Vector3 wi)
         {
             return Color.Black;
         }
