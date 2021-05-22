@@ -22,7 +22,7 @@ namespace CowLibrary
         
         private Box CreateBox()
         {
-            return new Box(point, radius);
+            return new Box(point, 2 * radius);
         }
         
         public override bool Intersect(Ray ray, out Surfel surfel)

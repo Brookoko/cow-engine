@@ -6,7 +6,7 @@ namespace CowRenderer
         public int height = 1080 / 3;
         public int fov = 60;
         
-        public float bias = 0.01f;
+        public float bias = 0.0001f;
         
         public int numberOfThreadPerDimension = 8;
         public int numberOfRayPerPixelDimension = 10;
