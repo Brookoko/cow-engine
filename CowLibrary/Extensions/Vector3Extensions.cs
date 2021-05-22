@@ -5,6 +5,11 @@ namespace CowLibrary
 
     public static class Vector3Extensions
     {
+        public static float Min(this Vector3 v)
+        {
+            return Math.Min(v.X, Math.Min(v.Y, v.Z));
+        }
+        
         public static Vector3 Normalize(this Vector3 v)
         {
             return Vector3.Normalize(v);

@@ -9,7 +9,7 @@ namespace CowLibrary
         
         private Box box;
         
-        private readonly float radius;
+        private float radius;
         private Vector3 center = Vector3.Zero;
         
         public Sphere(float radius)
@@ -71,6 +71,7 @@ namespace CowLibrary
         public override void Apply(Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);
+            radius = matrix.ExtractScale().Min() * radius;
             box = new Box(center, radius * 2);
         }
     }

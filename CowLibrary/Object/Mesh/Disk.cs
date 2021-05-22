@@ -57,6 +57,7 @@ namespace CowLibrary
             normal = matrix.MultiplyVector(normal);
             point = matrix.MultiplyPoint(point);
             box = CreateBox();
+            radius = matrix.ExtractScale().Min() * radius;
         }
     }
 }
