@@ -13,7 +13,7 @@ namespace CowLibrary.Lights
             this.intensity = intensity;
         }
         
-        public override ShadingInfo GetShadingInfo(Vector3 point)
+        public override ShadingInfo GetShadingInfo(Surfel surfel)
         {
             return new ShadingInfo()
             {

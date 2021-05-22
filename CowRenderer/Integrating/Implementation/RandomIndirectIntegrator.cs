@@ -43,7 +43,7 @@ namespace CowRenderer.Integration
             var color = new Color(0f);
             for (var i = 0; i < RenderConfig.numberOfRayPerLight; i++)
             {
-                var dir = Mathf.OnUnitHalfSphere(surfel.normal);
+                var dir = Mathf.CosineSampleHemisphere(surfel.normal, Mathf.CreateSample());
                 var ray = new Ray(p, dir);
                 if (Raycaster.Raycast(ray, out var hit))
                 {

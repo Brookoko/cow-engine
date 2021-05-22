@@ -9,7 +9,7 @@ namespace CowRenderer.Integration
         
         public Color GetColor(Scene scene, Surfel surfel)
         {
-            return surfel == null ? bColor : wColor;
+            return surfel.material == null ? bColor : wColor;
         }
     }
 }

@@ -25,7 +25,12 @@ namespace CowRenderer.Integration
                 return environment?.Sample(surfel.ray) ?? Color.Black;
             }
 
-            return scene.lights.Aggregate(Color.Black, (current, light) => current + GetLighting(surfel, light, 0));
+            var result = Color.Black;
+            foreach (var light in scene.lights)
+            {
+                result += GetLighting(surfel, light, 0);
+            }
+            return result;
         }
 
         private Color GetLighting(Surfel surfel, Light light, int depth)
@@ -35,7 +40,7 @@ namespace CowRenderer.Integration
         
         private Color GetDirectLighting(Surfel surfel, Light light)
         {
-            var shading = light.GetShadingInfo(surfel.point);
+            var shading = light.GetShadingInfo(surfel);
             var color = surfel.material.GetColor(surfel.ray, shading.direction);
             var dot = Vector3.Dot(surfel.normal, shading.direction);
             dot = Math.Max(dot, 0);
@@ -52,7 +57,7 @@ namespace CowRenderer.Integration
                 var f = surfel.material.Sample(surfel, out var wi, out var pdf);
                 if (pdf > 0)
                 {
-                    result += f * Trace(surfel, light, wi, depth);
+                    result += f * pdf * Trace(surfel, light, wi, depth);
                 }
             }
             return result / RenderConfig.numberOfRayPerLight;

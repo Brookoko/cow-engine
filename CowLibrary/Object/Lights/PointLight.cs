@@ -14,9 +14,9 @@ namespace CowLibrary.Lights
             this.intensity = intensity;
         }
         
-        public override ShadingInfo GetShadingInfo(Vector3 point)
+        public override ShadingInfo GetShadingInfo(Surfel surfel)
         {
-            var direction = transform.position - point;
+            var direction = transform.position - surfel.point;
             var sqrtDistance = direction.LengthSquared();
             var distance = (float) Math.Sqrt(sqrtDistance);
             return new ShadingInfo

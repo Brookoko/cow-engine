@@ -19,7 +19,7 @@ namespace CowRenderer.Raycasting
             {
                 if (renderableObject.mesh.Intersect(ray, out var hitSurfel))
                 {
-                    if (hitSurfel.t > closestSurfel?.t)
+                    if (hitSurfel.t <= 0 || hitSurfel.t > closestSurfel?.t)
                     {
                         continue;
                     }

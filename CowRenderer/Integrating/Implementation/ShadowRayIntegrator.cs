@@ -26,7 +26,7 @@ namespace CowRenderer.Integration
             var result = new Color(0, 0, 0);
             foreach (var light in scene.lights)
             {
-                var shading = light.GetShadingInfo(surfel.point);
+                var shading = light.GetShadingInfo(surfel);
                 var dot = Vector3.Dot(shading.direction, surfel.normal);
                 dot = Math.Max(dot, 0);
                 var multiplier = TraceShadowRay(surfel, shading.direction, shading.distance);

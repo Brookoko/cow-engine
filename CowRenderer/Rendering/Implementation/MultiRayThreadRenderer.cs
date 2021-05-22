@@ -1,6 +1,5 @@
 namespace CowRenderer.Rendering
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Numerics;
     using CowLibrary;
@@ -11,13 +10,15 @@ namespace CowRenderer.Rendering
         {
             var w = (int) (to.X - from.X);
             var h = (int) (to.Y - from.Y);
+            var fromY = (int) from.Y;
+            var fromX = (int) from.X;
             var camera = scene.MainCamera;
             for (var i = 0; i < h; i++)
             {
                 for (var j = 0; j < w; j++)
                 {
-                    var y = i + (int) from.Y;
-                    var x = j + (int) from.X;
+                    var y = i + fromY;
+                    var x = j + fromX;
                     var surfels = Raycast(camera, x, y);
                     image[y, x] = Integrate(surfels);
                 }
