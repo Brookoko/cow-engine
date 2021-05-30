@@ -6,7 +6,7 @@ namespace CowLibrary
     {
         private BRDF brdf;
         
-        public TransmissionMaterial(Color color, float t, float eta) : base(color)
+        public TransmissionMaterial(float t, float eta) : base(Color.White)
         {
             brdf = new SpecularTransmissionBRDF(t, 1f, eta, TransportMode.Importance);
         }

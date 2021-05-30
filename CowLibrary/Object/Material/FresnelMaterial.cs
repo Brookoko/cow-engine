@@ -6,7 +6,7 @@ namespace CowLibrary
     {
         private readonly BRDF brdf;
         
-        public FresnelMaterial(Color color, float r, float t, float eta) : base(color)
+        public FresnelMaterial(float r, float t, float eta) : base(Color.White)
         {
             brdf = new FresnelSpecularBRDF(r, t, 1, eta, TransportMode.Importance);
         }
