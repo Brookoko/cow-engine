@@ -38,16 +38,18 @@ namespace CowLibrary
         {
             var point = ViewportPoint(screenPoint);
             var lensCenter = new Vector3(0, 0, lens.distance);
-            var dir = (lensCenter - point).Normalize();
-            var focusPoint = point + dir * (lens.distance + lens.focus);
+            var dir = (point - lensCenter).Normalize();
+            var focusPoint = lensCenter + dir * lens.focus;
             var rays = new List<Ray>();
             for (var i = 0; i < samples; i++)
             {
-                var sample = Mathf.ConcentricSampleDisk(Mathf.CreateSample());
+                var sample = Mathf.ConcentricSampleDisk(Mathf.CreateSample()).Normalize();
                 var lensPoint = lensCenter + new Vector3(sample * lens.radius, 0);
-                var direction = lensPoint - focusPoint;
+                var direction = focusPoint - lensPoint;
+                lensPoint.Z = 0;
+                var position = transform.localToWorldMatrix.MultiplyPoint(lensPoint);
                 direction = transform.localToWorldMatrix.MultiplyVector(direction).Normalize();
-                var ray = new Ray(transform.position, direction);
+                var ray = new Ray(position, direction);
                 rays.Add(ray);
             }
             return rays;

@@ -15,6 +15,11 @@ namespace CowLibrary
             return Vector3.Normalize(v);
         }
 
+        public static Vector2 Normalize(this Vector2 v)
+        {
+            return Vector2.Normalize(v);
+        }
+        
         public static double AngleTo(this Vector3 a, Vector3 b)
         {
             return a.AngleRadTo(b) * Const.Rad2Deg;

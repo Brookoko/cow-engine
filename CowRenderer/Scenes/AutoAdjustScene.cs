@@ -30,6 +30,9 @@ namespace CowRenderer
             sphere = new RenderableObject(new Sphere(1), new ReflectionMaterial(1f, 1.5f));
             sphere.transform.position = new Vector3(2f, 0, 3f);
             objects.Add(sphere);
+            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(Color.Blue, 1));
+            sphere.transform.position = new Vector3(-15, 0, -40);
+            objects.Add(sphere);
             var box = GetBoundingBoxFor(objects);
             PlaceCamera(box);
             PlacePlane(box);
@@ -38,7 +41,7 @@ namespace CowRenderer
         
         private RealisticCamera CreateCamera()
         {
-            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov, new Lens(1f, 0.003f, 1));
+            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov, new Lens(5f, 0.01f, 1f));
         }
         
         private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
