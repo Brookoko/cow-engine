@@ -1,5 +1,7 @@
 namespace CowLibrary
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Numerics;
 
     public class OrthographicCamera : Camera
@@ -10,6 +12,11 @@ namespace CowLibrary
             var y = 1 - 2 * (screenPoint.Y + 0.5f) / height;
             var origin = new Vector3(x, y, 0);
             return new Ray(origin, Vector3.UnitZ);
+        }
+        
+        public override List<Ray> Sample(Vector2 screenPoint, int samples)
+        {
+            return Enumerable.Range(0, samples).Select(_ => ScreenPointToRay(screenPoint)).ToList();
         }
     }
 }

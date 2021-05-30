@@ -1,5 +1,7 @@
 namespace CowRenderer.Rendering
 {
+    using System;
+    using System.Linq;
     using System.Numerics;
     using Cowject;
     using CowLibrary;
@@ -7,50 +9,54 @@ namespace CowRenderer.Rendering
     public class SimpleRenderer : IRenderer
     {
         [Inject]
-        public  IRaycaster Raycaster { get; set; }
+        public IRaycaster Raycaster { get; set; }
 
         [Inject]
         private IIntegrator Integrator { get; set; }
 
+        [Inject]
+        public RenderConfig RenderConfig { get; set; }
+
         public Image Render(Scene scene)
         {
             Raycaster.Init(scene);
-            var pixelsRaycastSurfels = GetPixelsRaycastSurfels(scene.MainCamera);
-            return IntegratePixelsSurfels(scene, pixelsRaycastSurfels);
-        }
+            var camera = scene.MainCamera;
+            var w = camera.width;
+            var h = camera.height;
+            var image = new Image(w, h);
 
-        private Surfel[,] GetPixelsRaycastSurfels(Camera targetCamera)
-        {
-            var w = targetCamera.width;
-            var h = targetCamera.height;
-            var resultSurfels = new Surfel[h, w];
             for (var y = 0; y < h; y++)
             {
                 for (var x = 0; x < w; x++)
                 {
-                    var cameraRay = targetCamera.ScreenPointToRay(new Vector2(x + 0.5f, y + 0.5f));
-                    var isSurfelHit = Raycaster.Raycast(cameraRay, out var surfel);
-                    resultSurfels[y, x] = surfel;
+                    var surfels = Raycast(camera, new Vector2(x, y));
+                    image[y, x] = Integrate(scene, surfels);
                 }
             }
-            return resultSurfels;
+
+            return image;
         }
 
-        private Image IntegratePixelsSurfels(Scene scene, Surfel[,] surfels)
+        private Surfel[] Raycast(Camera camera, Vector2 point)
         {
-            var w = surfels.GetLength(1);
-            var h = surfels.GetLength(0);
-            var outputImage = new Image(w, h);
-            
-            for (var y = 0; y < h; y++)
+            var numberOfRay = RenderConfig.numberOfRayPerPixel;
+            var surfels = new Surfel[numberOfRay];
+            var rays = camera.Sample(point, numberOfRay);
+            for (var i = 0; i < numberOfRay; i++)
             {
-                for (var x = 0; x < w; x++)
-                {
-                    outputImage[y, x] = Integrator.GetColor(scene, surfels[y, x]);
-                }
+                Raycaster.Raycast(rays[i], out var surfel);
+                surfels[i] = surfel;
             }
 
-            return outputImage;
+            return surfels;
+        }
+
+        private Color Integrate(Scene scene, Surfel[] surfels)
+        {
+            var color = surfels
+                .Select(s => Integrator.GetColor(scene, s))
+                .Aggregate(Color.Black, (acc, c) => acc + c);
+            return color / surfels.Length;
         }
     }
 }

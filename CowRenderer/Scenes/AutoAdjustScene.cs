@@ -14,7 +14,7 @@ namespace CowRenderer
 
         public override Camera MainCamera => camera;
 
-        private PerspectiveCamera camera;
+        private RealisticCamera camera;
         
         public override void PrepareScene()
         {
@@ -36,14 +36,9 @@ namespace CowRenderer
             base.PrepareScene();
         }
         
-        private PerspectiveCamera CreateCamera()
+        private RealisticCamera CreateCamera()
         {
-            return new PerspectiveCamera()
-            {
-                width = RenderConfig.width,
-                height = RenderConfig.height,
-                fov = RenderConfig.fov
-            };
+            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov, new Lens(1f, 0.003f, 1));
         }
         
         private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
