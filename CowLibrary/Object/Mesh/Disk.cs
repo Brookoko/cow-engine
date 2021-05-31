@@ -32,7 +32,7 @@ namespace CowLibrary
             {
                 var dir = point - ray.origin;
                 var t = Vector3.Dot(dir, normal) / dot;
-                if (t >= 0)
+                if (t > 0)
                 {
                     var p = ray.GetPoint(t);
                     var dist = Vector3.DistanceSquared(p, point);

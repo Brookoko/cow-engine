@@ -85,6 +85,12 @@ namespace CowLibrary
             }
 
             var t = f * Vector3.Dot(edge2, q);
+            if (t <= 0)
+            {
+                surfel = null;
+                return false;
+            }
+            
             surfel = new Surfel()
             {
                 point = ray.GetPoint(t),

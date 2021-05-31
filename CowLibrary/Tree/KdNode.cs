@@ -35,7 +35,7 @@ namespace CowLibrary
             {
                 if (node.Intersect(ray, out var s))
                 {
-                    if (s.t >= 0 && (surfel == null || surfel.t > s.t))
+                    if (surfel == null || surfel.t > s.t)
                     {
                         intersected = true;
                         surfel = s;

@@ -30,7 +30,7 @@ namespace CowLibrary
             {
                 var dir = point - ray.origin;
                 var t = Vector3.Dot(dir, normal) / dot;
-                if (t >= 0)
+                if (t > 0)
                 {
                     surfel = new Surfel()
                     {

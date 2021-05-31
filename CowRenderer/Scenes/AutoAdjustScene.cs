@@ -20,19 +20,6 @@ namespace CowRenderer
         {
             camera = CreateCamera();
             cameras.Add(camera);
-            objects.Clear();
-            var sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(Color.Green, 0.5f));
-            sphere.transform.position = new Vector3(-1, 0, 0);
-            objects.Add(sphere);
-            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(Color.White, 1));
-            sphere.transform.position = new Vector3(1, 0, 0);
-            objects.Add(sphere);
-            sphere = new RenderableObject(new Sphere(1), new ReflectionMaterial(1f, 1.5f));
-            sphere.transform.position = new Vector3(2f, 0, 3f);
-            objects.Add(sphere);
-            sphere = new RenderableObject(new Sphere(1), new DiffuseMaterial(Color.Blue, 1));
-            sphere.transform.position = new Vector3(-15, 0, -40);
-            objects.Add(sphere);
             var box = GetBoundingBoxFor(objects);
             PlaceCamera(box);
             PlacePlane(box);
@@ -41,7 +28,7 @@ namespace CowRenderer
         
         private RealisticCamera CreateCamera()
         {
-            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov, new Lens(5f, 0.01f, 1f));
+            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov, new Lens(1f, 0.01f, 1f));
         }
         
         private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
@@ -68,12 +55,12 @@ namespace CowRenderer
             var tan = (float) Math.Tan(Const.Deg2Rad * camera.fov / 2);
             var dist = max / tan;
             
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, 7), box.center);
+            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
         }
         
         private void PlacePlane(Box box)
         {
-            var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(new Color(1f, 0, 0), 1));
+            var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(Color.Red, 1));
             plane.transform.position = box.min.Y * Vector3.UnitY;
             objects.Add(plane);
         }

@@ -55,7 +55,7 @@ namespace CowRenderer.Integration
             for (var i = 0; i < n; i++)
             {
                 var f = surfel.material.Sample(surfel, out var wi, out var pdf);
-                if (pdf > 0)
+                if (pdf > 0 && f > 0)
                 {
                     result += f * pdf * Trace(surfel, light, wi, depth);
                 }
