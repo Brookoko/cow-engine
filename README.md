@@ -3,4 +3,4 @@
 ![dragon](https://user-images.githubusercontent.com/24894653/120246941-70d8ff00-c27a-11eb-934d-55e22e1201f3.png)
 ![spheres](https://user-images.githubusercontent.com/24894653/120399401-9af6f380-c344-11eb-8a2e-dff5f9e35d0e.png)
 ![cow-reflection](https://user-images.githubusercontent.com/24894653/120399390-929eb880-c344-11eb-91ed-c5ce144a91f4.png)
-![dragon-reflection](https://user-images.githubusercontent.com/24894653/120399367-8a467d80-c344-11eb-97fa-5e304949ed93.png)
+![dragon-reflection](https://user-images.githubusercontent.com/24894653/120400199-1b6a2400-c346-11eb-889b-b48e057d6e68.png)
