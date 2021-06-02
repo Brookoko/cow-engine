@@ -105,13 +105,9 @@ namespace CowLibrary
             v0 = matrix.MultiplyPoint(v0);
             v1 = matrix.MultiplyPoint(v1);
             v2 = matrix.MultiplyPoint(v2);
-            if (Matrix4x4.Invert(matrix, out var m))
-            {
-                n0 = m.MultiplyVector(n0).Normalize();
-                n1 = m.MultiplyVector(n1).Normalize();
-                n2 = m.MultiplyVector(n2).Normalize();
-            }
-
+            n0 = matrix.MultiplyVector(n0).Normalize();
+            n1 = matrix.MultiplyVector(n1).Normalize();
+            n2 = matrix.MultiplyVector(n2).Normalize();
             box = CreateBox();
         }
     }
