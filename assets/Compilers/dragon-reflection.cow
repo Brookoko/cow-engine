@@ -1,0 +1,48 @@
+string mesh = "C:/Projects/KPI/cow-engine/assets/dragon.obj"
+
+transform tran = {
+  position: (0, 0, 0),
+  rotation: (0, 0, 0),
+  scale: vector3.one,
+}
+
+figure dragon = {
+  transform: tran,
+  mesh: mesh,
+  material: {
+    r: 1,
+    eta: 1.5
+  }
+}
+
+figure plane = {
+  transform: {
+    position: (0, 0, 0),
+    scale: 5 * vector3.one
+  },
+  mesh: "disk",
+  material: {
+    color: (1, 0, 0),
+    r: 1
+  }
+}
+
+light l = {
+  color: (3, 3, 3),
+  type: "EnvironmentLight"
+}
+
+camera = {
+  transform: {
+    position: (0, 0.7, 3),
+  },
+  width: 1920 / 3,
+  height: 1080 / 3,
+  fov: 60,
+}
+
+config = {
+  raysPerPixel: 8,
+  rayDepth: 10,
+  raysPerLight: 1,
+}
