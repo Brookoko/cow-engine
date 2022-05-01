@@ -8,20 +8,20 @@ namespace CowLibrary
     {
         private const int MinNumberOfTriangles = 8;
         private const int MaxDepth = 16;
-        
+
         public readonly KdNode root;
-        
+
         public KdTree(List<Triangle> triangles)
         {
             root = BuildNode(triangles, 0);
         }
-        
+
         private KdNode BuildNode(List<Triangle> triangles, int depth)
         {
             var node = new KdNode(triangles);
             return triangles.Count <= MinNumberOfTriangles || depth >= MaxDepth ? node : Split(node, depth);
         }
-        
+
         private KdNode Split(KdNode node, int depth)
         {
             var splitValue = GetMedian(node.mesh.triangles, depth);
@@ -49,8 +49,9 @@ namespace CowLibrary
             var i = (l - 1) / 2;
             return l % 2 == 0 ? (sortedAxis[i] + sortedAxis[i + 1]) * 0.5f : sortedAxis[i];
         }
-        
-        private (List<Triangle> left, List<Triangle> right, List<Triangle> middle) SplitTriangle(List<Triangle> triangles, int depth, float v)
+
+        private (List<Triangle> left, List<Triangle> right, List<Triangle> middle) SplitTriangle(
+            List<Triangle> triangles, int depth, float v)
         {
             var leftTriangles = new List<Triangle>();
             var rightTriangles = new List<Triangle>();
@@ -72,12 +73,12 @@ namespace CowLibrary
             }
             return (leftTriangles, rightTriangles, middleTriangles);
         }
-        
+
         private float GetDimension(Vector3 v, int depth)
         {
             return v.Get(depth % 3);
         }
-        
+
         public bool Intersect(Ray ray, out Surfel surfel)
         {
             return root.Intersect(ray, out surfel);

@@ -5,7 +5,7 @@ namespace CowRenderer
     public interface IRaycaster
     {
         void Init(Scene scene);
-        
+
         bool Raycast(Ray ray, out Surfel surfel);
     }
 }

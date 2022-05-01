@@ -10,7 +10,7 @@ namespace CowEngine.ImageWorker
         {
             bypassFormat = bypassDelimiter + "{0}";
         }
-        
+
         public void Write(byte[] bytes, string path)
         {
             path = path.Replace('/', Path.DirectorySeparatorChar);
@@ -18,7 +18,7 @@ namespace CowEngine.ImageWorker
             {
                 path = BypassToNonExistingFile(path);
             }
-            
+
             var fileInfo = new FileInfo(path);
             fileInfo.Directory?.Create();
             File.WriteAllBytes(path, bytes);
@@ -30,7 +30,7 @@ namespace CowEngine.ImageWorker
             var fileNameNoExt = Path.GetFileNameWithoutExtension(path);
             var fileExtension = Path.GetExtension(path);
             var bypassCounter = 0;
-            
+
             while (File.Exists(path))
             {
                 var bypassFileName = fileNameNoExt + string.Format(bypassFormat, ++bypassCounter) + fileExtension;

@@ -5,7 +5,7 @@ namespace CowLibrary
     public class ReflectionMaterial : Material
     {
         private IBrdf brdf;
-        
+
         public ReflectionMaterial(float r, float eta) : base(Color.White)
         {
             var fresnel = new DielectricFresnel(1, eta);
@@ -16,7 +16,7 @@ namespace CowLibrary
         {
             return brdf.Evaluate(wo, wi) * Color;
         }
-        
+
         public override float Sample(Surfel surfel, out Vector3 wi, out float pdf)
         {
             return brdf.Sample(surfel, out wi, Mathf.CreateSample(), out pdf);

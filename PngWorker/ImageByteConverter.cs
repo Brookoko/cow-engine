@@ -6,7 +6,7 @@ namespace CowEngine.ImageWorker.Png
     {
         byte[,] ToBytes(Image image);
     }
-    
+
     internal class ImageByteConverter : IImageByteConverter
     {
         public byte[,] ToBytes(Image image)
@@ -18,7 +18,7 @@ namespace CowEngine.ImageWorker.Png
             {
                 for (var j = 0; j < 3 * w; j += 3)
                 {
-                    var b = image[i, j/3].ToBytes();
+                    var b = image[i, j / 3].ToBytes();
                     bytes[i, j] = b[0];
                     bytes[i, j + 1] = b[1];
                     bytes[i, j + 2] = b[2];

@@ -7,18 +7,18 @@ namespace CowLibrary
     {
         private readonly float r;
         private readonly Fresnel fresnel;
-        
+
         public SpecularReflectionBrdf(float r, Fresnel fresnel)
         {
             this.r = r;
             this.fresnel = fresnel;
         }
-        
+
         public float Evaluate(Vector3 wo, Vector3 wi)
         {
             return 0;
         }
-        
+
         public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
         {
             pdf = 1;

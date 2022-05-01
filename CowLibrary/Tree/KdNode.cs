@@ -6,12 +6,12 @@ namespace CowLibrary
     {
         public readonly TriangleMesh mesh;
         public readonly List<KdNode> children = new();
-        
+
         public KdNode(List<Triangle> triangles)
         {
             mesh = new TriangleMesh(triangles);
         }
-        
+
         public bool Intersect(Ray ray, out Surfel surfel)
         {
             if (children.Count == 0 && mesh.triangles.Count == 0)
@@ -26,7 +26,7 @@ namespace CowLibrary
             }
             return children.Count > 0 ? IntersectChildren(ray, out surfel) : mesh.Intersect(ray, out surfel);
         }
-        
+
         private bool IntersectChildren(Ray ray, out Surfel surfel)
         {
             surfel = null;

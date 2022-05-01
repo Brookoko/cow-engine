@@ -10,7 +10,7 @@ namespace CowLibrary
             this.etaI = etaI;
             this.etaT = etaT;
         }
-        
+
         public abstract float Evaluate(float cosThetaI);
     }
 }

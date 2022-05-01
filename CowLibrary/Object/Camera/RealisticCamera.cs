@@ -13,14 +13,14 @@ namespace CowLibrary
             init
             {
                 fov = value;
-                tan = (float) Math.Tan(Const.Deg2Rad * value / 2);
+                tan = (float)Math.Tan(Const.Deg2Rad * value / 2);
             }
         }
-        
+
         private readonly float fov;
         private readonly float tan;
         private readonly Lens lens;
-        
+
         public RealisticCamera(int width, int height, float fov, Lens lens)
         {
             Fov = fov;
@@ -28,12 +28,12 @@ namespace CowLibrary
             this.height = height;
             this.lens = lens;
         }
-        
+
         public override Ray ScreenPointToRay(Vector2 screenPoint)
         {
             return Sample(screenPoint, 1).First();
         }
-        
+
         public override List<Ray> Sample(Vector2 screenPoint, int samples)
         {
             var point = ViewportPoint(screenPoint);
@@ -54,7 +54,7 @@ namespace CowLibrary
             }
             return rays;
         }
-        
+
         private Vector3 ViewportPoint(Vector2 screenPoint)
         {
             var x = (2 * (screenPoint.X + 0.5f) / width - 1) * tan;

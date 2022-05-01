@@ -8,10 +8,10 @@ namespace CowRenderer.Rendering
     {
         public override void Render()
         {
-            var w = (int) (to.X - from.X);
-            var h = (int) (to.Y - from.Y);
-            var fromY = (int) from.Y;
-            var fromX = (int) from.X;
+            var w = (int)(to.X - from.X);
+            var h = (int)(to.Y - from.Y);
+            var fromY = (int)from.Y;
+            var fromX = (int)from.X;
             var camera = scene.MainCamera;
 
             for (var i = 0; i < h; i++)

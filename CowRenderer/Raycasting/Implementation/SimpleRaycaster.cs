@@ -6,12 +6,12 @@ namespace CowRenderer.Raycasting
     public class SimpleRaycaster : IRaycaster
     {
         private List<RenderableObject> objects;
-        
+
         public void Init(Scene scene)
         {
             objects = scene.objects;
         }
-        
+
         public bool Raycast(Ray ray, out Surfel surfel)
         {
             Surfel closestSurfel = null;
@@ -31,7 +31,7 @@ namespace CowRenderer.Raycasting
 
             if (closestSurfel == null)
             {
-                surfel = new Surfel() {ray = ray.direction};
+                surfel = new Surfel() { ray = ray.direction };
                 return false;
             }
             surfel = closestSurfel;

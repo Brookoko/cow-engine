@@ -8,20 +8,20 @@ namespace CowLibrary
     {
         private const int MinNumberOfObjects = 8;
         private const int MaxDepth = 16;
-        
+
         public readonly SceneNode root;
-        
+
         public SceneTree(List<RenderableObject> objects)
         {
             root = BuildNode(objects, 0);
         }
-        
+
         private SceneNode BuildNode(List<RenderableObject> objects, int depth)
         {
             var node = new SceneNode(objects);
             return objects.Count <= MinNumberOfObjects || depth >= MaxDepth ? node : Split(node, depth);
         }
-        
+
         private SceneNode Split(SceneNode node, int depth)
         {
             var splitValue = GetMedian(node.objects, depth);
@@ -49,8 +49,9 @@ namespace CowLibrary
             var i = (l - 1) / 2;
             return l % 2 == 0 ? (sortedAxis[i] + sortedAxis[i + 1]) * 0.5f : sortedAxis[i];
         }
-        
-        private (List<RenderableObject> left, List<RenderableObject> right, List<RenderableObject> middle) SplitObjects(List<RenderableObject> objects, int depth, float v)
+
+        private (List<RenderableObject> left, List<RenderableObject> right, List<RenderableObject> middle) SplitObjects(
+            List<RenderableObject> objects, int depth, float v)
         {
             var leftObjects = new List<RenderableObject>();
             var rightObjects = new List<RenderableObject>();
@@ -72,12 +73,12 @@ namespace CowLibrary
             }
             return (leftObjects, rightObjects, middleObjects);
         }
-        
+
         private float GetDimension(Vector3 v, int depth)
         {
             return v.Get(depth % 3);
         }
-        
+
         public bool Intersect(Ray ray, out Surfel surfel)
         {
             return root.Intersect(ray, out surfel);

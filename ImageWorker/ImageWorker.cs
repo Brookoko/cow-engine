@@ -7,15 +7,15 @@ namespace CowEngine.ImageWorker
     {
         void SaveImage(Image image, string extension);
     }
-    
+
     public class ImageWorker : IImageWorker
     {
         [Inject]
         internal IIoWorker IoWorker { get; set; }
-        
+
         [Inject]
         internal IImageEncoderProvider ImageEncoderProvider { get; set; }
-        
+
         public void SaveImage(Image image, string path)
         {
             var extension = path.GetExtension();

@@ -7,7 +7,7 @@ namespace CowRenderer.Integration
     public class FlatShadingIntegrator : IIntegrator
     {
         private readonly Color backgroundColor = new Color(245, 245, 245);
-        
+
         public Color GetColor(Scene scene, Surfel surfel)
         {
             if (surfel.material == null)

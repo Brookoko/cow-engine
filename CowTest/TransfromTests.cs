@@ -28,7 +28,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One, transform.Position);
             Assert.AreEqual(Vector3.One, transform.LocalPosition);
         }
-        
+
         [Test]
         public void _03TestWorldPosition()
         {
@@ -39,7 +39,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One, transform.Position);
             Assert.AreEqual(Vector3.Zero, transform.LocalPosition);
         }
-        
+
         [Test]
         public void _04TestLocalPositionNoParent()
         {
@@ -48,7 +48,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One, transform.Position);
             Assert.AreEqual(Vector3.One, transform.LocalPosition);
         }
-        
+
         [Test]
         public void _05TestLocalPosition()
         {
@@ -59,7 +59,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One * 2, transform.Position);
             Assert.AreEqual(Vector3.One, transform.LocalPosition);
         }
-        
+
         [Test]
         public void _06TestWorldRotationNoParent()
         {
@@ -69,7 +69,7 @@ namespace CowTest
             Assert.AreEqual(rot, transform.Rotation);
             Assert.AreEqual(rot, transform.LocalRotation);
         }
-        
+
         [Test]
         public void _07TestWorldRotation()
         {
@@ -81,7 +81,7 @@ namespace CowTest
             Assert.AreEqual(rot, transform.Rotation);
             Assert.AreEqual(Quaternion.Identity, transform.LocalRotation);
         }
-        
+
         [Test]
         public void _08TestLocalRotationNoParent()
         {
@@ -91,7 +91,7 @@ namespace CowTest
             Assert.AreEqual(rot, transform.Rotation);
             Assert.AreEqual(rot, transform.LocalRotation);
         }
-        
+
         [Test]
         public void _09TestLocalRotation()
         {
@@ -103,7 +103,7 @@ namespace CowTest
             Assert.AreEqual(rot * rot, transform.Rotation);
             Assert.AreEqual(rot, transform.LocalRotation);
         }
-        
+
         [Test]
         public void _10TestWorldScaleNoParent()
         {
@@ -112,7 +112,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One * 2, transform.LossyScale);
             Assert.AreEqual(Vector3.One * 2, transform.LocalScale);
         }
-        
+
         [Test]
         public void _11TestWorldScale()
         {
@@ -123,7 +123,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One * 2, transform.LossyScale);
             Assert.AreEqual(Vector3.One, transform.LocalScale);
         }
-        
+
         [Test]
         public void _12TestLocalScaleNoParent()
         {
@@ -132,7 +132,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One * 2, transform.LossyScale);
             Assert.AreEqual(Vector3.One * 2, transform.LocalScale);
         }
-        
+
         [Test]
         public void _13TestLocalScale()
         {
@@ -143,7 +143,7 @@ namespace CowTest
             Assert.AreEqual(Vector3.One * 4, transform.LossyScale);
             Assert.AreEqual(Vector3.One * 2, transform.LocalScale);
         }
-        
+
         [Test]
         public void _14TestComplexTransformation()
         {

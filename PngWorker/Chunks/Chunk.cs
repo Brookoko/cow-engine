@@ -8,7 +8,7 @@ namespace CowEngine.ImageWorker.Png
         public ChunkType type;
         public byte[] data;
         public int crc;
-        
+
         public Chunk(byte[] data, ChunkType type)
         {
             size = data.Length;
@@ -16,14 +16,14 @@ namespace CowEngine.ImageWorker.Png
             this.data = data;
             crc = CalculateCrc();
         }
-        
+
         private int CalculateCrc()
         {
             var typeBytes = type.ToHeader().ToBytes();
             var crcBytes = typeBytes.Concat(data).ToArray();
-            return (int) CrcExtractor.Extract(crcBytes);
+            return (int)CrcExtractor.Extract(crcBytes);
         }
-        
+
         public byte[] ToBytes()
         {
             return size.ToBytes()
@@ -33,7 +33,7 @@ namespace CowEngine.ImageWorker.Png
                 .ToArray();
         }
     }
-    
+
     internal enum ChunkType
     {
         Header,

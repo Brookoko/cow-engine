@@ -6,12 +6,12 @@ namespace CowLibrary
     public class Sphere : Mesh
     {
         public override Box BoundingBox => box;
-        
+
         private Box box;
-        
+
         private float radius;
         private Vector3 center = Vector3.Zero;
-        
+
         public Sphere(float radius)
         {
             this.radius = radius;
@@ -39,7 +39,7 @@ namespace CowLibrary
             float t;
             if (discriminant == 0)
             {
-                t = (float) Math.Sqrt(aCoeff * cCoeff);
+                t = (float)Math.Sqrt(aCoeff * cCoeff);
             }
             else
             {
@@ -54,10 +54,10 @@ namespace CowLibrary
                     surfel = null;
                     return false;
                 }
-                
-                t = (float) Math.Min(k1, k2);
+
+                t = (float)Math.Min(k1, k2);
             }
-            
+
             var p = ray.GetPoint(t);
             surfel = new Surfel()
             {
@@ -67,7 +67,7 @@ namespace CowLibrary
             };
             return true;
         }
-        
+
         public override void Apply(Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);

@@ -15,13 +15,13 @@ namespace CowLibrary
             set
             {
                 fov = value;
-                tan = (float) Math.Tan(Const.Deg2Rad * value / 2);
+                tan = (float)Math.Tan(Const.Deg2Rad * value / 2);
             }
         }
-        
+
         private float fov;
         private float tan;
-        
+
         /// <summary> Creates camera-space ray from camera through screen space point </summary>
         /// <param name="screenPoint"> Scree space coordinates </param>
         public override Ray ScreenPointToRay(Vector2 screenPoint)
@@ -32,7 +32,7 @@ namespace CowLibrary
             dir = Transform.LocalToWorldMatrix.MultiplyVector(dir).Normalize();
             return new Ray(Transform.Position, dir);
         }
-        
+
         public override List<Ray> Sample(Vector2 screenPoint, int samples)
         {
             var rays = new List<Ray>();

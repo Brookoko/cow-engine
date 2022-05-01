@@ -16,13 +16,13 @@
             new ObjModule(),
             new SceneModule()
         };
-        
+
         public static void Main(string[] args)
         {
             var container = SetupContainer();
 
             var argumentParser = container.Get<IArgumentsParser>();
-            
+
             try
             {
                 argumentParser.Parse(args);
@@ -34,7 +34,7 @@
                 throw;
             }
         }
-        
+
         private static DiContainer SetupContainer()
         {
             var container = new DiContainer();

@@ -34,16 +34,16 @@ namespace CowLibrary
             min = center - size;
             max = center + size;
         }
-        
+
         public override bool Intersect(Ray ray, out Surfel surfel)
         {
             var invdir = new Vector3(1 / ray.direction.X, 1 / ray.direction.Y, 1 / ray.direction.Z);
-            
+
             var xmin = invdir.X >= 0 ? min.X : max.X;
             var xmax = invdir.X >= 0 ? max.X : min.X;
             var tmin = (xmin - ray.origin.X) * invdir.X;
             var tmax = (xmax - ray.origin.X) * invdir.X;
-            
+
             var ymin = invdir.Y >= 0 ? min.Y : max.Y;
             var ymax = invdir.Y >= 0 ? max.Y : min.Y;
             var tymin = (ymin - ray.origin.Y) * invdir.Y;
@@ -61,7 +61,7 @@ namespace CowLibrary
             var zmax = invdir.Z >= 0 ? max.Z : min.Z;
             var tzmin = (zmin - ray.origin.Z) * invdir.Z;
             var tzmax = (zmax - ray.origin.Z) * invdir.Z;
-            
+
             if (tmin > tzmax || tzmin > tmax)
             {
                 surfel = null;
@@ -84,9 +84,9 @@ namespace CowLibrary
             {
                 t = Math.Min(tmin, tmax);
             }
-            
+
             var p = ray.GetPoint(t);
-            
+
             surfel = new Surfel()
             {
                 t = t,
@@ -95,14 +95,14 @@ namespace CowLibrary
             };
             return true;
         }
-        
+
         private Vector3 GetNormal(Vector3 point)
         {
             var localPoint = point - center;
             var min = Math.Abs(size.X - Math.Abs(localPoint.X));
             var normal = Vector3.UnitX;
             normal *= Math.Sign(localPoint.X);
-            
+
             var dist = Math.Abs(size.Y - Math.Abs(localPoint.Y));
             if (dist < min)
             {
@@ -119,7 +119,7 @@ namespace CowLibrary
             }
             return normal;
         }
-        
+
         public override void Apply(Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);

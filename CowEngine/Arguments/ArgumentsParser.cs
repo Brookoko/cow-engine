@@ -7,18 +7,18 @@ namespace CowEngine
     {
         void Parse(string[] args);
     }
-    
+
     public class ArgumentsParser : IArgumentsParser
     {
         [Inject(Name = Options.Model)]
         public IFlow ModelFlow { get; set; }
-        
+
         [Inject(Name = Options.Compiled)]
         public IFlow CompiledFlow { get; set; }
-        
+
         [Inject(Name = Options.Scene)]
         public IFlow SceneFlow { get; set; }
-        
+
         public void Parse(string[] args)
         {
             Parser.Default.ParseArguments<ModelOptions, CompiledOptions, SceneOptions>(args)

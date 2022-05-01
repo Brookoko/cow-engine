@@ -90,7 +90,7 @@ namespace CowLibrary
                 surfel = null;
                 return false;
             }
-            
+
             surfel = new Surfel()
             {
                 point = ray.GetPoint(t),

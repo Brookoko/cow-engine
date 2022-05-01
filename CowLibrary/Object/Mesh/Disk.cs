@@ -7,24 +7,24 @@ namespace CowLibrary
         private const float e = 1e-10f;
 
         public override Box BoundingBox => box;
-        
+
         private Box box;
-        
+
         private Vector3 normal = -Vector3.UnitY;
         private Vector3 point = Vector3.Zero;
         private float radius;
-        
+
         public Disk(float radius)
         {
             this.radius = radius;
             box = CreateBox();
         }
-        
+
         private Box CreateBox()
         {
             return new Box(point, 2 * radius);
         }
-        
+
         public override bool Intersect(Ray ray, out Surfel surfel)
         {
             var dot = Vector3.Dot(normal, ray.direction);
@@ -51,7 +51,7 @@ namespace CowLibrary
             surfel = null;
             return false;
         }
-        
+
         public override void Apply(Matrix4x4 matrix)
         {
             point = matrix.MultiplyPoint(point);

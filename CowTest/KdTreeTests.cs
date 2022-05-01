@@ -14,7 +14,7 @@ namespace CowTest
     public class KdTreeTests
     {
         private ObjWorker objWorker;
-        
+
         [SetUp]
         public void Setup()
         {
@@ -25,7 +25,7 @@ namespace CowTest
                 ModelToObjectConverter = new ModelToMeshConverter()
             };
         }
-        
+
         [Test]
         public void _01TestOneNode()
         {
@@ -40,7 +40,7 @@ namespace CowTest
             Assert.AreEqual(new Vector3(3, 2, 0), tree.root.mesh.BoundingBox.max);
             Assert.AreEqual(tree.root.children.Count, 0);
         }
-        
+
         [Test]
         public void _02TestThreeNodes()
         {
@@ -76,7 +76,7 @@ namespace CowTest
             Assert.AreEqual(new Vector3(3, 2, 0), tree.root.mesh.BoundingBox.max);
             Assert.AreEqual(tree.root.children.Count, 3);
         }
-        
+
         [Test]
         public void _03TestModel()
         {

@@ -5,7 +5,7 @@ using ObjLoader.Loader.Data.VertexData;
 
 namespace ObjLoader.Loader.Loaders
 {
-    public class LoadResult  
+    public class LoadResult
     {
         public IList<Vertex> Vertices { get; set; }
         public IList<Texture> Textures { get; set; }

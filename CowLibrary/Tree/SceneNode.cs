@@ -10,13 +10,13 @@ namespace CowLibrary
         public readonly List<RenderableObject> objects;
         public readonly List<SceneNode> children = new List<SceneNode>();
         private readonly Box box;
-        
+
         public SceneNode(List<RenderableObject> objects)
         {
             this.objects = objects;
             box = CreateBox();
         }
-        
+
         private Box CreateBox()
         {
             var min = Vector3.One * float.MaxValue;
@@ -47,7 +47,7 @@ namespace CowLibrary
             }
             return children.Count > 0 ? IntersectChildren(ray, out surfel) : IntersectObjects(ray, out surfel);
         }
-        
+
         private bool IntersectChildren(Ray ray, out Surfel surfel)
         {
             surfel = null;
@@ -65,7 +65,7 @@ namespace CowLibrary
             }
             return intersected;
         }
-        
+
         private bool IntersectObjects(Ray ray, out Surfel surfel)
         {
             surfel = null;

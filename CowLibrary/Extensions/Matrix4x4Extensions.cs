@@ -13,7 +13,7 @@ namespace CowLibrary
             vector.W = m.M41 * v.X + m.M42 * v.Y + m.M43 * v.Z + m.M44 * v.W;
             return vector;
         }
-        
+
         public static Vector3 MultiplyVector(this Matrix4x4 m, Vector3 v)
         {
             Vector3 vector;
@@ -22,7 +22,7 @@ namespace CowLibrary
             vector.Z = m.M31 * v.X + m.M32 * v.Y + m.M33 * v.Z;
             return vector;
         }
-        
+
         public static Vector3 MultiplyPoint(this Matrix4x4 m, Vector3 v)
         {
             Vector3 vector;
@@ -35,7 +35,7 @@ namespace CowLibrary
             vector.Z *= num;
             return vector;
         }
-        
+
         public static Matrix4x4 Translate(Vector3 vector)
         {
             Matrix4x4 matrix;
@@ -57,7 +57,7 @@ namespace CowLibrary
             matrix.M44 = 1f;
             return matrix;
         }
-        
+
         public static Matrix4x4 Rotate(Quaternion q)
         {
             var num1 = q.X * 2f;
@@ -91,7 +91,7 @@ namespace CowLibrary
             matrix.M44 = 1f;
             return matrix;
         }
-        
+
         public static Matrix4x4 Scale(Vector3 vector)
         {
             Matrix4x4 matrix;
@@ -113,7 +113,7 @@ namespace CowLibrary
             matrix.M44 = 1f;
             return matrix;
         }
-        
+
         public static Matrix4x4 TRS(Vector3 pos, Quaternion q, Vector3 s)
         {
             var translate = Translate(pos);
@@ -121,12 +121,12 @@ namespace CowLibrary
             var scale = Scale(s);
             return translate * rotation * scale;
         }
-        
+
         public static Matrix4x4 LookAt(Vector3 from, Vector3 to)
         {
             return LookAt(from, to, Vector3.UnitY);
         }
-        
+
         public static Matrix4x4 LookAt(Vector3 from, Vector3 to, Vector3 up)
         {
             var forward = (from - to).Normalize();
@@ -134,12 +134,12 @@ namespace CowLibrary
             up = Vector3.Cross(forward, right);
             return FromBasis(right, up, forward, from);
         }
-        
+
         public static Vector3 ExtractTranslation(this Matrix4x4 m)
         {
             return new Vector3(m.M14, m.M24, m.M34);
         }
-        
+
         public static Vector3 ExtractScale(this Matrix4x4 m)
         {
             return new Vector3(
@@ -148,22 +148,22 @@ namespace CowLibrary
                 new Vector3(m.M13, m.M23, m.M33).Length()
             );
         }
-        
+
         public static Vector3 Right(this Matrix4x4 m)
         {
             return new Vector3(m.M11, m.M21, m.M31);
         }
-        
+
         public static Vector3 Up(this Matrix4x4 m)
         {
             return new Vector3(m.M12, m.M22, m.M32);
         }
-        
+
         public static Vector3 Forward(this Matrix4x4 m)
         {
             return new Vector3(m.M13, m.M23, m.M33);
         }
-        
+
         public static Matrix4x4 FromBasis(Vector3 right, Vector3 up, Vector3 forward, Vector3 from)
         {
             Matrix4x4 matrix;
@@ -171,24 +171,24 @@ namespace CowLibrary
             matrix.M11 = right.X;
             matrix.M21 = right.Y;
             matrix.M31 = right.Z;
-            
+
             matrix.M12 = up.X;
             matrix.M22 = up.Y;
             matrix.M32 = up.Z;
-            
+
             matrix.M13 = forward.X;
             matrix.M23 = forward.Y;
             matrix.M33 = forward.Z;
-            
+
             matrix.M14 = from.X;
             matrix.M24 = from.Y;
             matrix.M34 = from.Z;
-            
+
             matrix.M41 = 0;
             matrix.M42 = 0;
             matrix.M43 = 0;
             matrix.M44 = 1;
-            
+
             return matrix;
         }
     }

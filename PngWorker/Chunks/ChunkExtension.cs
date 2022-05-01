@@ -18,7 +18,7 @@ namespace CowEngine.ImageWorker.Png
                     return "Unknown";
             }
         }
-        
+
         public static ChunkType FromHeader(string name)
         {
             switch (name)

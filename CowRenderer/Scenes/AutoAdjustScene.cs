@@ -15,7 +15,7 @@ namespace CowRenderer
         public override Camera MainCamera => camera;
 
         private RealisticCamera camera;
-        
+
         public override void PrepareScene()
         {
             camera = CreateCamera();
@@ -25,12 +25,13 @@ namespace CowRenderer
             PlacePlane(box);
             base.PrepareScene();
         }
-        
+
         private RealisticCamera CreateCamera()
         {
-            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov, new Lens(1f, 0.01f, 1f));
+            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov,
+                new Lens(1f, 0.01f, 1f));
         }
-        
+
         private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
         {
             var min = renderableObjects.First().Mesh.BoundingBox.min;
@@ -48,16 +49,16 @@ namespace CowRenderer
 
             return new Box(min, max);
         }
-        
+
         private void PlaceCamera(Box box)
         {
             var max = Math.Max(box.size.X * 1.3f, box.size.Y * 1.3f * camera.AspectRatio);
-            var tan = (float) Math.Tan(Const.Deg2Rad * camera.Fov / 2);
+            var tan = (float)Math.Tan(Const.Deg2Rad * camera.Fov / 2);
             var dist = max / tan;
-            
+
             camera.Transform.LocalToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
         }
-        
+
         private void PlacePlane(Box box)
         {
             var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(Color.Red, 1));

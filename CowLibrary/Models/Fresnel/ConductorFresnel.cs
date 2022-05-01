@@ -5,7 +5,7 @@ namespace CowLibrary
     public class ConductorFresnel : Fresnel
     {
         private readonly float k;
-        
+
         public ConductorFresnel(float etaI, float etaT, float k) : base(etaI, etaT)
         {
             this.k = k;
@@ -33,7 +33,7 @@ namespace CowLibrary
             var t4 = t2 * sinThetaI2;
             var rp = rs * (t3 - t4) / (t3 + t4);
 
-            return (float) (rp + rs) * 0.5f;
+            return (float)(rp + rs) * 0.5f;
         }
     }
 }

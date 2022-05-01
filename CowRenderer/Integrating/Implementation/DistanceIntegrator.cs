@@ -5,11 +5,11 @@ namespace CowRenderer.Integration
     public class DistanceIntegrator : IIntegrator
     {
         private readonly Color negativeColor = Color.White;
-        
+
         private readonly Color minColor = Color.Red;
 
         private readonly float minDistance = 0f;
-        
+
         private readonly Color maxColor = Color.Blue;
 
         private readonly float maxDistance = 2f;
@@ -21,7 +21,8 @@ namespace CowRenderer.Integration
                 return negativeColor;
             }
 
-            return ColorExtensions.LerpUnclamped(minColor, maxColor, (surfel.t - minDistance) / (maxDistance - minDistance));
+            return ColorExtensions.LerpUnclamped(minColor, maxColor,
+                (surfel.t - minDistance) / (maxDistance - minDistance));
         }
     }
 }

@@ -10,18 +10,18 @@ namespace CowEngine
     {
         Mesh Parse(string source);
     }
-    
+
     public class ObjWorker : IObjWorker
     {
         [Inject]
         public IObjLoaderFactory ObjLoaderFactory { get; set; }
-        
+
         [Inject]
         public IIoWorker IoWorker { get; set; }
-        
+
         [Inject]
         public IModelToObjectConverter ModelToObjectConverter { get; set; }
-        
+
         public Mesh Parse(string source)
         {
             var objLoader = ObjLoaderFactory.Create();

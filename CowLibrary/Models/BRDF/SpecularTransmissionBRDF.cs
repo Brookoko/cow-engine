@@ -10,7 +10,7 @@ namespace CowLibrary
         private readonly float etaB;
         private readonly TransportMode mode;
         private readonly DielectricFresnel fresnel;
-        
+
         public SpecularTransmissionBrdf(float t, float etaA, float etaB, TransportMode mode)
         {
             this.t = t;
@@ -19,12 +19,12 @@ namespace CowLibrary
             this.mode = mode;
             fresnel = new DielectricFresnel(etaA, etaB);
         }
-        
+
         public float Evaluate(Vector3 wo, Vector3 wi)
         {
             return 0;
         }
-        
+
         public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
         {
             var wo = surfel.ray;
@@ -39,7 +39,7 @@ namespace CowLibrary
                 pdf = 0;
                 return 0;
             }
-            
+
             pdf = 1;
             var cos = Vector3.Dot(wi, surfel.normal);
             var ft = t * (1 - fresnel.Evaluate(cos));

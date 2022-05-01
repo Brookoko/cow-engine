@@ -7,18 +7,18 @@ namespace CowLibrary.Lights
     {
         private readonly Color color;
         private readonly float intensity;
-        
+
         public PointLight(Color color, float intensity)
         {
             this.color = color;
             this.intensity = intensity;
         }
-        
+
         public override ShadingInfo GetShadingInfo(Surfel surfel)
         {
             var direction = Transform.Position - surfel.point;
             var sqrtDistance = direction.LengthSquared();
-            var distance = (float) Math.Sqrt(sqrtDistance);
+            var distance = (float)Math.Sqrt(sqrtDistance);
             return new ShadingInfo
             {
                 direction = direction / distance,

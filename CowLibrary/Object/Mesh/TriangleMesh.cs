@@ -8,17 +8,17 @@ namespace CowLibrary
     public class TriangleMesh : Mesh
     {
         public readonly List<Triangle> triangles;
-        
+
         public override Box BoundingBox => box;
-        
+
         private Box box;
-        
+
         public TriangleMesh(List<Triangle> triangles)
         {
             this.triangles = triangles;
             box = CreateBox();
         }
-        
+
         private Box CreateBox()
         {
             var min = Vector3.One * float.MaxValue;
@@ -34,7 +34,7 @@ namespace CowLibrary
             }
             return new Box(min, max);
         }
-        
+
         public override bool Intersect(Ray ray, out Surfel surfel)
         {
             surfel = null;
@@ -52,7 +52,7 @@ namespace CowLibrary
             }
             return intersected;
         }
-        
+
         public override void Apply(Matrix4x4 matrix)
         {
             foreach (var triangle in triangles)

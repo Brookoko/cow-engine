@@ -7,19 +7,19 @@ namespace CowRenderer.Integration
     {
         [Inject]
         public DiContainer DiContainer { get; set; }
-        
+
         private readonly IIntegrator directIntegrator = new ShadowRayIntegrator();
         private readonly IIntegrator indirectIntegrator = new RandomIndirectIntegrator();
-        
+
         private readonly Color backgroundColor = new Color(245, 245, 245);
-        
+
         [PostConstruct]
         public void Prepare()
         {
             DiContainer.Inject(directIntegrator);
             DiContainer.Inject(indirectIntegrator);
         }
-        
+
         public Color GetColor(Scene scene, Surfel surfel)
         {
             if (surfel.material == null)

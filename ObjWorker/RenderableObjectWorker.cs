@@ -7,12 +7,12 @@ namespace CowEngine
     {
         RenderableObject Parse(string source);
     }
-    
+
     public class RenderableObjectWorker : IRenderableObjectWorker
     {
         [Inject]
         public IObjWorker ObjWorker { get; set; }
-        
+
         public RenderableObject Parse(string source)
         {
             var mesh = ObjWorker.Parse(source);

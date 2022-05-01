@@ -8,7 +8,7 @@ namespace CowLibrary.Lights
 
         public abstract Color Sample(Vector3 wi);
     }
-    
+
     public class ShadingInfo
     {
         public Vector3 direction;

@@ -6,8 +6,8 @@ namespace CowEngine.ImageWorker
 
     public class Deflate
     {
-        private static byte[] Flags => new byte[] {0x78, 0x9C};
-        
+        private static byte[] Flags => new byte[] { 0x78, 0x9C };
+
         public byte[] Encode(byte[] data)
         {
             using (var ms = new MemoryStream(data))

@@ -8,22 +8,22 @@ namespace CowRenderer.Integration
     {
         [Inject]
         public DiContainer DiContainer { get; set; }
-        
+
         [Inject]
         public IRaycaster Raycaster { get; set; }
-        
+
         [Inject]
         public RenderConfig RenderConfig { get; set; }
-        
+
         private readonly IIntegrator directIntegrator = new ShadowRayIntegrator();
         private readonly Color backgroundColor = new Color(245, 245, 245);
-        
+
         [PostConstruct]
         public void Prepare()
         {
             DiContainer.Inject(directIntegrator);
         }
-        
+
         public Color GetColor(Scene scene, Surfel surfel)
         {
             if (surfel.material == null)
@@ -32,7 +32,7 @@ namespace CowRenderer.Integration
             }
             return TraceRecursive(scene, surfel, 0);
         }
-        
+
         private Color TraceRecursive(Scene scene, Surfel surfel, int depth)
         {
             if (depth >= RenderConfig.rayDepth)

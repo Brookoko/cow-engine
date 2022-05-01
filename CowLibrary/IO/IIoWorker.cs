@@ -3,7 +3,7 @@ namespace CowEngine.ImageWorker
     public interface IIoWorker : IBytesReader, IBytesWriter
     {
     }
-    
+
     public interface IBytesReader
     {
         byte[] Read(string path);

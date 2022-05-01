@@ -10,14 +10,14 @@ namespace CowEngine.ImageWorker
     {
         IImageEncoder FindEncoder(string extension);
     }
-    
+
     public class ImageEncoderProvider : IImageEncoderProvider
     {
         private readonly List<IImageEncoder> encoders = new()
         {
             new PngWorker()
         };
-        
+
         public IImageEncoder FindEncoder(string extension)
         {
             var encoder = encoders.FirstOrDefault(en => en.CanWorkWith(extension));

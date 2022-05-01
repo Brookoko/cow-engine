@@ -18,12 +18,12 @@ namespace CowEngine.ImageWorker.Png
         {
             return colorType == ColorType.TruecolorAlpha || colorType == ColorType.GreyscaleAlpha;
         }
-        
+
         public static byte[] ToBytes(this string s)
         {
-            return Encoding.UTF8.GetBytes(s); 
+            return Encoding.UTF8.GetBytes(s);
         }
-        
+
         public static byte[] FromHexString(this string s)
         {
             return Enumerable.Range(0, s.Length)
@@ -31,12 +31,12 @@ namespace CowEngine.ImageWorker.Png
                 .Select(x => Convert.ToByte(s.Substring(x, 2), 16))
                 .ToArray();
         }
-        
+
         public static int ExtractInt(this byte[] bytes, int index)
         {
             return (bytes[index] << 24) | (bytes[index + 1] << 16) | (bytes[index + 2] << 8) | bytes[index + 3];
         }
-        
+
         public static byte[] ToBytes(this int i)
         {
             var bytes = BitConverter.GetBytes(i);

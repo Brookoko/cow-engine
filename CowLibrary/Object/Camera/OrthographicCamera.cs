@@ -13,7 +13,7 @@ namespace CowLibrary
             var origin = new Vector3(x, y, 0);
             return new Ray(origin, Vector3.UnitZ);
         }
-        
+
         public override List<Ray> Sample(Vector2 screenPoint, int samples)
         {
             return Enumerable.Range(0, samples).Select(_ => ScreenPointToRay(screenPoint)).ToList();

@@ -9,12 +9,12 @@ namespace CowRenderer.Integration
     {
         [Inject]
         public IRaycaster Raycaster { get; set; }
-        
+
         [Inject]
         public RenderConfig RenderConfig { get; set; }
-        
+
         private readonly Color backgroundColor = new Color(245, 245, 245);
-        
+
         public Color GetColor(Scene scene, Surfel surfel)
         {
             if (surfel.material == null)

@@ -6,17 +6,17 @@ namespace CowLibrary
     public class LambertianBrdf : IBrdf
     {
         private readonly float r;
-        
+
         public LambertianBrdf(float r)
         {
             this.r = Math.Clamp(r, 0, 1);
         }
-        
+
         public float Evaluate(Vector3 wo, Vector3 wi)
         {
             return r * Const.InvPi;
         }
-        
+
         public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
         {
             var wo = surfel.ray;

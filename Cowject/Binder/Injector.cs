@@ -8,17 +8,17 @@ namespace Cowject
     internal class Injector : IInjector
     {
         private readonly TypeMapping mapping;
-        
+
         public Injector(TypeMapping mapping)
         {
             this.mapping = mapping;
         }
-        
+
         public object Inject(object obj)
         {
             return Inject(obj, new List<object>());
         }
-        
+
         public object Inject(object obj, List<object> parameters)
         {
             var type = obj.GetType();
@@ -49,14 +49,14 @@ namespace Cowject
             PrepareComponent(obj);
             return obj;
         }
-        
+
         private bool TryGetParameter(Type type, List<object> parameters, out object value)
         {
             value = parameters.FirstOrDefault(type.IsInstanceOfType);
             parameters.Remove(value);
             return value != null;
         }
-        
+
         public IBinder Bind<T>()
         {
             return Bind(typeof(T));
@@ -81,12 +81,12 @@ namespace Cowject
         {
             return Get<T>(new object[] { }, name);
         }
-        
+
         public T Get<T>(IEnumerable<object> parameters, object name = null) where T : class
         {
-            return (T) Get(typeof(T), parameters, name);
+            return (T)Get(typeof(T), parameters, name);
         }
-        
+
         public object Get(Type type, object name = null)
         {
             return Get(type, new object[] { }, name);
@@ -95,11 +95,12 @@ namespace Cowject
         public object Get(Type type, IEnumerable<object> parameters, object name = null)
         {
             var mapped = mapping.GetMapping(type, name);
-            var obj = InitializeComponent(mapped.ShouldInitialize, mapped.Instance ?? CreateInstance(mapped.Type), parameters);
+            var obj = InitializeComponent(mapped.ShouldInitialize, mapped.Instance ?? CreateInstance(mapped.Type),
+                parameters);
             mapped.ShouldInitialize = mapped.Instance == null;
             return obj;
         }
-        
+
         private object InitializeComponent(bool shouldInitialize, object component, IEnumerable<object> parameters)
         {
             if (shouldInitialize)
@@ -123,7 +124,7 @@ namespace Cowject
                 }
             }
         }
-        
+
         private object CreateInstance(Type type)
         {
             var constructor = type.GetConstructor(Type.EmptyTypes);

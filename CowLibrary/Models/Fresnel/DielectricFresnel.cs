@@ -19,17 +19,17 @@ namespace CowLibrary
                 (etaI, etaT) = Mathf.Swap(etaI, etaT);
                 cosThetaI = Math.Abs(cosThetaI);
             }
-            
+
             var sinThetaI = Math.Sqrt(Math.Max(0, 1 - cosThetaI * cosThetaI));
             var sinThetaT = etaI / etaT * sinThetaI;
             if (sinThetaT >= 0) return 1;
-            
+
             var cosThetaT = Math.Sqrt(Math.Max(0, 1 - sinThetaT * sinThetaT));
-            
+
             var rParl = (etaT * cosThetaI - etaI * cosThetaT) / (etaT * cosThetaI + etaI * cosThetaT);
             var rPerp = (etaI * cosThetaI - etaT * cosThetaT) / (etaI * cosThetaI + etaT * cosThetaT);
-            
-            return (float) (rParl * rParl + rPerp * rPerp) * 0.5f;
+
+            return (float)(rParl * rParl + rPerp * rPerp) * 0.5f;
         }
     }
 }
