@@ -17,13 +17,13 @@ namespace CowRenderer.Raycasting
             Surfel closestSurfel = null;
             foreach (var renderableObject in objects)
             {
-                if (renderableObject.mesh.Intersect(ray, out var hitSurfel))
+                if (renderableObject.Mesh.Intersect(ray, out var hitSurfel))
                 {
                     if (hitSurfel.t > closestSurfel?.t)
                     {
                         continue;
                     }
-                    hitSurfel.material = renderableObject.material;
+                    hitSurfel.material = renderableObject.Material;
                     hitSurfel.ray = ray.direction;
                     closestSurfel = hitSurfel;
                 }

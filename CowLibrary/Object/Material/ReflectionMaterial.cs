@@ -4,17 +4,17 @@ namespace CowLibrary
 
     public class ReflectionMaterial : Material
     {
-        private BRDF brdf;
+        private IBrdf brdf;
         
         public ReflectionMaterial(float r, float eta) : base(Color.White)
         {
             var fresnel = new DielectricFresnel(1, eta);
-            brdf = new SpecularReflectionBRDF(r, fresnel);
+            brdf = new SpecularReflectionBrdf(r, fresnel);
         }
 
         public override Color GetColor(Vector3 wo, Vector3 wi)
         {
-            return brdf.Evaluate(wo, wi) * color;
+            return brdf.Evaluate(wo, wi) * Color;
         }
         
         public override float Sample(Surfel surfel, out Vector3 wi, out float pdf)

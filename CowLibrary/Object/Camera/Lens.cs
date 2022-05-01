@@ -2,9 +2,9 @@ namespace CowLibrary
 {
     public struct Lens
     {
-        public float focus;
-        public float radius;
-        public float distance;
+        public readonly float focus;
+        public readonly float radius;
+        public readonly float distance;
 
         public Lens(float focus, float radius, float distance)
         {

@@ -7,25 +7,25 @@ namespace CowLibrary
 
     public class RealisticCamera : Camera
     {
-        public float fov
+        public float Fov
         {
-            get => _fov;
-            set
+            get => fov;
+            init
             {
-                _fov = value;
+                fov = value;
                 tan = (float) Math.Tan(Const.Deg2Rad * value / 2);
             }
         }
         
-        private float _fov;
-        private float tan;
-        private Lens lens;
+        private readonly float fov;
+        private readonly float tan;
+        private readonly Lens lens;
         
         public RealisticCamera(int width, int height, float fov, Lens lens)
         {
+            Fov = fov;
             this.width = width;
             this.height = height;
-            this.fov = fov;
             this.lens = lens;
         }
         
@@ -47,8 +47,8 @@ namespace CowLibrary
                 var lensPoint = lensCenter + new Vector3(sample * lens.radius, 0);
                 var direction = focusPoint - lensPoint;
                 lensPoint.Z = 0;
-                var position = transform.localToWorldMatrix.MultiplyPoint(lensPoint);
-                direction = transform.localToWorldMatrix.MultiplyVector(direction).Normalize();
+                var position = Transform.LocalToWorldMatrix.MultiplyPoint(lensPoint);
+                direction = Transform.LocalToWorldMatrix.MultiplyVector(direction).Normalize();
                 var ray = new Ray(position, direction);
                 rays.Add(ray);
             }
@@ -58,7 +58,7 @@ namespace CowLibrary
         private Vector3 ViewportPoint(Vector2 screenPoint)
         {
             var x = (2 * (screenPoint.X + 0.5f) / width - 1) * tan;
-            var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / aspectRatio * tan;
+            var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / AspectRatio * tan;
             return new Vector3(x, y, 0);
         }
     }

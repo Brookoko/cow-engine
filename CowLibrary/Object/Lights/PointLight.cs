@@ -16,7 +16,7 @@ namespace CowLibrary.Lights
         
         public override ShadingInfo GetShadingInfo(Surfel surfel)
         {
-            var direction = transform.position - surfel.point;
+            var direction = Transform.Position - surfel.point;
             var sqrtDistance = direction.LengthSquared();
             var distance = (float) Math.Sqrt(sqrtDistance);
             return new ShadingInfo

@@ -5,7 +5,7 @@ namespace CowLibrary
 
     public abstract class Camera : SceneObject
     {
-        public float aspectRatio => (float) width / height;
+        public float AspectRatio => (float) width / height;
         
         public int width;
         public int height;

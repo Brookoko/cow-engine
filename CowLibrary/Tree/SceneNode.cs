@@ -21,7 +21,7 @@ namespace CowLibrary
         {
             var min = Vector3.One * float.MaxValue;
             var max = Vector3.One * float.MinValue;
-            foreach (var b in objects.Select(obj => obj.mesh.BoundingBox))
+            foreach (var b in objects.Select(obj => obj.Mesh.BoundingBox))
             {
                 min.X = Math.Min(min.X, b.min.X);
                 min.Y = Math.Min(min.Y, b.min.Y);
@@ -72,13 +72,13 @@ namespace CowLibrary
             var intersected = false;
             foreach (var obj in objects)
             {
-                if (obj.mesh.Intersect(ray, out var s))
+                if (obj.Mesh.Intersect(ray, out var s))
                 {
                     intersected = true;
                     if (surfel == null || surfel.t > s.t)
                     {
                         surfel = s;
-                        surfel.material = obj.material;
+                        surfel.material = obj.Material;
                         surfel.ray = ray.direction;
                     }
                 }

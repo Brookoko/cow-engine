@@ -11,7 +11,7 @@ namespace CowRenderer
         
         public void SetMainCamera(int cameraId)
         {
-            camera = cameras.First(c => c.id == cameraId);
+            camera = cameras.First(c => c.Id == cameraId);
         }
     }
 }

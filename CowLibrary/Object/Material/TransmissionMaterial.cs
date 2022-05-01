@@ -4,16 +4,16 @@ namespace CowLibrary
 
     public class TransmissionMaterial : Material
     {
-        private BRDF brdf;
+        private readonly IBrdf brdf;
         
         public TransmissionMaterial(float t, float eta) : base(Color.White)
         {
-            brdf = new SpecularTransmissionBRDF(t, 1f, eta, TransportMode.Importance);
+            brdf = new SpecularTransmissionBrdf(t, 1f, eta, TransportMode.Importance);
         }
         
         public override Color GetColor(Vector3 wo, Vector3 wi)
         {
-            return brdf.Evaluate(wo, wi) * color;
+            return brdf.Evaluate(wo, wi) * Color;
         }
         
         public override float Sample(Surfel surfel, out Vector3 wi, out float pdf)

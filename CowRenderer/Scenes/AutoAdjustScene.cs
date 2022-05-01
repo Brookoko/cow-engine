@@ -33,11 +33,11 @@ namespace CowRenderer
         
         private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
         {
-            var min = renderableObjects.First().mesh.BoundingBox.min;
-            var max = renderableObjects.First().mesh.BoundingBox.max;
+            var min = renderableObjects.First().Mesh.BoundingBox.min;
+            var max = renderableObjects.First().Mesh.BoundingBox.max;
             foreach (var renderableObject in renderableObjects)
             {
-                var objectBoundingBox = renderableObject.mesh.BoundingBox;
+                var objectBoundingBox = renderableObject.Mesh.BoundingBox;
                 min.X = Math.Min(min.X, objectBoundingBox.min.X);
                 min.Y = Math.Min(min.Y, objectBoundingBox.min.Y);
                 min.Z = Math.Min(min.Z, objectBoundingBox.min.Z);
@@ -51,17 +51,17 @@ namespace CowRenderer
         
         private void PlaceCamera(Box box)
         {
-            var max = Math.Max(box.size.X * 1.3f, box.size.Y * 1.3f * camera.aspectRatio);
-            var tan = (float) Math.Tan(Const.Deg2Rad * camera.fov / 2);
+            var max = Math.Max(box.size.X * 1.3f, box.size.Y * 1.3f * camera.AspectRatio);
+            var tan = (float) Math.Tan(Const.Deg2Rad * camera.Fov / 2);
             var dist = max / tan;
             
-            camera.transform.localToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
+            camera.Transform.LocalToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
         }
         
         private void PlacePlane(Box box)
         {
             var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(Color.Red, 1));
-            plane.transform.position = box.min.Y * Vector3.UnitY;
+            plane.Transform.Position = box.min.Y * Vector3.UnitY;
             objects.Add(plane);
         }
     }

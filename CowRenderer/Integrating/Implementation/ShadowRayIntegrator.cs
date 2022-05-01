@@ -22,7 +22,7 @@ namespace CowRenderer.Integration
                 return backgroundColor;
             }
 
-            var baseColor = surfel.material.color;
+            var baseColor = surfel.material.Color;
             var result = new Color(0, 0, 0);
             foreach (var light in scene.lights)
             {

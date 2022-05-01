@@ -8,7 +8,7 @@
 
     public class Program
     {
-        private static readonly List<IModule> modules = new List<IModule>()
+        private static readonly List<IModule> Modules = new()
         {
             new CoreModule(),
             new ImageModule(),
@@ -38,7 +38,7 @@
         private static DiContainer SetupContainer()
         {
             var container = new DiContainer();
-            foreach (var module in modules)
+            foreach (var module in Modules)
             {
                 module.Prepare(container);
             }

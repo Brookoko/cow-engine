@@ -10,54 +10,54 @@ namespace CowTest
         public void _01TestDefaultTransform()
         {
             var transform = new Transform();
-            Assert.AreEqual(Matrix4x4.Identity, transform.localToWorldMatrix);
-            Assert.AreEqual(Matrix4x4.Identity, transform.worldToLocalMatrix);
-            Assert.AreEqual(Vector3.Zero, transform.localPosition);
-            Assert.AreEqual(Vector3.One, transform.localScale);
-            Assert.AreEqual(Quaternion.Identity, transform.localRotation);
-            Assert.AreEqual(Vector3.Zero, transform.position);
-            Assert.AreEqual(Vector3.One, transform.lossyScale);
-            Assert.AreEqual(Quaternion.Identity, transform.rotation);
+            Assert.AreEqual(Matrix4x4.Identity, transform.LocalToWorldMatrix);
+            Assert.AreEqual(Matrix4x4.Identity, transform.WorldToLocalMatrix);
+            Assert.AreEqual(Vector3.Zero, transform.LocalPosition);
+            Assert.AreEqual(Vector3.One, transform.LocalScale);
+            Assert.AreEqual(Quaternion.Identity, transform.LocalRotation);
+            Assert.AreEqual(Vector3.Zero, transform.Position);
+            Assert.AreEqual(Vector3.One, transform.LossyScale);
+            Assert.AreEqual(Quaternion.Identity, transform.Rotation);
         }
 
         [Test]
         public void _02TestWorldPositionNoParent()
         {
             var transform = new Transform();
-            transform.position = Vector3.One;
-            Assert.AreEqual(Vector3.One, transform.position);
-            Assert.AreEqual(Vector3.One, transform.localPosition);
+            transform.Position = Vector3.One;
+            Assert.AreEqual(Vector3.One, transform.Position);
+            Assert.AreEqual(Vector3.One, transform.LocalPosition);
         }
         
         [Test]
         public void _03TestWorldPosition()
         {
             var transform = new Transform();
-            var parent = transform.parent = new Transform();
-            parent.position = Vector3.One;
-            transform.position = Vector3.One;
-            Assert.AreEqual(Vector3.One, transform.position);
-            Assert.AreEqual(Vector3.Zero, transform.localPosition);
+            var parent = transform.Parent = new Transform();
+            parent.Position = Vector3.One;
+            transform.Position = Vector3.One;
+            Assert.AreEqual(Vector3.One, transform.Position);
+            Assert.AreEqual(Vector3.Zero, transform.LocalPosition);
         }
         
         [Test]
         public void _04TestLocalPositionNoParent()
         {
             var transform = new Transform();
-            transform.localPosition = Vector3.One;
-            Assert.AreEqual(Vector3.One, transform.position);
-            Assert.AreEqual(Vector3.One, transform.localPosition);
+            transform.LocalPosition = Vector3.One;
+            Assert.AreEqual(Vector3.One, transform.Position);
+            Assert.AreEqual(Vector3.One, transform.LocalPosition);
         }
         
         [Test]
         public void _05TestLocalPosition()
         {
             var transform = new Transform();
-            var parent = transform.parent = new Transform();
-            parent.position = Vector3.One;
-            transform.localPosition = Vector3.One;
-            Assert.AreEqual(Vector3.One * 2, transform.position);
-            Assert.AreEqual(Vector3.One, transform.localPosition);
+            var parent = transform.Parent = new Transform();
+            parent.Position = Vector3.One;
+            transform.LocalPosition = Vector3.One;
+            Assert.AreEqual(Vector3.One * 2, transform.Position);
+            Assert.AreEqual(Vector3.One, transform.LocalPosition);
         }
         
         [Test]
@@ -65,21 +65,21 @@ namespace CowTest
         {
             var transform = new Transform();
             var rot = Quaternion.CreateFromAxisAngle(Vector3.UnitX, 90);
-            transform.rotation = rot;
-            Assert.AreEqual(rot, transform.rotation);
-            Assert.AreEqual(rot, transform.localRotation);
+            transform.Rotation = rot;
+            Assert.AreEqual(rot, transform.Rotation);
+            Assert.AreEqual(rot, transform.LocalRotation);
         }
         
         [Test]
         public void _07TestWorldRotation()
         {
             var transform = new Transform();
-            var parent = transform.parent = new Transform();
+            var parent = transform.Parent = new Transform();
             var rot = Quaternion.CreateFromAxisAngle(Vector3.UnitX, 90);
-            parent.rotation = rot;
-            transform.rotation = rot;
-            Assert.AreEqual(rot, transform.rotation);
-            Assert.AreEqual(Quaternion.Identity, transform.localRotation);
+            parent.Rotation = rot;
+            transform.Rotation = rot;
+            Assert.AreEqual(rot, transform.Rotation);
+            Assert.AreEqual(Quaternion.Identity, transform.LocalRotation);
         }
         
         [Test]
@@ -87,80 +87,80 @@ namespace CowTest
         {
             var transform = new Transform();
             var rot = Quaternion.CreateFromAxisAngle(Vector3.UnitX, 90);
-            transform.localRotation = rot;
-            Assert.AreEqual(rot, transform.rotation);
-            Assert.AreEqual(rot, transform.localRotation);
+            transform.LocalRotation = rot;
+            Assert.AreEqual(rot, transform.Rotation);
+            Assert.AreEqual(rot, transform.LocalRotation);
         }
         
         [Test]
         public void _09TestLocalRotation()
         {
             var transform = new Transform();
-            var parent = transform.parent = new Transform();
+            var parent = transform.Parent = new Transform();
             var rot = Quaternion.CreateFromAxisAngle(Vector3.UnitX, 90);
-            parent.rotation = rot;
-            transform.localRotation = rot;
-            Assert.AreEqual(rot * rot, transform.rotation);
-            Assert.AreEqual(rot, transform.localRotation);
+            parent.Rotation = rot;
+            transform.LocalRotation = rot;
+            Assert.AreEqual(rot * rot, transform.Rotation);
+            Assert.AreEqual(rot, transform.LocalRotation);
         }
         
         [Test]
         public void _10TestWorldScaleNoParent()
         {
             var transform = new Transform();
-            transform.lossyScale = Vector3.One * 2;
-            Assert.AreEqual(Vector3.One * 2, transform.lossyScale);
-            Assert.AreEqual(Vector3.One * 2, transform.localScale);
+            transform.LossyScale = Vector3.One * 2;
+            Assert.AreEqual(Vector3.One * 2, transform.LossyScale);
+            Assert.AreEqual(Vector3.One * 2, transform.LocalScale);
         }
         
         [Test]
         public void _11TestWorldScale()
         {
             var transform = new Transform();
-            var parent = transform.parent = new Transform();
-            parent.lossyScale = Vector3.One * 2;
-            transform.lossyScale = Vector3.One * 2;
-            Assert.AreEqual(Vector3.One * 2, transform.lossyScale);
-            Assert.AreEqual(Vector3.One, transform.localScale);
+            var parent = transform.Parent = new Transform();
+            parent.LossyScale = Vector3.One * 2;
+            transform.LossyScale = Vector3.One * 2;
+            Assert.AreEqual(Vector3.One * 2, transform.LossyScale);
+            Assert.AreEqual(Vector3.One, transform.LocalScale);
         }
         
         [Test]
         public void _12TestLocalScaleNoParent()
         {
             var transform = new Transform();
-            transform.localScale = Vector3.One * 2;
-            Assert.AreEqual(Vector3.One * 2, transform.lossyScale);
-            Assert.AreEqual(Vector3.One * 2, transform.localScale);
+            transform.LocalScale = Vector3.One * 2;
+            Assert.AreEqual(Vector3.One * 2, transform.LossyScale);
+            Assert.AreEqual(Vector3.One * 2, transform.LocalScale);
         }
         
         [Test]
         public void _13TestLocalScale()
         {
             var transform = new Transform();
-            var parent = transform.parent = new Transform();
-            parent.lossyScale = Vector3.One * 2;
-            transform.localScale = Vector3.One * 2;
-            Assert.AreEqual(Vector3.One * 4, transform.lossyScale);
-            Assert.AreEqual(Vector3.One * 2, transform.localScale);
+            var parent = transform.Parent = new Transform();
+            parent.LossyScale = Vector3.One * 2;
+            transform.LocalScale = Vector3.One * 2;
+            Assert.AreEqual(Vector3.One * 4, transform.LossyScale);
+            Assert.AreEqual(Vector3.One * 2, transform.LocalScale);
         }
         
         [Test]
         public void _14TestComplexTransformation()
         {
             var transform = new Transform();
-            var parent = transform.parent = new Transform();
-            parent.localPosition = Vector3.One;
-            parent.localScale = Vector3.One * 2;
-            transform.localScale = Vector3.One * 2;
-            transform.localPosition = Vector3.One;
+            var parent = transform.Parent = new Transform();
+            parent.LocalPosition = Vector3.One;
+            parent.LocalScale = Vector3.One * 2;
+            transform.LocalScale = Vector3.One * 2;
+            transform.LocalPosition = Vector3.One;
             var rot = Quaternion.CreateFromAxisAngle(Vector3.UnitX, 90);
-            transform.localRotation = rot;
-            Assert.AreEqual(Vector3.One, transform.localPosition);
-            Assert.AreEqual(Vector3.One * 2, transform.localScale);
-            Assert.AreEqual(rot, transform.localRotation);
-            Assert.AreEqual(Vector3.One * 3, transform.position);
-            Assert.AreEqual(Vector3.One * 4, transform.lossyScale);
-            Assert.AreEqual(rot, transform.rotation);
+            transform.LocalRotation = rot;
+            Assert.AreEqual(Vector3.One, transform.LocalPosition);
+            Assert.AreEqual(Vector3.One * 2, transform.LocalScale);
+            Assert.AreEqual(rot, transform.LocalRotation);
+            Assert.AreEqual(Vector3.One * 3, transform.Position);
+            Assert.AreEqual(Vector3.One * 4, transform.LossyScale);
+            Assert.AreEqual(rot, transform.Rotation);
         }
     }
 }

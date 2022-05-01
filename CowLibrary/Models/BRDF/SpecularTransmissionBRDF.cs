@@ -3,7 +3,7 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class SpecularTransmissionBRDF : BRDF
+    public class SpecularTransmissionBrdf : IBrdf
     {
         private readonly float t;
         private readonly float etaA;
@@ -11,7 +11,7 @@ namespace CowLibrary
         private readonly TransportMode mode;
         private readonly DielectricFresnel fresnel;
         
-        public SpecularTransmissionBRDF(float t, float etaA, float etaB, TransportMode mode)
+        public SpecularTransmissionBrdf(float t, float etaA, float etaB, TransportMode mode)
         {
             this.t = t;
             this.etaA = etaA;
@@ -20,12 +20,12 @@ namespace CowLibrary
             fresnel = new DielectricFresnel(etaA, etaB);
         }
         
-        public override float Evaluate(Vector3 wo, Vector3 wi)
+        public float Evaluate(Vector3 wo, Vector3 wi)
         {
             return 0;
         }
         
-        public override float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
+        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
         {
             var wo = surfel.ray;
             var entering = Vector3.Dot(wo, surfel.normal) < 0;

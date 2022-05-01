@@ -4,11 +4,11 @@ namespace CowLibrary
 
     public readonly struct Color
     {
-        public static readonly Color White = new Color(1f);
-        public static readonly Color Black = new Color(0f);
-        public static readonly Color Red = new Color(1f, 0f, 0f);
-        public static readonly Color Green = new Color(0f, 1f, 0f);
-        public static readonly Color Blue = new Color(0f, 0f, 1f);
+        public static readonly Color White = new(1f);
+        public static readonly Color Black = new(0f);
+        public static readonly Color Red = new(1f, 0f, 0f);
+        public static readonly Color Green = new(0f, 1f, 0f);
+        public static readonly Color Blue = new(0f, 0f, 1f);
         
         public readonly float r;
         public readonly float g;

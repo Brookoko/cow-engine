@@ -68,17 +68,17 @@
                 case SceneFormat.Camera.CameraOneofCase.Perspective:
                     return new PerspectiveCamera()
                     {
-                        id = parsedCamera.Id,
-                        transform = tran,
+                        Id = parsedCamera.Id,
+                        Transform = tran,
                         width = RenderConfig.width,
                         height = RenderConfig.height,
-                        fov = (float) parsedCamera.Perspective.Fov,
+                        Fov = (float) parsedCamera.Perspective.Fov,
                     };
                 case SceneFormat.Camera.CameraOneofCase.Orthographic:
                     return new OrthographicCamera()
                     {
-                        id = parsedCamera.Id,
-                        transform = tran,
+                        Id = parsedCamera.Id,
+                        Transform = tran,
                         width = RenderConfig.width,
                         height = RenderConfig.height,
                     };
@@ -92,12 +92,10 @@
             var tran = ConvertTransform(parsedObject.Transform);
             var mesh = GetMesh(parsedObject);
             var material = GetMaterial(parsedObject, materials);
-            return new RenderableObject()
+            return new RenderableObject(mesh, material)
             {
-                id = parsedObject.Id,
-                transform = tran,
-                mesh = mesh,
-                material = material,
+                Id = parsedObject.Id,
+                Transform = tran,
             };
         }
         
@@ -146,19 +144,19 @@
                 case SceneFormat.Light.LightOneofCase.Point:
                     return new PointLight(color, 1)
                     {
-                        id = parsedLight.Id,
-                        transform = tran,
+                        Id = parsedLight.Id,
+                        Transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Directional:
                     return new DirectionalLight(color, 1)
                     {
-                        id = parsedLight.Id,
-                        transform = tran,
+                        Id = parsedLight.Id,
+                        Transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Environment:
                     return new EnvironmentLight(color, 1)
                     {
-                        id = parsedLight.Id,
+                        Id = parsedLight.Id,
                     };
                 case SceneFormat.Light.LightOneofCase.Sphere:
                     throw new Exception("Sphere light is not supported yet");
@@ -196,9 +194,9 @@
             if (t == null) return new Transform();
             return new Transform()
             {
-                localPosition = ConvertVector(t.Position),
-                localRotation = ConvertToQuaternion(t.Rotation),
-                localScale = ConvertVector(t.Scale),
+                LocalPosition = ConvertVector(t.Position),
+                LocalRotation = ConvertToQuaternion(t.Rotation),
+                LocalScale = ConvertVector(t.Scale),
             };
         }
         

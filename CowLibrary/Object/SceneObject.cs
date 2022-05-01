@@ -2,7 +2,8 @@ namespace CowLibrary
 {
     public abstract class SceneObject
     {
-        public int id;
-        public Transform transform = new Transform();
+        public int Id { get; init; }
+
+        public Transform Transform { get; init; } = new();
     }
 }

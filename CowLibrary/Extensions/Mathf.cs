@@ -7,27 +7,26 @@ namespace CowLibrary
     public static class Mathf
     {
         private static int seed = Environment.TickCount;
-        
-        private static readonly ThreadLocal<Random> random =
-            new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref seed)));
-        
+
+        private static readonly ThreadLocal<Random> Random = new(() => new Random(Interlocked.Increment(ref seed)));
+
         public static Vector2 CreateSample()
         {
-            return new Vector2((float) random.Value.NextDouble(), (float) random.Value.NextDouble());
+            return new Vector2((float)Random.Value.NextDouble(), (float)Random.Value.NextDouble());
         }
-        
+
         public static (float a, float b) Swap(float a, float b)
         {
             return (b, a);
         }
-        
+
         public static Vector3 CosineSampleHemisphere(Vector2 sample)
         {
             var d = ConcentricSampleDisk(sample);
-            var z = (float) Math.Sqrt(Math.Max(0, 1 - d.X * d.X - d.Y * d.Y));
+            var z = (float)Math.Sqrt(Math.Max(0, 1 - d.X * d.X - d.Y * d.Y));
             return new Vector3(d.X, z, d.Y);
         }
-        
+
         public static Vector3 CosineSampleHemisphere(Vector3 up, Vector2 sample)
         {
             var v = CosineSampleHemisphere(sample);
@@ -36,7 +35,7 @@ namespace CowLibrary
             var m = Matrix4x4Extensions.FromBasis(right, up, forward, Vector3.Zero);
             return m.MultiplyVector(v);
         }
-        
+
         public static Vector2 ConcentricSampleDisk(Vector2 sample)
         {
             var offset = 2 * sample - Vector2.One;
@@ -54,7 +53,7 @@ namespace CowLibrary
             }
             var theta = Const.PiOver4 * (d / r);
 
-            return r * new Vector2((float) Math.Cos(theta), (float) Math.Sin(theta));
+            return r * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
         }
     }
 }

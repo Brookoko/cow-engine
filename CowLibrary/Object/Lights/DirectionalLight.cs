@@ -17,7 +17,7 @@ namespace CowLibrary.Lights
         {
             return new ShadingInfo()
             {
-                direction = transform.forward,
+                direction = Transform.Forward,
                 distance = float.PositiveInfinity,
                 color = color * intensity
             };

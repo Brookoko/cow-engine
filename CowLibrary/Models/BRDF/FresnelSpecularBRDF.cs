@@ -2,25 +2,25 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class FresnelSpecularBRDF : BRDF
+    public class FresnelSpecularBrdf : IBrdf
     {
         private readonly DielectricFresnel fresnel;
-        private readonly BRDF reflection;
-        private readonly BRDF transmission;
+        private readonly IBrdf reflection;
+        private readonly IBrdf transmission;
         
-        public FresnelSpecularBRDF(float r, float t, float etaA, float etaB, TransportMode mode)
+        public FresnelSpecularBrdf(float r, float t, float etaA, float etaB, TransportMode mode)
         {
             fresnel = new DielectricFresnel(etaA, etaB);
-            reflection = new SpecularReflectionBRDF(r, fresnel);
-            transmission = new SpecularTransmissionBRDF(t, etaA, etaB, mode);
+            reflection = new SpecularReflectionBrdf(r, fresnel);
+            transmission = new SpecularTransmissionBrdf(t, etaA, etaB, mode);
         }
         
-        public override float Evaluate(Vector3 wo, Vector3 wi)
+        public float Evaluate(Vector3 wo, Vector3 wi)
         {
             return 0;
         }
         
-        public override float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
+        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
         {
             float res;
             var f = fresnel.Evaluate(Vector3.Dot(surfel.normal, surfel.ray));

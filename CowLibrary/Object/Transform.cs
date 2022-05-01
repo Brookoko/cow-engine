@@ -4,157 +4,138 @@ namespace CowLibrary
 
     public class Transform
     {
-        public Transform parent
+        public Transform Parent
         {
-            get => _parent;
+            get => parent;
             set => SetParent(value);
         }
 
-        public Vector3 position
+        public Vector3 Position
         {
-            get
-            {
-                _position = parent == null ? _localPosition : parent.localToWorldMatrix.MultiplyPoint(_localPosition);
-                return _position;
-            }
+            get => position;
             set
             {
-                _position = value;
-                _localPosition = parent == null ? value : parent.worldToLocalMatrix.MultiplyPoint(value);
+                position = value;
+                localPosition = Parent == null ? value : Parent.WorldToLocalMatrix.MultiplyPoint(value);
                 CalculateMatrix();
             }
         }
 
-        public Quaternion rotation
+        public Quaternion Rotation
         {
-            get
-            {
-                _rotation = parent == null ? _localRotation : parent.rotation * _localRotation;
-                return _rotation;
-            }
+            get => rotation;
             set
             {
-                _rotation = value;
-                _localRotation = parent == null ? value : Quaternion.Inverse(parent.rotation) * value;
+                rotation = value;
+                localRotation = Parent == null ? value : Quaternion.Inverse(Parent.Rotation) * value;
                 CalculateMatrix();
             }
         }
 
-        public Vector3 lossyScale
+        public Vector3 LossyScale
         {
-            get
-            {
-                _lossyScale = parent == null ? _localScale : parent.localToWorldMatrix.MultiplyVector(_localScale);
-                return _lossyScale;
-            }
+            get => lossyScale;
             set
             {
-                _lossyScale = value;
-                _localScale = parent == null ? value : parent.worldToLocalMatrix.MultiplyVector(value);
+                lossyScale = value;
+                localScale = Parent == null ? value : Parent.WorldToLocalMatrix.MultiplyVector(value);
                 CalculateMatrix();
             }
         }
 
-        public Vector3 localPosition
+        public Vector3 LocalPosition
         {
-            get => _localPosition;
+            get => localPosition;
             set
             {
-                _localPosition = value;
-                _position = parent == null ? value : parent.localToWorldMatrix.MultiplyPoint(value);
-                CalculateMatrix();
-            }
-        }
-        
-        public Quaternion localRotation
-        {
-            get => _localRotation;
-            set
-            {
-                _localRotation = value;
-                _rotation = parent == null ? value : parent.rotation * value;
-                CalculateMatrix();
-            }
-        }
-        
-        public Vector3 localScale
-        {
-            get => _localScale;
-            set
-            {
-                _localScale = value;
-                _lossyScale = parent == null ? value : parent.localToWorldMatrix.MultiplyVector(value);
+                localPosition = value;
+                position = Parent == null ? value : Parent.LocalToWorldMatrix.MultiplyPoint(value);
                 CalculateMatrix();
             }
         }
 
-        public Matrix4x4 localToWorldMatrix
+        public Quaternion LocalRotation
         {
-            get
-            {
-                if (parent != null) CalculateMatrix();
-                return _localToWorldMatrix;
-            }
+            get => localRotation;
             set
             {
-                _localToWorldMatrix = value;
-                Matrix4x4.Invert(_localToWorldMatrix, out _worldToLocalMatrix);
+                localRotation = value;
+                rotation = Parent == null ? value : Parent.Rotation * value;
+                CalculateMatrix();
+            }
+        }
+
+        public Vector3 LocalScale
+        {
+            get => localScale;
+            set
+            {
+                localScale = value;
+                lossyScale = Parent == null ? value : Parent.LocalToWorldMatrix.MultiplyVector(value);
+                CalculateMatrix();
+            }
+        }
+
+        public Matrix4x4 LocalToWorldMatrix
+        {
+            get => localToWorldMatrix;
+            set
+            {
+                localToWorldMatrix = value;
+                Matrix4x4.Invert(localToWorldMatrix, out worldToLocalMatrix);
                 ExtractValuesFromMatrix();
             }
         }
 
-        public Matrix4x4 worldToLocalMatrix
+        public Matrix4x4 WorldToLocalMatrix
         {
-            get
-            {
-                if (parent != null) CalculateMatrix();
-                return _worldToLocalMatrix;
-            }
+            get => worldToLocalMatrix;
             set
             {
-                _worldToLocalMatrix = value;
-                Matrix4x4.Invert(_worldToLocalMatrix, out _localToWorldMatrix);
+                worldToLocalMatrix = value;
+                Matrix4x4.Invert(worldToLocalMatrix, out localToWorldMatrix);
                 ExtractValuesFromMatrix();
             }
         }
 
-        public Vector3 right => _localToWorldMatrix.Right();
-        public Vector3 up => _localToWorldMatrix.Up();
-        public Vector3 forward => _localToWorldMatrix.Forward();
-        
-        private Transform _parent;
-        
-        private Vector3 _position = Vector3.Zero;
-        private Quaternion _rotation = Quaternion.Identity;
-        private Vector3 _lossyScale = Vector3.One;
-        
-        private Vector3 _localPosition = Vector3.Zero;
-        private Quaternion _localRotation = Quaternion.Identity;
-        private Vector3 _localScale = Vector3.One;
-        
-        private Matrix4x4 _localToWorldMatrix = Matrix4x4.Identity;
-        private Matrix4x4 _worldToLocalMatrix = Matrix4x4.Identity;
-        
+        public Vector3 Right => localToWorldMatrix.Right();
+        public Vector3 Up => localToWorldMatrix.Up();
+        public Vector3 Forward => localToWorldMatrix.Forward();
+
+        private Transform parent;
+
+        private Vector3 position = Vector3.Zero;
+        private Quaternion rotation = Quaternion.Identity;
+        private Vector3 lossyScale = Vector3.One;
+
+        private Vector3 localPosition = Vector3.Zero;
+        private Quaternion localRotation = Quaternion.Identity;
+        private Vector3 localScale = Vector3.One;
+
+        private Matrix4x4 localToWorldMatrix = Matrix4x4.Identity;
+        private Matrix4x4 worldToLocalMatrix = Matrix4x4.Identity;
+
         public void SetParent(Transform newParent)
         {
-            _parent = newParent;
+            parent = newParent;
             CalculateMatrix();
+            ExtractValuesFromMatrix();
         }
-        
+
         private void CalculateMatrix()
         {
-            _localToWorldMatrix = Matrix4x4Extensions.TRS(position, rotation, lossyScale);
-            Matrix4x4.Invert(_localToWorldMatrix, out _worldToLocalMatrix);
+            localToWorldMatrix = Matrix4x4Extensions.TRS(Position, Rotation, LossyScale);
+            Matrix4x4.Invert(localToWorldMatrix, out worldToLocalMatrix);
         }
-        
+
         private void ExtractValuesFromMatrix()
         {
-            _position = _localToWorldMatrix.ExtractTranslation();
-            _rotation = Quaternion.CreateFromRotationMatrix(_localToWorldMatrix);
-            _lossyScale = _localToWorldMatrix.ExtractScale();
-            _localPosition = parent == null ? _position : parent.worldToLocalMatrix.MultiplyPoint(_position);
-            _localRotation = parent == null ? _rotation : Quaternion.Inverse(parent.rotation) * _rotation;
-            _localScale = parent == null ? _lossyScale : parent.worldToLocalMatrix.MultiplyPoint(_lossyScale);
+            position = localToWorldMatrix.ExtractTranslation();
+            rotation = Quaternion.CreateFromRotationMatrix(localToWorldMatrix);
+            lossyScale = localToWorldMatrix.ExtractScale();
+            localPosition = Parent == null ? position : Parent.WorldToLocalMatrix.MultiplyPoint(position);
+            localRotation = Parent == null ? rotation : Quaternion.Inverse(Parent.Rotation) * rotation;
+            localScale = Parent == null ? lossyScale : Parent.WorldToLocalMatrix.MultiplyPoint(lossyScale);
         }
     }
 }

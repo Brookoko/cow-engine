@@ -85,7 +85,7 @@ namespace CowRenderer.Integration
             var lightning = light.Sample(direction);
             var dot = Vector3.Dot(surfel.normal, direction);
             dot = Math.Max(dot, 0);
-            return surfel.material.color * lightning * dot;
+            return surfel.material.Color * lightning * dot;
         }
     }
 }
