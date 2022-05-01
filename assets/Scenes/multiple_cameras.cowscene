@@ -63,7 +63,7 @@
         }
       },
       "meshed_object": {
-        "reference": "C:/Projects/KPI/cow-engine/assets/cow2.obj"
+        "reference": "C:/Projects/cow-engine/assets/cow2.obj"
       }
     }
   ]

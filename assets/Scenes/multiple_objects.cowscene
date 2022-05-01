@@ -45,7 +45,7 @@
         }
       },
       "meshed_object": {
-        "reference": "C:/Projects/KPI/cow-engine/assets/cow2.obj"
+        "reference": "C:/Projects/cow-engine/assets/cow2.obj"
       }
     },
     {
@@ -67,7 +67,7 @@
         }
       },
       "meshed_object": {
-        "reference": "C:/Projects/KPI/cow-engine/assets/dragon.obj"
+        "reference": "C:/Projects/cow-engine/assets/dragon.obj"
       }
     },
     {
@@ -117,6 +117,24 @@
           "z": 0.3
         }
       }
+    }
+  ],
+  "lights": [
+    {
+      "id": 6,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 2,
+          "z": 2
+        }
+      },
+      "color": {
+        "r": 3,
+        "g": 3,
+        "b": 3
+      },
+      "environment": {}
     }
   ]
 }

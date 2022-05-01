@@ -12,7 +12,7 @@
         "position": {
           "x": 0,
           "y": 0.3,
-          "z": 26.2
+          "z": 1.2
         }
       },
       "perspective": {
@@ -27,20 +27,42 @@
         "position": {
           "x": 0,
           "y": 0,
-          "z": 25
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 0.7,
+            "g": 0,
+            "b": 0.8
+          }
+        }
+      },
+      "meshed_object": {
+        "reference": "C:/Projects/cow-engine/assets/cow2.obj"
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
         }
       },
       "material": {
         "lambert_reflection": {
           "color": {
             "r": 1,
-            "g": 1,
-            "b": 1
+            "g": 0,
+            "b": 0
           }
         }
       },
-      "meshed_object": {
-        "reference": "C:\\Projects\\KPI\\cow-engine\\assets\\cow2.obj"
+      "disk": {
+        "radius": 10
       }
     }
   ],
