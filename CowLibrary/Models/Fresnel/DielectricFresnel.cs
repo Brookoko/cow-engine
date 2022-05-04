@@ -10,7 +10,7 @@ namespace CowLibrary
 
         public override float Evaluate(float cosThetaI)
         {
-            cosThetaI = Math.Clamp(cosThetaI, -1, 1);
+            cosThetaI = Mathf.Clamp(cosThetaI, -1, 1);
             var etaI = this.etaI;
             var etaT = this.etaT;
             var entering = cosThetaI > 0;

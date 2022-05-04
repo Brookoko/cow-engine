@@ -8,7 +8,7 @@
 
     public class Program
     {
-        private static readonly List<IModule> Modules = new()
+        private static readonly List<IModule> Modules = new List<IModule>()
         {
             new CoreModule(),
             new ImageModule(),

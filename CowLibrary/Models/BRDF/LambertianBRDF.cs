@@ -9,7 +9,7 @@ namespace CowLibrary
 
         public LambertianBrdf(float r)
         {
-            this.r = Math.Clamp(r, 0, 1);
+            this.r = Mathf.Clamp(r, 0, 1);
         }
 
         public float Evaluate(Vector3 wo, Vector3 wi)
