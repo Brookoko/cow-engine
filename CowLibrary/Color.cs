@@ -2,7 +2,7 @@ namespace CowLibrary
 {
     using System;
 
-    public struct Color : IEquatable<Color>
+    public readonly struct Color : IEquatable<Color>
     {
         public static readonly Color White = new  Color(1f);
         public static readonly Color Black = new Color(0f);

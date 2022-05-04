@@ -14,6 +14,7 @@
             new ImageModule(),
             new RendererModule(),
             new ObjModule(),
+            new SceneModule()
         };
 
         public static void Main(string[] args)
