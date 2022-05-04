@@ -13,6 +13,7 @@
         <Authors>CowEngine</Authors>
         <Company>CowEngine</Company>
         <Product>CowEngine</Product>
+        <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +23,6 @@
       <ProjectReference Include="..\ImageWorker\ImageWorker.csproj" />
       <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
       <ProjectReference Include="..\PngWorker\PngWorker.csproj" />
-      <ProjectReference Include="..\SceneWorker\SceneWorker.csproj" />
     </ItemGroup>
 
     <ItemGroup>

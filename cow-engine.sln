@@ -1,26 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowEngine", "CowEngine\CowEngine.csproj", "{1D66E099-E162-43EC-A4E1-6D022756C6F0}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1927
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CowEngine", "CowEngine\CowEngine.csproj", "{1D66E099-E162-43EC-A4E1-6D022756C6F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cowject", "Cowject\Cowject.csproj", "{0A750299-CA71-4742-B2FC-8BD47F8D80FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cowject", "Cowject\Cowject.csproj", "{0A750299-CA71-4742-B2FC-8BD47F8D80FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowLibrary", "CowLibrary\CowLibrary.csproj", "{0F5FD226-EBC5-457C-B740-B2673FCB6B9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CowLibrary", "CowLibrary\CowLibrary.csproj", "{0F5FD226-EBC5-457C-B740-B2673FCB6B9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageWorker", "ImageWorker\ImageWorker.csproj", "{79594A69-BAE1-419F-908B-C47ABA6BB296}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageWorker", "ImageWorker\ImageWorker.csproj", "{79594A69-BAE1-419F-908B-C47ABA6BB296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CjClutter.ObjLoader.Loader", "CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.csproj", "{11032440-6431-44C3-8D8E-008CB3B76735}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CjClutter.ObjLoader.Loader", "CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.csproj", "{11032440-6431-44C3-8D8E-008CB3B76735}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CjClutter.ObjLoader.Test", "CjClutter.ObjLoader.Test\CjClutter.ObjLoader.Test.csproj", "{5F0D0E1C-1DC3-4059-B746-31155FB1E9CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CjClutter.ObjLoader.Test", "CjClutter.ObjLoader.Test\CjClutter.ObjLoader.Test.csproj", "{5F0D0E1C-1DC3-4059-B746-31155FB1E9CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjWorker", "ObjWorker\ObjWorker.csproj", "{CEB990B0-BE40-48E3-9C1D-6314B5C2F618}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObjWorker", "ObjWorker\ObjWorker.csproj", "{CEB990B0-BE40-48E3-9C1D-6314B5C2F618}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PngWorker", "PngWorker\PngWorker.csproj", "{CB3D6C31-3441-4E45-B908-6C26FD6E33FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PngWorker", "PngWorker\PngWorker.csproj", "{CB3D6C31-3441-4E45-B908-6C26FD6E33FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowTest", "CowTest\CowTest.csproj", "{198991F7-5494-482F-831C-DAB464C2320D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CowTest", "CowTest\CowTest.csproj", "{198991F7-5494-482F-831C-DAB464C2320D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowRenderer", "CowRenderer\CowRenderer.csproj", "{73821783-7E50-42E1-810F-C803E15BF6C7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SceneWorker", "SceneWorker\SceneWorker.csproj", "{791D222A-C614-4E58-BBA6-04501D0062C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CowRenderer", "CowRenderer\CowRenderer.csproj", "{73821783-7E50-42E1-810F-C803E15BF6C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,9 +69,11 @@ Global
 		{73821783-7E50-42E1-810F-C803E15BF6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73821783-7E50-42E1-810F-C803E15BF6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73821783-7E50-42E1-810F-C803E15BF6C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{791D222A-C614-4E58-BBA6-04501D0062C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{791D222A-C614-4E58-BBA6-04501D0062C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{791D222A-C614-4E58-BBA6-04501D0062C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{791D222A-C614-4E58-BBA6-04501D0062C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C39929B-8A75-426A-926A-886E09400714}
 	EndGlobalSection
 EndGlobal

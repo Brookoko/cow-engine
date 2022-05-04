@@ -3,13 +3,9 @@ namespace CowEngine
     using Cowject;
     using CowRenderer;
     using ImageWorker;
-    using SceneWorker;
 
     public class SceneFlow : IFlow
     {
-        [Inject]
-        public ISceneWorker SceneWorker { get; set; }
-
         [Inject]
         public IRenderer Renderer { get; set; }
 
@@ -22,7 +18,7 @@ namespace CowEngine
         public int Process(string source, string output)
         {
             Watch.Start();
-            var scene = SceneWorker.Parse(source);
+            var scene = new AutoAdjustScene();
             Watch.Stop("Loading scene");
 
             Watch.Start();
