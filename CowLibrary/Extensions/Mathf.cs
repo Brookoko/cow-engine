@@ -8,18 +8,7 @@ namespace CowLibrary
     {
         private static int seed = Environment.TickCount;
 
-        private static readonly ThreadLocal<Random> Random =
-            new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref seed)));
-
-        public static int Clamp(int value, int lower, int upper)
-        {
-            return Math.Max(Math.Min(value, upper), lower);
-        }
-        
-        public static float Clamp(float value, float lower, float upper)
-        {
-            return Math.Max(Math.Min(value, upper), lower);
-        }
+        private static readonly ThreadLocal<Random> Random = new(() => new Random(Interlocked.Increment(ref seed)));
 
         public static Vector2 CreateSample()
         {

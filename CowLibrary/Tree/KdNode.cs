@@ -5,7 +5,7 @@ namespace CowLibrary
     public class KdNode
     {
         public readonly TriangleMesh mesh;
-        public readonly List<KdNode> children = new List<KdNode>();
+        public readonly List<KdNode> children = new();
 
         public KdNode(List<Triangle> triangles)
         {

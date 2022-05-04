@@ -2,6 +2,6 @@ namespace CowEngine
 {
     public interface IFlow
     {
-        int Process(string source, string output);
+        public int Process(string source, string output);
     }
 }

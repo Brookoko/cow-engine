@@ -2,13 +2,13 @@ namespace CowLibrary
 {
     using System;
 
-    public readonly struct Color : IEquatable<Color>
+    public readonly struct Color
     {
-        public static readonly Color White = new  Color(1f);
-        public static readonly Color Black = new Color(0f);
-        public static readonly Color Red = new Color(1f, 0f, 0f);
-        public static readonly Color Green = new Color(0f, 1f, 0f);
-        public static readonly Color Blue = new Color(0f, 0f, 1f);
+        public static readonly Color White = new(1f);
+        public static readonly Color Black = new(0f);
+        public static readonly Color Red = new(1f, 0f, 0f);
+        public static readonly Color Green = new(0f, 1f, 0f);
+        public static readonly Color Blue = new(0f, 0f, 1f);
 
         public readonly float r;
         public readonly float g;
@@ -39,7 +39,7 @@ namespace CowLibrary
         {
             return new[]
             {
-                (byte)(Mathf.Clamp(r, 0, 1) * 255), (byte)(Mathf.Clamp(g, 0, 1) * 255), (byte)(Mathf.Clamp(b, 0, 1) * 255)
+                (byte)(Math.Clamp(r, 0, 1) * 255), (byte)(Math.Clamp(g, 0, 1) * 255), (byte)(Math.Clamp(b, 0, 1) * 255)
             };
         }
 
@@ -106,14 +106,7 @@ namespace CowLibrary
 
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = r.GetHashCode();
-                hashCode = (hashCode * 397) ^ g.GetHashCode();
-                hashCode = (hashCode * 397) ^ b.GetHashCode();
-                hashCode = (hashCode * 397) ^ a.GetHashCode();
-                return hashCode;
-            }
+            return HashCode.Combine(r, g, b, a);
         }
 
         public static bool operator ==(Color left, Color right)

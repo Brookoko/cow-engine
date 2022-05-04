@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net471;netcoreapp3.1</TargetFrameworks>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SceneFormat" Version="0.1.181" />
+    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
       <ProjectReference Include="..\CowRenderer\CowRenderer.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="SceneFormat" Version="0.1.206" />
     </ItemGroup>
 
 </Project>

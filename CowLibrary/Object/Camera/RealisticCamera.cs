@@ -10,15 +10,15 @@ namespace CowLibrary
         public float Fov
         {
             get => fov;
-            private set
+            init
             {
                 fov = value;
                 tan = (float)Math.Tan(Const.Deg2Rad * value / 2);
             }
         }
 
-        private float fov;
-        private float tan;
+        private readonly float fov;
+        private readonly float tan;
         private readonly Lens lens;
 
         public RealisticCamera(int width, int height, float fov, Lens lens)

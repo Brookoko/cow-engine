@@ -4,8 +4,8 @@ namespace CowLibrary
 
     public interface IBrdf
     {
-        float Evaluate(Vector3 wo, Vector3 wi);
+        public float Evaluate(Vector3 wo, Vector3 wi);
 
-        float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf);
+        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf);
     }
 }

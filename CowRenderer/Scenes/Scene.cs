@@ -8,11 +8,11 @@ namespace CowRenderer
     {
         public abstract Camera MainCamera { get; }
 
-        public readonly List<Camera> cameras = new List<Camera>();
+        public readonly List<Camera> cameras = new();
 
-        public readonly List<Light> lights = new List<Light>();
+        public readonly List<Light> lights = new();
 
-        public readonly List<RenderableObject> objects = new List<RenderableObject>();
+        public readonly List<RenderableObject> objects = new();
 
         public virtual void PrepareScene()
         {

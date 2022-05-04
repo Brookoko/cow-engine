@@ -13,7 +13,7 @@ namespace CowEngine.ImageWorker
 
     public class ImageEncoderProvider : IImageEncoderProvider
     {
-        private readonly List<IImageEncoder> encoders = new List<IImageEncoder>()
+        private readonly List<IImageEncoder> encoders = new()
         {
             new PngWorker()
         };
