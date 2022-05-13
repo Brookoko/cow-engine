@@ -1,15 +1,11 @@
-namespace CowEngine
+﻿namespace CowEngine
 {
     using Cowject;
     using CowRenderer;
     using ImageWorker;
-    using SceneWorker;
 
-    public class SceneFlow : IFlow
+    public class CpuFlow : IFlow<CpuOption>
     {
-        [Inject]
-        public ISceneWorker SceneWorker { get; set; }
-
         [Inject]
         public IRenderer Renderer { get; set; }
 
@@ -19,10 +15,13 @@ namespace CowEngine
         [Inject]
         public IWatch Watch { get; set; }
 
-        public int Process(string source, string output)
+        [Inject]
+        public ISceneLoader SceneLoader { get; set; }
+        
+        public int Process(CpuOption option)
         {
             Watch.Start();
-            var scene = SceneWorker.Parse(source);
+            var scene = SceneLoader.LoadSceneFromOptions(option);
             Watch.Stop("Loading scene");
 
             Watch.Start();
@@ -34,7 +33,7 @@ namespace CowEngine
             Watch.Stop("Rendering scene");
 
             Watch.Start();
-            ImageWorker.SaveImage(image, output);
+            ImageWorker.SaveImage(image, option.Output);
             Watch.Stop("Saving render");
 
             return 0;

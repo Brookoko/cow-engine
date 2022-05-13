@@ -10,9 +10,9 @@ namespace CowEngine
             container.Bind<IArgumentsParser>().To<ArgumentsParser>().ToSingleton();
             container.Bind<IIoWorker>().To<IoWorker>().ToSingleton();
             container.Bind<IWatch>().To<Watch>().ToSingleton();
-            container.Bind<IFlow>().WithName(Options.Model).To<ModelFlow>().ToSingleton();
-            container.Bind<IFlow>().WithName(Options.Compiled).To<CompiledFlow>().ToSingleton();
-            container.Bind<IFlow>().WithName(Options.Scene).To<SceneFlow>().ToSingleton();
+            container.Bind<ISceneLoader>().To<SceneLoader>().ToSingleton();
+            container.Bind<IFlow<CpuOption>>().To<CpuFlow>().ToSingleton();
+            container.Bind<IFlow<GpuOption>>().To<GpuFlow>().ToSingleton();
         }
     }
 }

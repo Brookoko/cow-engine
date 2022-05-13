@@ -2,28 +2,23 @@ namespace CowEngine
 {
     using CommandLine;
 
-    [Verb("compiled", HelpText = "Render compiled scene")]
-    public class CompiledOptions
+    [Verb("cpu", HelpText = "Render scene")]
+    public class CpuOption : Option
     {
-        [Option('o', "output", Required = true, HelpText = "Output image")]
-        public string Output { get; set; }
     }
-
-    [Verb("model", HelpText = "Render model")]
-    public class ModelOptions
+    
+    [Verb("gpu", HelpText = "Render scene")]
+    public class GpuOption : Option
     {
-        [Option('s', "source", Required = true, HelpText = "Source model")]
-        public string Source { get; set; }
-
-        [Option('o', "output", Required = true, HelpText = "Output image")]
-        public string Output { get; set; }
     }
-
-    [Verb("scene", HelpText = "Render scene")]
-    public class SceneOptions
+    
+    public class Option
     {
-        [Option('s', "source", Required = true, HelpText = "Source scene")]
-        public string Source { get; set; }
+        [Option('m', "model", Required = false, HelpText = "Source model", Group = "Source")]
+        public string Model { get; set; }
+        
+        [Option('s', "source", Required = false, HelpText = "Source scene", Group = "Source")]
+        public string Scene { get; set; }
 
         [Option('o', "output", Required = true, HelpText = "Output image")]
         public string Output { get; set; }
@@ -31,8 +26,7 @@ namespace CowEngine
 
     public enum Options
     {
-        Model,
-        Compiled,
-        Scene
+        Cpu,
+        Gpu,
     }
 }

@@ -10,22 +10,19 @@ namespace CowEngine
 
     public class ArgumentsParser : IArgumentsParser
     {
-        [Inject(Name = Options.Model)]
-        public IFlow ModelFlow { get; set; }
+        [Inject]
+        public IFlow<CpuOption> CpuFlow { get; set; }
 
-        [Inject(Name = Options.Compiled)]
-        public IFlow CompiledFlow { get; set; }
-
-        [Inject(Name = Options.Scene)]
-        public IFlow SceneFlow { get; set; }
+        [Inject]
+        public IFlow<GpuOption> GpuFlow { get; set; }
 
         public void Parse(string[] args)
         {
-            Parser.Default.ParseArguments<ModelOptions, CompiledOptions, SceneOptions>(args)
-                .MapResult<ModelOptions, CompiledOptions, SceneOptions, int>(
-                    opts => ModelFlow.Process(opts.Source, opts.Output),
-                    opts => CompiledFlow.Process("", opts.Output),
-                    opts => SceneFlow.Process(opts.Source, opts.Output),
+            Parser.Default
+                .ParseArguments<CpuOption, GpuOption>(args)
+                .MapResult<CpuOption, GpuOption, int>(
+                    CpuFlow.Process,
+                    GpuFlow.Process,
                     _ => 1
                 );
         }
