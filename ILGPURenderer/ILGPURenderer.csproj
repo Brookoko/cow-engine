@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CowRenderer\CowRenderer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ILGPU" Version="1.1.0" />
+      <PackageReference Include="ILGPU.Algorithms" Version="1.1.0" />
+    </ItemGroup>
+
+</Project>
