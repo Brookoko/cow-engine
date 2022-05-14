@@ -1,6 +1,5 @@
 namespace CowEngine
 {
-    using System.Collections.Generic;
     using System.Numerics;
     using CowLibrary;
     using ObjLoader.Loader.Data.Elements;
@@ -9,21 +8,22 @@ namespace CowEngine
 
     public interface IModelToObjectConverter
     {
-        Mesh Convert(LoadResult result);
+        IMesh Convert(LoadResult result);
     }
 
     public class ModelToMeshConverter : IModelToObjectConverter
     {
-        public Mesh Convert(LoadResult result)
+        public IMesh Convert(LoadResult result)
         {
             return ExtractMesh(result, result.Groups[0]);
         }
 
-        private Mesh ExtractMesh(LoadResult result, Group group)
+        private IMesh ExtractMesh(LoadResult result, Group group)
         {
-            var triangles = new List<Triangle>();
-            foreach (var face in group.Faces)
+            var triangles = new Triangle[group.Faces.Count];
+            for (var i = 0; i < group.Faces.Count; i++)
             {
+                var face = group.Faces[i];
                 var (v0, v1, v2) = GetVertices(result, face);
                 var t = new Triangle(v0, v1, v2);
                 if (result.Normals.Count == 0)
@@ -35,7 +35,7 @@ namespace CowEngine
                     var (n0, n1, n2) = GetNormals(result, face);
                     t.SetNormal(n0, n1, n2);
                 }
-                triangles.Add(t);
+                triangles[i] = t;
             }
             return new OptimizedMesh(triangles);
         }

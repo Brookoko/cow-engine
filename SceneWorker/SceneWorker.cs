@@ -100,7 +100,7 @@
             };
         }
 
-        private Mesh GetMesh(SceneFormat.SceneObject parsedObject)
+        private IMesh GetMesh(SceneFormat.SceneObject parsedObject)
         {
             switch (parsedObject.MeshCase)
             {

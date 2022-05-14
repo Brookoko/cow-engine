@@ -34,13 +34,13 @@ namespace CowLibrary
             return Sample(screenPoint, 1).First();
         }
 
-        public override List<Ray> Sample(Vector2 screenPoint, int samples)
+        public override Ray[] Sample(Vector2 screenPoint, int samples)
         {
             var point = ViewportPoint(screenPoint);
             var lensCenter = new Vector3(0, 0, lens.distance);
             var dir = (point - lensCenter).Normalize();
             var focusPoint = lensCenter + dir * lens.focus;
-            var rays = new List<Ray>();
+            var rays = new Ray[samples];
             for (var i = 0; i < samples; i++)
             {
                 var sample = Mathf.ConcentricSampleDisk(Mathf.CreateSample()).Normalize();
@@ -49,8 +49,7 @@ namespace CowLibrary
                 lensPoint.Z = 0;
                 var position = Transform.LocalToWorldMatrix.MultiplyPoint(lensPoint);
                 direction = Transform.LocalToWorldMatrix.MultiplyVector(direction).Normalize();
-                var ray = new Ray(position, direction);
-                rays.Add(ray);
+                rays[i] = new Ray(position, direction);
             }
             return rays;
         }

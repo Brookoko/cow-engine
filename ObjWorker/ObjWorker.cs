@@ -8,7 +8,7 @@ namespace CowEngine
 
     public interface IObjWorker
     {
-        Mesh Parse(string source);
+        IMesh Parse(string source);
     }
 
     public class ObjWorker : IObjWorker
@@ -22,7 +22,7 @@ namespace CowEngine
         [Inject]
         public IModelToObjectConverter ModelToObjectConverter { get; set; }
 
-        public Mesh Parse(string source)
+        public IMesh Parse(string source)
         {
             var objLoader = ObjLoaderFactory.Create();
             var bytes = IoWorker.Read(source);

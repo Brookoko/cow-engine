@@ -2,9 +2,7 @@ namespace CowLibrary
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Numerics;
-    using System.Runtime.InteropServices;
 
     public class PerspectiveCamera : Camera
     {
@@ -33,14 +31,13 @@ namespace CowLibrary
             return new Ray(Transform.Position, dir);
         }
 
-        public override List<Ray> Sample(Vector2 screenPoint, int samples)
+        public override Ray[] Sample(Vector2 screenPoint, int samples)
         {
-            var rays = new List<Ray>();
+            var rays = new Ray[samples];
             for (var i = 0; i < samples; i++)
             {
                 var sample = Mathf.CreateSample() - 0.5f * Vector2.One;
-                var ray = ScreenPointToRay(screenPoint + sample);
-                rays.Add(ray);
+                rays[i] = ScreenPointToRay(screenPoint + sample);
             }
             return rays;
         }

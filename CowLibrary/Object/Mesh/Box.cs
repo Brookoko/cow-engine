@@ -3,14 +3,14 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class Box : Mesh
+    public struct Box : IMesh
     {
         public Vector3 center;
         public Vector3 min;
         public Vector3 max;
         public Vector3 size;
 
-        public override Box BoundingBox => this;
+        public Box BoundingBox => this;
 
         public Box(Vector3 min, Vector3 max)
         {
@@ -31,11 +31,12 @@ namespace CowLibrary
         public Box(Vector3 size)
         {
             this.size = size;
+            center = Vector3.Zero;
             min = center - size;
             max = center + size;
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        public readonly Surfel? Intersect(in Ray ray)
         {
             var invdir = new Vector3(1 / ray.direction.X, 1 / ray.direction.Y, 1 / ray.direction.Z);
 
@@ -51,8 +52,7 @@ namespace CowLibrary
 
             if (tmin > tymax || tymin > tmax)
             {
-                surfel = null;
-                return false;
+                return null;
             }
             tmin = Math.Max(tmin, tymin);
             tmax = Math.Min(tmax, tymax);
@@ -64,8 +64,7 @@ namespace CowLibrary
 
             if (tmin > tzmax || tzmin > tmax)
             {
-                surfel = null;
-                return false;
+                return null;
             }
             tmin = Math.Max(tmin, tzmin);
             tmax = Math.Min(tmax, tzmax);
@@ -75,8 +74,7 @@ namespace CowLibrary
             {
                 if (tmax < 0)
                 {
-                    surfel = null;
-                    return false;
+                    return null;
                 }
                 t = tmax;
             }
@@ -87,16 +85,15 @@ namespace CowLibrary
 
             var p = ray.GetPoint(t);
 
-            surfel = new Surfel()
+            return new Surfel()
             {
                 t = t,
                 point = p,
-                normal = GetNormal(p),
+                normal = GetNormal(in p),
             };
-            return true;
         }
 
-        private Vector3 GetNormal(Vector3 point)
+        private Vector3 GetNormal(in Vector3 point)
         {
             var localPoint = point - center;
             var min = Math.Abs(size.X - Math.Abs(localPoint.X));
@@ -120,7 +117,7 @@ namespace CowLibrary
             return normal;
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);
             size = matrix.MultiplyVector(size);

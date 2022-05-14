@@ -12,29 +12,28 @@ namespace CowRenderer.Raycasting
             objects = scene.objects;
         }
 
-        public bool Raycast(Ray ray, out Surfel surfel)
+        public bool Raycast(in Ray ray, out Surfel surfel)
         {
-            Surfel closestSurfel = null;
+            Surfel? closestSurfel = null;
             foreach (var renderableObject in objects)
             {
-                if (renderableObject.Mesh.Intersect(ray, out var hitSurfel))
+                var hitSurfel = renderableObject.Mesh.Intersect(in ray);
+                if (hitSurfel.HasValue)
                 {
-                    if (hitSurfel.t > closestSurfel?.t)
+                    if (hitSurfel.Value.t > closestSurfel?.t)
                     {
                         continue;
                     }
-                    hitSurfel.material = renderableObject.Material;
-                    hitSurfel.ray = ray.direction;
-                    closestSurfel = hitSurfel;
+                    closestSurfel = hitSurfel.Value with { material = renderableObject.Material, ray = ray.direction };
                 }
             }
 
-            if (closestSurfel == null)
+            if (!closestSurfel.HasValue)
             {
                 surfel = new Surfel() { ray = ray.direction };
                 return false;
             }
-            surfel = closestSurfel;
+            surfel = closestSurfel.Value;
             return true;
         }
     }

@@ -2,7 +2,7 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class Ray
+    public readonly struct Ray
     {
         public readonly Vector3 origin;
         public readonly Vector3 direction;

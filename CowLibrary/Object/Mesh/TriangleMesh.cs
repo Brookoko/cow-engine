@@ -1,22 +1,19 @@
 namespace CowLibrary
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
 
-    public class TriangleMesh : Mesh
+    public struct TriangleMesh : IMesh
     {
-        public readonly List<Triangle> triangles;
+        public Box BoundingBox { get; private set; }
 
-        public override Box BoundingBox => box;
+        public readonly Triangle[] triangles;
 
-        private Box box;
-
-        public TriangleMesh(List<Triangle> triangles)
+        public TriangleMesh(Triangle[] triangles) : this()
         {
             this.triangles = triangles;
-            box = CreateBox();
+            BoundingBox = CreateBox();
         }
 
         private Box CreateBox()
@@ -35,31 +32,30 @@ namespace CowLibrary
             return new Box(min, max);
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        public readonly Surfel? Intersect(in Ray ray)
         {
-            surfel = null;
-            var intersected = false;
+            Surfel? surfel = null;
             foreach (var t in triangles)
             {
-                if (t.Intersect(ray, out var s))
+                var s = t.Intersect(in ray);
+                if (s.HasValue)
                 {
-                    if (surfel == null || surfel.t > s.t)
+                    if (!surfel.HasValue || surfel.Value.t > s.Value.t)
                     {
                         surfel = s;
-                        intersected = true;
                     }
                 }
             }
-            return intersected;
+            return surfel;
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
             foreach (var triangle in triangles)
             {
-                triangle.Apply(matrix);
+                triangle.Apply(in matrix);
             }
-            box = CreateBox();
+            BoundingBox = CreateBox();
         }
     }
 }

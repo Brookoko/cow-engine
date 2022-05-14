@@ -3,11 +3,9 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class Sphere : Mesh
+    public struct Sphere : IMesh
     {
-        public override Box BoundingBox => box;
-
-        private Box box;
+        public Box BoundingBox { get; private set; }
 
         private float radius;
         private Vector3 center = Vector3.Zero;
@@ -15,10 +13,10 @@ namespace CowLibrary
         public Sphere(float radius)
         {
             this.radius = radius;
-            box = new Box(center, radius * 2);
+            BoundingBox = new Box(center, radius * 2);
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        public readonly Surfel? Intersect(in Ray ray)
         {
             var f1 = ray.origin.X - center.X;
             var f2 = ray.origin.Y - center.Y;
@@ -32,8 +30,7 @@ namespace CowLibrary
             var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;
             if (discriminant < 0)
             {
-                surfel = null;
-                return false;
+                return null;
             }
 
             float t;
@@ -51,28 +48,26 @@ namespace CowLibrary
                 k2 = k2 > 0 ? k2 : k1;
                 if (k2 < 0)
                 {
-                    surfel = null;
-                    return false;
+                    return null;
                 }
 
                 t = (float)Math.Min(k1, k2);
             }
 
             var p = ray.GetPoint(t);
-            surfel = new Surfel()
+            return new Surfel()
             {
                 point = p,
                 normal = (p - center).Normalize(),
                 t = t
             };
-            return true;
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);
             radius = matrix.ExtractScale().Min() * radius;
-            box = new Box(center, radius * 2);
+            BoundingBox = new Box(center, radius * 2);
         }
     }
 }

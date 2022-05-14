@@ -1,48 +1,32 @@
 namespace CowLibrary
 {
-    using System.Collections.Generic;
-
-    public class KdNode
+    public class KdNode : IIntersectable
     {
         public readonly TriangleMesh mesh;
-        public readonly List<KdNode> children = new();
+        public readonly KdNode[] children = new KdNode[3];
 
-        public KdNode(List<Triangle> triangles)
+        public KdNode(Triangle[] triangles)
         {
             mesh = new TriangleMesh(triangles);
         }
 
-        public bool Intersect(Ray ray, out Surfel surfel)
+        public Surfel? Intersect(in Ray ray)
         {
-            if (children.Count == 0 && mesh.triangles.Count == 0)
+            if (children.Length == 0 && mesh.triangles.Length == 0)
             {
-                surfel = null;
-                return false;
+                return null;
             }
-            if (!mesh.BoundingBox.Intersect(ray, out surfel))
+            var surfel = mesh.BoundingBox.Intersect(in ray);
+            if (!surfel.HasValue)
             {
-                surfel = null;
-                return false;
+                return null;
             }
-            return children.Count > 0 ? IntersectChildren(ray, out surfel) : mesh.Intersect(ray, out surfel);
+            return children.Length > 0 ? IntersectChildren(in ray) : mesh.Intersect(in ray);
         }
 
-        private bool IntersectChildren(Ray ray, out Surfel surfel)
+        private Surfel? IntersectChildren(in Ray ray)
         {
-            surfel = null;
-            var intersected = false;
-            foreach (var node in children)
-            {
-                if (node.Intersect(ray, out var s))
-                {
-                    if (surfel == null || surfel.t > s.t)
-                    {
-                        intersected = true;
-                        surfel = s;
-                    }
-                }
-            }
-            return intersected;
+            return IntersectionHelper.Intersect(children, in ray);
         }
     }
 }

@@ -4,7 +4,7 @@ namespace CowLibrary
     using System.Linq;
     using System.Numerics;
 
-    public class SceneTree
+    public class SceneTree : IIntersectable
     {
         private const int MinNumberOfObjects = 8;
         private const int MaxDepth = 16;
@@ -79,9 +79,9 @@ namespace CowLibrary
             return v.Get(depth % 3);
         }
 
-        public bool Intersect(Ray ray, out Surfel surfel)
+        public Surfel? Intersect(in Ray ray)
         {
-            return root.Intersect(ray, out surfel);
+            return root.Intersect(in ray);
         }
     }
 }

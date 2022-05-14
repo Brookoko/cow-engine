@@ -2,7 +2,7 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class Surfel
+    public struct Surfel
     {
         public float t;
         public Vector3 ray;

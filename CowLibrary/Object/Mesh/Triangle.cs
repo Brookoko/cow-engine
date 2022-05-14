@@ -3,28 +3,24 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class Triangle : Mesh
+    public struct Triangle : IMesh
     {
-        private const double e = 1e-10f;
+        public Box BoundingBox { get; private set; }
 
-        public override Box BoundingBox => box;
+        private Vector3 v0;
+        private Vector3 v1;
+        private Vector3 v2;
 
-        public Vector3 v0;
-        public Vector3 v1;
-        public Vector3 v2;
+        private Vector3 n0;
+        private Vector3 n1;
+        private Vector3 n2;
 
-        public Vector3 n0;
-        public Vector3 n1;
-        public Vector3 n2;
-
-        private Box box;
-
-        public Triangle(Vector3 v0, Vector3 v1, Vector3 v2)
+        public Triangle(Vector3 v0, Vector3 v1, Vector3 v2) : this()
         {
             this.v0 = v0;
             this.v1 = v1;
             this.v2 = v2;
-            box = CreateBox();
+            BoundingBox = CreateBox();
         }
 
         private Box CreateBox()
@@ -54,17 +50,16 @@ namespace CowLibrary
             n0 = n1 = n2 = n;
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        public readonly Surfel? Intersect(in Ray ray)
         {
             var edge1 = v1 - v0;
             var edge2 = v2 - v0;
 
             var h = Vector3.Cross(ray.direction, edge2);
             var a = Vector3.Dot(edge1, h);
-            if (Math.Abs(a) < e)
+            if (Math.Abs(a) < Const.Epsilon)
             {
-                surfel = null;
-                return false;
+                return null;
             }
 
             var f = 1f / a;
@@ -72,35 +67,31 @@ namespace CowLibrary
             var u = f * Vector3.Dot(s, h);
             if (u < 0 || u > 1)
             {
-                surfel = null;
-                return false;
+                return null;
             }
 
             var q = Vector3.Cross(s, edge1);
             var v = f * Vector3.Dot(ray.direction, q);
             if (v < 0 || u + v > 1)
             {
-                surfel = null;
-                return false;
+                return null;
             }
 
             var t = f * Vector3.Dot(edge2, q);
             if (t <= 0)
             {
-                surfel = null;
-                return false;
+                return null;
             }
 
-            surfel = new Surfel()
+            return new Surfel()
             {
                 point = ray.GetPoint(t),
                 normal = n0 * (1 - u - v) + n1 * u + n2 * v,
                 t = t
             };
-            return true;
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
             v0 = matrix.MultiplyPoint(v0);
             v1 = matrix.MultiplyPoint(v1);
@@ -108,7 +99,7 @@ namespace CowLibrary
             n0 = matrix.MultiplyVector(n0).Normalize();
             n1 = matrix.MultiplyVector(n1).Normalize();
             n2 = matrix.MultiplyVector(n2).Normalize();
-            box = CreateBox();
+            BoundingBox = CreateBox();
         }
     }
 }

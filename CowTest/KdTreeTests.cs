@@ -29,7 +29,7 @@ namespace CowTest
         [Test]
         public void _01TestOneNode()
         {
-            var triangles = new List<Triangle>()
+            var triangles = new[]
             {
                 new Triangle(new Vector3(-3, 0, 0), new Vector3(-2, 2, 0), new Vector3(-1, 0, 0)),
                 new Triangle(new Vector3(-1, 0, 0), new Vector3(0, 2, 0), new Vector3(1, 0, 0)),
@@ -38,13 +38,13 @@ namespace CowTest
             var tree = new KdTree(triangles);
             Assert.AreEqual(new Vector3(-3, 0, 0), tree.root.mesh.BoundingBox.min);
             Assert.AreEqual(new Vector3(3, 2, 0), tree.root.mesh.BoundingBox.max);
-            Assert.AreEqual(tree.root.children.Count, 0);
+            Assert.AreEqual(tree.root.children.Length, 0);
         }
 
         [Test]
         public void _02TestThreeNodes()
         {
-            var triangles = new List<Triangle>()
+            var triangles = new[]
             {
                 new Triangle(new Vector3(-3, 0, 0), new Vector3(-2, 2, 0), new Vector3(-1, 0, 0)),
                 new Triangle(new Vector3(-3, 0, 0), new Vector3(-2, 2, 0), new Vector3(-1, 0, 0)),
@@ -74,7 +74,7 @@ namespace CowTest
             var tree = new KdTree(triangles);
             Assert.AreEqual(new Vector3(-3, 0, 0), tree.root.mesh.BoundingBox.min);
             Assert.AreEqual(new Vector3(3, 2, 0), tree.root.mesh.BoundingBox.max);
-            Assert.AreEqual(tree.root.children.Count, 3);
+            Assert.AreEqual(tree.root.children.Length, 3);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace CowTest
         {
             var watch = new Stopwatch();
             var mesh = objWorker.Parse("C:\\Projects\\cow-engine\\assets\\cow.obj");
-            var triangles = (mesh as TriangleMesh).triangles;
+            var triangles = (mesh is TriangleMesh triangleMesh ? triangleMesh : default).triangles;
             watch.Start();
             var tree = new KdTree(triangles);
             watch.Stop();

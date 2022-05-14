@@ -1,6 +1,5 @@
 namespace CowLibrary
 {
-    using System.Collections.Generic;
     using System.Numerics;
 
     public abstract class Camera : SceneObject
@@ -15,6 +14,6 @@ namespace CowLibrary
 
         public abstract Ray ScreenPointToRay(Vector2 screenPoint);
 
-        public abstract List<Ray> Sample(Vector2 screenPoint, int samples);
+        public abstract Ray[] Sample(Vector2 screenPoint, int samples);
     }
 }

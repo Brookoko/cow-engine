@@ -5,7 +5,7 @@ namespace CowLibrary
     using System.Linq;
     using System.Numerics;
 
-    public class SceneNode
+    public class SceneNode : IIntersectable
     {
         public readonly List<RenderableObject> objects;
         public readonly List<SceneNode> children = new List<SceneNode>();
@@ -33,57 +33,40 @@ namespace CowLibrary
             return new Box(min, max);
         }
 
-        public bool Intersect(Ray ray, out Surfel surfel)
+        public Surfel? Intersect(in Ray ray)
         {
             if (children.Count == 0 && objects.Count == 0)
             {
-                surfel = null;
-                return false;
+                return null;
             }
-            if (!box.Intersect(ray, out surfel))
+            var surfel = box.Intersect(in ray);
+            if (!surfel.HasValue)
             {
-                surfel = null;
-                return false;
+                return null;
             }
-            return children.Count > 0 ? IntersectChildren(ray, out surfel) : IntersectObjects(ray, out surfel);
+            return children.Count > 0 ? IntersectChildren(in ray) : IntersectObjects(in ray);
         }
 
-        private bool IntersectChildren(Ray ray, out Surfel surfel)
+        private Surfel? IntersectChildren(in Ray ray)
         {
-            surfel = null;
-            var intersected = false;
-            foreach (var node in children)
-            {
-                if (node.Intersect(ray, out var s))
-                {
-                    if (surfel == null || surfel.t > s.t)
-                    {
-                        surfel = s;
-                        intersected = true;
-                    }
-                }
-            }
-            return intersected;
+            return IntersectionHelper.Intersect(children, in ray);
         }
 
-        private bool IntersectObjects(Ray ray, out Surfel surfel)
+        private Surfel? IntersectObjects(in Ray ray)
         {
-            surfel = null;
-            var intersected = false;
+            Surfel? surfel = default;
             foreach (var obj in objects)
             {
-                if (obj.Mesh.Intersect(ray, out var s))
+                var s = obj.Mesh.Intersect(in ray);
+                if (s.HasValue)
                 {
-                    intersected = true;
-                    if (surfel == null || surfel.t > s.t)
+                    if (!surfel.HasValue || surfel.Value.t > s.Value.t)
                     {
-                        surfel = s;
-                        surfel.material = obj.Material;
-                        surfel.ray = ray.direction;
+                        surfel = s.Value with { material = obj.Material, ray = ray.direction };
                     }
                 }
             }
-            return intersected;
+            return surfel;
         }
     }
 }

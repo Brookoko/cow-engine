@@ -2,10 +2,10 @@ namespace CowLibrary
 {
     public class RenderableObject : SceneObject
     {
-        public Mesh Mesh { get; }
+        public IMesh Mesh { get; }
         public Material Material { get; }
 
-        public RenderableObject(Mesh mesh, Material material)
+        public RenderableObject(IMesh mesh, Material material)
         {
             Mesh = mesh;
             Material = material;

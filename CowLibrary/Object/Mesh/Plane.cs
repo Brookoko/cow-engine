@@ -2,20 +2,19 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class Plane : Mesh
+    public struct Plane : IMesh
     {
-        private const float e = 1e-10f;
+        public Box BoundingBox { get; private set; }
 
-        public override Box BoundingBox => box;
-
-        private Box box;
-
-        private Vector3 normal = -Vector3.UnitY;
-        private Vector3 point = Vector3.Zero;
+        private Vector3 normal;
+        private Vector3 point;
 
         public Plane()
         {
-            box = CreateBox();
+            this = default;
+            normal = -Vector3.UnitY;
+            point = Vector3.Zero;
+            BoundingBox = CreateBox();
         }
 
         private Box CreateBox()
@@ -23,33 +22,32 @@ namespace CowLibrary
             return new Box(point, 1000);
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        public readonly Surfel? Intersect(in Ray ray)
         {
             var dot = Vector3.Dot(normal, ray.direction);
-            if (dot > e)
+            if (dot <= Const.Epsilon)
             {
-                var dir = point - ray.origin;
-                var t = Vector3.Dot(dir, normal) / dot;
-                if (t > 0)
-                {
-                    surfel = new Surfel()
-                    {
-                        t = t,
-                        point = ray.GetPoint(t),
-                        normal = -normal
-                    };
-                    return true;
-                }
+                return null;
             }
-            surfel = null;
-            return false;
+            var dir = point - ray.origin;
+            var t = Vector3.Dot(dir, normal) / dot;
+            if (t <= 0)
+            {
+                return null;
+            }
+            return new Surfel()
+            {
+                t = t,
+                point = ray.GetPoint(t),
+                normal = -normal
+            };
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
             normal = matrix.MultiplyVector(normal).Normalize();
             point = matrix.MultiplyPoint(point);
-            box = CreateBox();
+            BoundingBox = CreateBox();
         }
     }
 }

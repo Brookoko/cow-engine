@@ -1,6 +1,5 @@
 namespace CowLibrary
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
 
@@ -14,9 +13,9 @@ namespace CowLibrary
             return new Ray(origin, Vector3.UnitZ);
         }
 
-        public override List<Ray> Sample(Vector2 screenPoint, int samples)
+        public override Ray[] Sample(Vector2 screenPoint, int samples)
         {
-            return Enumerable.Range(0, samples).Select(_ => ScreenPointToRay(screenPoint)).ToList();
+            return Enumerable.Range(0, samples).Select(_ => ScreenPointToRay(screenPoint)).ToArray();
         }
     }
 }
