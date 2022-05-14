@@ -8,6 +8,7 @@
     using Cowject;
     using CowLibrary;
     using CowLibrary.Lights;
+    using CowLibrary.Mathematics.Sampler;
     using CowRenderer;
     using Google.Protobuf.Collections;
     using SceneFormat;
@@ -39,6 +40,9 @@
         public IObjWorker ObjWorker { get; set; }
 
         [Inject]
+        public ISamplerProvider SamplerProvider { get; set; }
+
+        [Inject]
         public RenderConfig RenderConfig { get; set; }
 
         public Scene Parse(string path)
@@ -66,14 +70,14 @@
             switch (parsedCamera.CameraCase)
             {
                 case SceneFormat.Camera.CameraOneofCase.Perspective:
-                    return new PerspectiveCamera(RenderConfig.width, RenderConfig.height,
+                    return new PerspectiveCamera(RenderConfig.width, RenderConfig.height, SamplerProvider.GetSampler(),
                         (float)parsedCamera.Perspective.Fov)
                     {
                         Id = parsedCamera.Id,
                         Transform = tran,
                     };
                 case SceneFormat.Camera.CameraOneofCase.Orthographic:
-                    return new OrthographicCamera(RenderConfig.width, RenderConfig.height)
+                    return new OrthographicCamera(RenderConfig.width, RenderConfig.height, SamplerProvider.GetSampler())
                     {
                         Id = parsedCamera.Id,
                         Transform = tran,
@@ -151,7 +155,7 @@
                         Transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Environment:
-                    return new EnvironmentLight(color, 1)
+                    return new EnvironmentLight(color, 1, SamplerProvider.GetSampler())
                     {
                         Id = parsedLight.Id,
                     };
@@ -178,9 +182,9 @@
             switch (material.MaterialCase)
             {
                 case SceneFormat.Material.MaterialOneofCase.LambertReflection:
-                    return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color), 1);
+                    return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color), 1, SamplerProvider.GetSampler());
                 case SceneFormat.Material.MaterialOneofCase.SpecularReflection:
-                    return new ReflectionMaterial(1, (float)material.SpecularReflection.Eta);
+                    return new ReflectionMaterial(1, (float)material.SpecularReflection.Eta, SamplerProvider.GetSampler());
                 default:
                     throw new Exception("Unsupported material");
             }

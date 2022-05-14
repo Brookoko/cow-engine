@@ -2,6 +2,7 @@
 
 using System;
 using System.Numerics;
+using Mathematics.Sampler;
 
 public readonly struct PerspectiveCameraModel : ICameraModel
 {
@@ -20,7 +21,7 @@ public readonly struct PerspectiveCameraModel : ICameraModel
         this.nearPlane = nearPlane;
     }
     
-    public Ray ScreenPointToRay(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix)
+    public Ray ScreenPointToRay(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, ISampler sampler)
     {
         var x = (2 * (screenPoint.X + 0.5f) / width - 1) * tan;
         var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / aspectRatio * tan;
@@ -29,13 +30,33 @@ public readonly struct PerspectiveCameraModel : ICameraModel
         return new Ray(localToWorldMatrix.ExtractTranslation(), dir);
     }
 
-    public Ray[] Sample(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, int samples)
+    public Ray[] Sample(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, ISampler sampler, int samples)
     {
         var rays = new Ray[samples];
         for (var i = 0; i < samples; i++)
         {
-            var sample = RandomF.CreateSample() - 0.5f * Vector2.One;
-            rays[i] = ScreenPointToRay(screenPoint + sample, in localToWorldMatrix);
+            var sample = sampler.CreateSample() - 0.5f * Vector2.One;
+            rays[i] = ScreenPointToRay(screenPoint + sample, in localToWorldMatrix, sampler);
+        }
+        return rays;
+    }
+    
+    public Ray ScreenPointToRay(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in LocalSampler sampler)
+    {
+        var x = (2 * (screenPoint.X + 0.5f) / width - 1) * tan;
+        var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / aspectRatio * tan;
+        var dir = new Vector3(x, y, -nearPlane);
+        dir = localToWorldMatrix.MultiplyVector(dir).Normalize();
+        return new Ray(localToWorldMatrix.ExtractTranslation(), dir);
+    }
+    
+    public Ray[] Sample(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in LocalSampler sampler, int samples)
+    {
+        var rays = new Ray[samples];
+        for (var i = 0; i < samples; i++)
+        {
+            var sample = sampler.CreateSample() - 0.5f * Vector2.One;
+            rays[i] = ScreenPointToRay(screenPoint + sample, in localToWorldMatrix, sampler);
         }
         return rays;
     }

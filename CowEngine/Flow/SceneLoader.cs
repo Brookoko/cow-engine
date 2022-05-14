@@ -3,6 +3,7 @@
     using Cowject;
     using CowLibrary;
     using CowLibrary.Lights;
+    using CowLibrary.Mathematics.Sampler;
     using CowRenderer;
     using SceneWorker;
 
@@ -19,6 +20,9 @@
         [Inject]
         public IRenderableObjectWorker RenderableObjectWorker { get; set; }
 
+        [Inject]
+        public ISamplerProvider SamplerProvider { get; set; }
+        
         [Inject]
         public DiContainer DiContainer { get; set; }
         
@@ -49,10 +53,10 @@
 
         private Scene PrepareScene(RenderableObject model)
         {
-            var scene = new AutoAdjustScene();
+            var scene = new AutoAdjustScene(SamplerProvider.GetSampler());
             DiContainer.Inject(scene);
 
-            var light = new EnvironmentLight(new Color(255, 255, 255), 3);
+            var light = new EnvironmentLight(new Color(255, 255, 255), 3, SamplerProvider.GetSampler());
             scene.lights.Add(light);
 
             scene.objects.Add(model);

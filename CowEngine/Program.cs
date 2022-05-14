@@ -25,15 +25,14 @@
 
             var argumentParser = container.Get<IArgumentsParser>();
 
+            argumentParser.Parse(args);
             try
             {
-                argumentParser.Parse(args);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Failed to render. See next log for more details");
                 Console.WriteLine(e);
-                throw;
             }
         }
 

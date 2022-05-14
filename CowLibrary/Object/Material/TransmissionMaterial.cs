@@ -1,13 +1,16 @@
 namespace CowLibrary
 {
     using System.Numerics;
+    using Mathematics.Sampler;
 
     public class TransmissionMaterial : Material
     {
+        private readonly ISampler sampler;
         private readonly IBrdf brdf;
 
-        public TransmissionMaterial(float t, float eta) : base(Color.White)
+        public TransmissionMaterial(float t, float eta, ISampler sampler) : base(Color.White)
         {
+            this.sampler = sampler;
             brdf = new SpecularTransmissionBrdf(t, 1f, eta, TransportMode.Importance);
         }
 
@@ -18,7 +21,7 @@ namespace CowLibrary
 
         public override float Sample(in Surfel surfel, out Vector3 wi, out float pdf)
         {
-            return brdf.Sample(surfel, out wi, RandomF.CreateSample(), out pdf);
+            return brdf.Sample(surfel, out wi, sampler.CreateSample(), out pdf);
         }
     }
 }

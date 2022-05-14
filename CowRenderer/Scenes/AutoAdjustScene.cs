@@ -6,6 +6,7 @@ namespace CowRenderer
     using System.Numerics;
     using Cowject;
     using CowLibrary;
+    using CowLibrary.Mathematics.Sampler;
 
     public class AutoAdjustScene : Scene
     {
@@ -14,7 +15,13 @@ namespace CowRenderer
 
         public override Camera MainCamera => camera;
 
+        private readonly ISampler sampler;
         private RealisticCamera camera;
+
+        public AutoAdjustScene(ISampler sampler)
+        {
+            this.sampler = sampler;
+        }
 
         public override void PrepareScene()
         {
@@ -28,7 +35,7 @@ namespace CowRenderer
 
         private RealisticCamera CreateCamera()
         {
-            return new RealisticCamera(RenderConfig.width, RenderConfig.height, RenderConfig.fov,
+            return new RealisticCamera(RenderConfig.width, RenderConfig.height, sampler, RenderConfig.fov,
                 new Lens(1f, 0.01f, 1f));
         }
 
@@ -61,7 +68,7 @@ namespace CowRenderer
 
         private void PlacePlane(Bound box)
         {
-            var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(Color.Red, 1));
+            var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(Color.Red, 1, sampler));
             plane.Transform.Position = box.min.Y * Vector3.UnitY;
             objects.Add(plane);
         }

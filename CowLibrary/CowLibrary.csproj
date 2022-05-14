@@ -5,4 +5,8 @@
         <LangVersion>10</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ILGPU.Algorithms" Version="1.1.0" />
+    </ItemGroup>
+
 </Project>

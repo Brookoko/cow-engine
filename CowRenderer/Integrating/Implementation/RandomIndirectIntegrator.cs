@@ -3,6 +3,7 @@ namespace CowRenderer.Integration
     using System.Numerics;
     using Cowject;
     using CowLibrary;
+    using CowLibrary.Mathematics.Sampler;
 
     public class RandomIndirectIntegrator : IIntegrator
     {
@@ -15,6 +16,9 @@ namespace CowRenderer.Integration
         [Inject]
         public RenderConfig RenderConfig { get; set; }
 
+        [Inject]
+        public ISamplerProvider SamplerProvider { get; set; }
+        
         private readonly IIntegrator directIntegrator = new ShadowRayIntegrator();
         private readonly Color backgroundColor = new Color(245, 245, 245);
 
@@ -43,7 +47,7 @@ namespace CowRenderer.Integration
             var color = new Color(0f);
             for (var i = 0; i < RenderConfig.numberOfRayPerLight; i++)
             {
-                var dir = Mathf.CosineSampleHemisphere(surfel.normal, RandomF.CreateSample());
+                var dir = Mathf.CosineSampleHemisphere(surfel.normal, SamplerProvider.GetSampler().CreateSample());
                 var ray = new Ray(p, dir);
                 if (Raycaster.Raycast(ray, out var hit))
                 {
