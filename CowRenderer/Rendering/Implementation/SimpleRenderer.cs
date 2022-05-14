@@ -21,8 +21,8 @@ namespace CowRenderer.Rendering
         {
             Raycaster.Init(scene);
             var camera = scene.MainCamera;
-            var w = camera.width;
-            var h = camera.height;
+            var w = camera.Width;
+            var h = camera.Height;
             var image = new Image(w, h);
 
             for (var y = 0; y < h; y++)

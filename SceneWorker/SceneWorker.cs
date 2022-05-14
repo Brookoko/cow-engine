@@ -66,21 +66,17 @@
             switch (parsedCamera.CameraCase)
             {
                 case SceneFormat.Camera.CameraOneofCase.Perspective:
-                    return new PerspectiveCamera()
+                    return new PerspectiveCamera(RenderConfig.width, RenderConfig.height,
+                        (float)parsedCamera.Perspective.Fov)
                     {
                         Id = parsedCamera.Id,
                         Transform = tran,
-                        width = RenderConfig.width,
-                        height = RenderConfig.height,
-                        Fov = (float)parsedCamera.Perspective.Fov,
                     };
                 case SceneFormat.Camera.CameraOneofCase.Orthographic:
-                    return new OrthographicCamera()
+                    return new OrthographicCamera(RenderConfig.width, RenderConfig.height)
                     {
                         Id = parsedCamera.Id,
                         Transform = tran,
-                        width = RenderConfig.width,
-                        height = RenderConfig.height,
                     };
                 default:
                     throw new Exception("Unsupported camera");

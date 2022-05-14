@@ -1,19 +1,25 @@
 namespace CowLibrary
 {
     using System.Numerics;
+    using Models;
 
     public abstract class Camera : SceneObject
     {
-        public float AspectRatio => (float)width / height;
+        public abstract ICameraModel Model { get; }
 
-        public int width;
-        public int height;
+        public float AspectRatio => (float)Width / Height;
 
-        public float nearPlane = 1f;
-        public float farPlane = 500f;
+        public int Width { get; }
+        public int Height { get; }
 
-        public abstract Ray ScreenPointToRay(Vector2 screenPoint);
+        public abstract Ray ScreenPointToRay(in Vector2 screenPoint);
 
-        public abstract Ray[] Sample(Vector2 screenPoint, int samples);
+        public abstract Ray[] Sample(in Vector2 screenPoint, int samples);
+
+        public Camera(int width, int height)
+        {
+            Width = width;
+            Height = height;
+        }
     }
 }

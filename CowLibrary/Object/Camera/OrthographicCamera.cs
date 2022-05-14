@@ -1,21 +1,27 @@
 namespace CowLibrary
 {
-    using System.Linq;
     using System.Numerics;
+    using Models;
 
     public class OrthographicCamera : Camera
     {
-        public override Ray ScreenPointToRay(Vector2 screenPoint)
+        public override ICameraModel Model => model;
+
+        private readonly OrthographicCameraModel model;
+
+        public OrthographicCamera(int width, int height) : base(width, height)
         {
-            var x = (2 * (screenPoint.X + 0.5f) / width - 1) * AspectRatio;
-            var y = 1 - 2 * (screenPoint.Y + 0.5f) / height;
-            var origin = new Vector3(x, y, 0);
-            return new Ray(origin, Vector3.UnitZ);
+            model = new OrthographicCameraModel(Width, Height);
         }
 
-        public override Ray[] Sample(Vector2 screenPoint, int samples)
+        public override Ray ScreenPointToRay(in Vector2 screenPoint)
         {
-            return Enumerable.Range(0, samples).Select(_ => ScreenPointToRay(screenPoint)).ToArray();
+            return model.ScreenPointToRay(in screenPoint, Transform.LocalToWorldMatrix);
+        }
+
+        public override Ray[] Sample(in Vector2 screenPoint, int samples)
+        {
+            return model.Sample(in screenPoint, Transform.LocalToWorldMatrix, samples);
         }
     }
 }

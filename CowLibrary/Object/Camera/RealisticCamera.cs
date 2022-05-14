@@ -1,64 +1,30 @@
 namespace CowLibrary
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Numerics;
+    using Models;
 
     public class RealisticCamera : Camera
     {
-        public float Fov
-        {
-            get => fov;
-            init
-            {
-                fov = value;
-                tan = (float)Math.Tan(Const.Deg2Rad * value / 2);
-            }
-        }
+        public double Fov { get; }
 
-        private readonly float fov;
-        private readonly float tan;
-        private readonly Lens lens;
+        public override ICameraModel Model => model;
 
-        public RealisticCamera(int width, int height, float fov, Lens lens)
+        private readonly RealisticCameraModel model;
+
+        public RealisticCamera(int width, int height, float fov, Lens lens) : base(width, height)
         {
             Fov = fov;
-            this.width = width;
-            this.height = height;
-            this.lens = lens;
+            model = new RealisticCameraModel(width, height, fov, lens);
         }
 
-        public override Ray ScreenPointToRay(Vector2 screenPoint)
+        public override Ray ScreenPointToRay(in Vector2 screenPoint)
         {
-            return Sample(screenPoint, 1).First();
+            return model.ScreenPointToRay(in screenPoint, Transform.LocalToWorldMatrix);
         }
 
-        public override Ray[] Sample(Vector2 screenPoint, int samples)
+        public override Ray[] Sample(in Vector2 screenPoint, int samples)
         {
-            var point = ViewportPoint(screenPoint);
-            var lensCenter = new Vector3(0, 0, lens.distance);
-            var dir = (point - lensCenter).Normalize();
-            var focusPoint = lensCenter + dir * lens.focus;
-            var rays = new Ray[samples];
-            for (var i = 0; i < samples; i++)
-            {
-                var sample = Mathf.ConcentricSampleDisk(Mathf.CreateSample()).Normalize();
-                var lensPoint = lensCenter + new Vector3(sample * lens.radius, 0);
-                var direction = focusPoint - lensPoint;
-                lensPoint.Z = 0;
-                var position = Transform.LocalToWorldMatrix.MultiplyPoint(lensPoint);
-                direction = Transform.LocalToWorldMatrix.MultiplyVector(direction).Normalize();
-                rays[i] = new Ray(position, direction);
-            }
-            return rays;
-        }
-
-        private Vector3 ViewportPoint(Vector2 screenPoint)
-        {
-            var x = (2 * (screenPoint.X + 0.5f) / width - 1) * tan;
-            var y = (1 - 2 * (screenPoint.Y + 0.5f) / height) / AspectRatio * tan;
-            return new Vector3(x, y, 0);
+            return model.Sample(in screenPoint, Transform.LocalToWorldMatrix, samples);
         }
     }
 }

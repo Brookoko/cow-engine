@@ -22,8 +22,8 @@ namespace CowRenderer.Rendering
             var numberOfThread = RenderConfig.numberOfThreadPerDimension;
             var threads = new Thread[numberOfThread * numberOfThread];
 
-            var w = scene.MainCamera.width;
-            var h = scene.MainCamera.height;
+            var w = scene.MainCamera.Width;
+            var h = scene.MainCamera.Height;
             var xStep = w / numberOfThread;
             var yStep = h / numberOfThread;
             var image = new Image(w, h);
