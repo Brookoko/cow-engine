@@ -1,6 +1,6 @@
 namespace CowLibrary
 {
-    public class KdNode : IIntersectable
+    public readonly struct KdNode : IIntersectable
     {
         public readonly TriangleMesh mesh;
         public readonly KdNode[] children = new KdNode[3];
@@ -26,7 +26,19 @@ namespace CowLibrary
 
         private Surfel? IntersectChildren(in Ray ray)
         {
-            return IntersectionHelper.Intersect(children, in ray);
+            Surfel? surfel = null;
+            foreach (var child in children)
+            {
+                var s = child.Intersect(in ray);
+                if (s.HasValue)
+                {
+                    if (!surfel.HasValue || surfel.Value.t > s.Value.t)
+                    {
+                        surfel = s;
+                    }
+                }
+            }
+            return surfel;
         }
     }
 }

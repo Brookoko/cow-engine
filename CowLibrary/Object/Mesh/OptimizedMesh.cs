@@ -12,7 +12,7 @@ namespace CowLibrary
         public OptimizedMesh(Triangle[] triangles)
         {
             mesh = new TriangleMesh(triangles);
-            tree = null;
+            tree = default;
         }
 
         public readonly Surfel? Intersect(in Ray ray)

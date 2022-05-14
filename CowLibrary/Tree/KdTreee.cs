@@ -3,14 +3,14 @@ namespace CowLibrary
     using System.Linq;
     using System.Numerics;
 
-    public class KdTree : IIntersectable
+    public readonly struct KdTree : IIntersectable
     {
         private const int MinNumberOfTriangles = 8;
         private const int MaxDepth = 16;
 
         public readonly KdNode root;
 
-        public KdTree(Triangle[] triangles)
+        public KdTree(Triangle[] triangles) : this()
         {
             root = BuildNode(triangles, 0);
         }
@@ -40,8 +40,12 @@ namespace CowLibrary
 
         private float GetMedian(Triangle[] triangles, int depth)
         {
-            var sortedAxis = triangles
-                .Select(t => GetDimension(t.BoundingBox.center, depth))
+            var sortedAxis = new float[triangles.Length];
+            for (var j = 0; j < triangles.Length; j++)
+            {
+                sortedAxis[j] = GetDimension(triangles[j].BoundingBox.center, depth);
+            }
+            sortedAxis = sortedAxis
                 .OrderBy(v => v)
                 .ToArray();
             var l = sortedAxis.Length;
