@@ -3,11 +3,24 @@ namespace CowLibrary
     public readonly struct KdNode : IIntersectable
     {
         public readonly TriangleMesh mesh;
-        public readonly KdNode[] children = new KdNode[3];
+        public readonly KdNode[] children;
+        public readonly Bound bound;
 
         public KdNode(Triangle[] triangles)
         {
             mesh = new TriangleMesh(triangles);
+            children = new KdNode[0];
+            bound = mesh.BoundingBox;
+        }
+
+        public KdNode(in Triangle[] triangles, KdNode leftNode, KdNode middleNode, KdNode rightNode)
+        {
+            mesh = default;
+            bound = IntersectionHelper.CreateBound(triangles);
+            children = new KdNode[3];
+            children[0] = leftNode;
+            children[1] = middleNode;
+            children[2] = rightNode;
         }
 
         public Surfel? Intersect(in Ray ray)
@@ -16,12 +29,17 @@ namespace CowLibrary
             {
                 return null;
             }
-            var surfel = mesh.BoundingBox.Intersect(in ray);
+            var surfel = bound.Intersect(in ray);
             if (!surfel.HasValue)
             {
                 return null;
             }
-            return children.Length > 0 ? IntersectChildren(in ray) : mesh.Intersect(in ray);
+            return HasChildren() ? IntersectChildren(in ray) : mesh.Intersect(in ray);
+        }
+
+        private bool HasChildren()
+        {
+            return children.Length > 0;
         }
 
         private Surfel? IntersectChildren(in Ray ray)

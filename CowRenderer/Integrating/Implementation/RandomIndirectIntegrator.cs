@@ -24,7 +24,7 @@ namespace CowRenderer.Integration
             DiContainer.Inject(directIntegrator);
         }
 
-        public Color GetColor(Scene scene, Surfel surfel)
+        public Color GetColor(Scene scene, in Surfel surfel)
         {
             if (surfel.material == null)
             {
@@ -43,7 +43,7 @@ namespace CowRenderer.Integration
             var color = new Color(0f);
             for (var i = 0; i < RenderConfig.numberOfRayPerLight; i++)
             {
-                var dir = Mathf.CosineSampleHemisphere(surfel.normal, Mathf.CreateSample());
+                var dir = Mathf.CosineSampleHemisphere(surfel.normal, RandomF.CreateSample());
                 var ray = new Ray(p, dir);
                 if (Raycaster.Raycast(ray, out var hit))
                 {

@@ -14,17 +14,17 @@ namespace CowLibrary.Lights
             this.intensity = intensity;
         }
 
-        public override ShadingInfo GetShadingInfo(Surfel surfel)
+        public override ShadingInfo GetShadingInfo(in Surfel surfel)
         {
             return new ShadingInfo()
             {
-                direction = Mathf.CosineSampleHemisphere(surfel.normal, Mathf.CreateSample()),
+                direction = Mathf.CosineSampleHemisphere(surfel.normal, RandomF.CreateSample()),
                 distance = float.PositiveInfinity,
                 color = color * intensity
             };
         }
 
-        public override Color Sample(Vector3 wi)
+        public override Color Sample(in Vector3 wi)
         {
             return color * intensity;
         }

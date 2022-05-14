@@ -21,16 +21,16 @@ namespace CowRenderer.Rendering
                     var y = i + fromY;
                     var x = j + fromX;
                     var surfels = Raycast(camera, new Vector2(x, y));
-                    image[y, x] = Integrate(surfels);
+                    image[y, x] = Integrate(in surfels);
                 }
             }
         }
 
-        private Surfel[] Raycast(Camera camera, Vector2 point)
+        private Surfel[] Raycast(Camera camera, in Vector2 point)
         {
             var numberOfRay = RenderConfig.numberOfRayPerPixel;
             var surfels = new Surfel[numberOfRay];
-            var rays = camera.Sample(point, numberOfRay);
+            var rays = camera.Sample(in point, numberOfRay);
             for (var i = 0; i < numberOfRay; i++)
             {
                 Raycaster.Raycast(in rays[i], out var surfel);
@@ -40,11 +40,13 @@ namespace CowRenderer.Rendering
             return surfels;
         }
 
-        private Color Integrate(Surfel[] surfels)
+        private Color Integrate(in Surfel[] surfels)
         {
-            var color = surfels
-                .Select(s => Integrator.GetColor(scene, s))
-                .Aggregate(Color.Black, (acc, c) => acc + c);
+            var color = Color.Black;
+            foreach (var surfel in surfels)
+            {
+                color += Integrator.GetColor(scene, in surfel);
+            }
             return color / surfels.Length;
         }
     }

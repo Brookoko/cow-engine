@@ -1,6 +1,7 @@
 ﻿namespace ILGPURenderer
 {
     using System;
+    using CowRenderer;
     using ILGPU;
     using ILGPU.Runtime;
     using ILGPU.Runtime.CPU;
@@ -8,26 +9,20 @@
 
     public class GpuKernel : IDisposable
     {
-        private readonly Context context;
-        private readonly Accelerator accelerator;
+        public Context Context { get; }
+        public Accelerator Accelerator { get; }
 
         public GpuKernel(KernelMode mode)
         {
-            context = Context.Create(b => b.Cuda().EnableAlgorithms().Assertions());
-            accelerator = mode.GetAccelerator(context);
+            Context = Context.Create(b => b.Cuda().EnableAlgorithms().Assertions());
+            Accelerator = mode.GetAccelerator(Context);
         }
 
         public void Dispose()
         {
-            accelerator.Dispose();
-            context.Dispose();
+            Accelerator.Dispose();
+            Context.Dispose();
         }
-    }
-
-    public enum KernelMode
-    {
-        Gpu,
-        Cpu
     }
 
     public static class KernelModeExtensions

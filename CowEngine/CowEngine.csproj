@@ -3,7 +3,7 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net6.0</TargetFramework>
-        <PublishSingleFile>true</PublishSingleFile>
+        <PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PublishTrimmed>true</PublishTrimmed>
         <PublishReadyToRun>true</PublishReadyToRun>
@@ -20,6 +20,7 @@
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
       <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
       <ProjectReference Include="..\CowRenderer\CowRenderer.csproj" />
+      <ProjectReference Include="..\ILGPURenderer\ILGPURenderer.csproj" />
       <ProjectReference Include="..\ImageWorker\ImageWorker.csproj" />
       <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
       <ProjectReference Include="..\PngWorker\PngWorker.csproj" />

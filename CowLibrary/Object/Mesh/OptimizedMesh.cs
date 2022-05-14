@@ -4,7 +4,7 @@ namespace CowLibrary
 
     public struct OptimizedMesh : IMesh
     {
-        public Box BoundingBox => mesh.BoundingBox;
+        public Bound BoundingBox => mesh.BoundingBox;
 
         private readonly TriangleMesh mesh;
         private KdTree tree;

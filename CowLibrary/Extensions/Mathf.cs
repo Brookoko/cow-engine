@@ -2,19 +2,9 @@ namespace CowLibrary
 {
     using System;
     using System.Numerics;
-    using System.Threading;
 
     public static class Mathf
     {
-        private static int seed = Environment.TickCount;
-
-        private static readonly ThreadLocal<Random> Random = new(() => new Random(Interlocked.Increment(ref seed)));
-
-        public static Vector2 CreateSample()
-        {
-            return new Vector2((float)Random.Value.NextDouble(), (float)Random.Value.NextDouble());
-        }
-
         public static (float a, float b) Swap(float a, float b)
         {
             return (b, a);

@@ -20,9 +20,9 @@ namespace CowRenderer
         {
             camera = CreateCamera();
             cameras.Add(camera);
-            var box = GetBoundingBoxFor(objects);
-            PlaceCamera(box);
-            PlacePlane(box);
+            var bound = GetBoundingBoxFor(objects);
+            PlaceCamera(bound);
+            PlacePlane(bound);
             base.PrepareScene();
         }
 
@@ -32,7 +32,7 @@ namespace CowRenderer
                 new Lens(1f, 0.01f, 1f));
         }
 
-        private Box GetBoundingBoxFor(List<RenderableObject> renderableObjects)
+        private Bound GetBoundingBoxFor(List<RenderableObject> renderableObjects)
         {
             var min = renderableObjects.First().Mesh.BoundingBox.min;
             var max = renderableObjects.First().Mesh.BoundingBox.max;
@@ -47,10 +47,10 @@ namespace CowRenderer
                 max.Z = Math.Max(max.Z, objectBoundingBox.max.Z);
             }
 
-            return new Box(min, max);
+            return new Bound(min, max);
         }
 
-        private void PlaceCamera(Box box)
+        private void PlaceCamera(Bound box)
         {
             var max = Math.Max(box.size.X * 1.3f, box.size.Y * 1.3f * camera.AspectRatio);
             var tan = (float)Math.Tan(Const.Deg2Rad * camera.Fov / 2);
@@ -59,7 +59,7 @@ namespace CowRenderer
             camera.Transform.LocalToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
         }
 
-        private void PlacePlane(Box box)
+        private void PlacePlane(Bound box)
         {
             var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(Color.Red, 1));
             plane.Transform.Position = box.min.Y * Vector3.UnitY;

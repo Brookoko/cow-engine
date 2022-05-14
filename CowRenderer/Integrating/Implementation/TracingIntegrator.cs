@@ -20,7 +20,7 @@ namespace CowRenderer.Integration
             DiContainer.Inject(indirectIntegrator);
         }
 
-        public Color GetColor(Scene scene, Surfel surfel)
+        public Color GetColor(Scene scene, in Surfel surfel)
         {
             if (surfel.material == null)
             {

@@ -7,7 +7,7 @@ namespace CowRenderer.Integration
     {
         private readonly Color negativeColor = Color.White;
 
-        public Color GetColor(Scene scene, Surfel surfel)
+        public Color GetColor(Scene scene, in Surfel surfel)
         {
             if (surfel.material == null)
             {

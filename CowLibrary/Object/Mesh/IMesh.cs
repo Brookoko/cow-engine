@@ -4,7 +4,7 @@ namespace CowLibrary
 
     public interface IMesh : IIntersectable
     {
-        public Box BoundingBox { get; }
+        public Bound BoundingBox { get; }
 
         public void Apply(in Matrix4x4 matrix);
     }

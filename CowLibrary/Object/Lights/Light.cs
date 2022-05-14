@@ -4,9 +4,9 @@ namespace CowLibrary.Lights
 
     public abstract class Light : SceneObject
     {
-        public abstract ShadingInfo GetShadingInfo(Surfel surfel);
+        public abstract ShadingInfo GetShadingInfo(in Surfel surfel);
 
-        public abstract Color Sample(Vector3 wi);
+        public abstract Color Sample(in Vector3 wi);
     }
 
     public class ShadingInfo

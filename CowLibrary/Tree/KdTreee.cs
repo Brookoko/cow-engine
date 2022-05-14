@@ -12,30 +12,30 @@ namespace CowLibrary
 
         public KdTree(Triangle[] triangles) : this()
         {
-            root = BuildNode(triangles, 0);
+            root = BuildNode(in triangles, 0);
         }
 
-        private KdNode BuildNode(Triangle[] triangles, int depth)
+        private KdNode BuildNode(in Triangle[] triangles, int depth)
         {
-            var node = new KdNode(triangles);
-            return triangles.Length <= MinNumberOfTriangles || depth >= MaxDepth ? node : Split(node, depth);
-        }
-
-        private KdNode Split(KdNode node, int depth)
-        {
-            var splitValue = GetMedian(node.mesh.triangles, depth);
-            var (left, middle, right) = SplitTriangle(node.mesh.triangles, depth, splitValue);
-            if (middle.Length == node.mesh.triangles.Length)
+            if (triangles.Length <= MinNumberOfTriangles || depth >= MaxDepth)
             {
-                return node;
+                return new KdNode(triangles);
+            }
+            return Split(in triangles, depth);
+        }
+
+        private KdNode Split(in Triangle[] triangles, int depth)
+        {
+            var splitValue = GetMedian(triangles, depth);
+            var (left, middle, right) = SplitTriangle(triangles, depth, splitValue);
+            if (middle.Length == triangles.Length)
+            {
+                return new KdNode(triangles);
             }
             var leftNode = BuildNode(left, depth + 1);
             var middleNode = BuildNode(middle, depth + 1);
             var rightNode = BuildNode(right, depth + 1);
-            node.children[0] = leftNode;
-            node.children[1] = middleNode;
-            node.children[2] = rightNode;
-            return node;
+            return new KdNode(in triangles, leftNode, middleNode, rightNode);
         }
 
         private float GetMedian(Triangle[] triangles, int depth)
@@ -77,7 +77,10 @@ namespace CowLibrary
                     middleTriangles[middleCount++] = t;
                 }
             }
-            return (leftTriangles, middleTriangles, rightTriangles);
+            return (
+                leftTriangles.Take(leftCount).ToArray(),
+                middleTriangles.Take(middleCount).ToArray(),
+                rightTriangles.Take(rightCount).ToArray());
         }
 
         private float GetDimension(Vector3 v, int depth)

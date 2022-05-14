@@ -14,7 +14,7 @@ namespace CowRenderer.Integration
 
         private readonly float maxDistance = 2f;
 
-        public Color GetColor(Scene scene, Surfel surfel)
+        public Color GetColor(Scene scene, in Surfel surfel)
         {
             if (surfel.material == null)
             {

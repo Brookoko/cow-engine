@@ -6,30 +6,20 @@ namespace CowLibrary
 
     public struct TriangleMesh : IMesh
     {
-        public Box BoundingBox { get; private set; }
+        public Bound BoundingBox { get; private set; }
 
         public readonly Triangle[] triangles;
 
+        public TriangleMesh()
+        {
+            triangles = new Triangle[0];
+            BoundingBox = new Bound();
+        }
+        
         public TriangleMesh(Triangle[] triangles) : this()
         {
             this.triangles = triangles;
-            BoundingBox = CreateBox();
-        }
-
-        private Box CreateBox()
-        {
-            var min = Vector3.One * float.MaxValue;
-            var max = Vector3.One * float.MinValue;
-            foreach (var box in triangles.Select(t => t.BoundingBox))
-            {
-                min.X = Math.Min(min.X, box.min.X);
-                min.Y = Math.Min(min.Y, box.min.Y);
-                min.Z = Math.Min(min.Z, box.min.Z);
-                max.X = Math.Max(max.X, box.max.X);
-                max.Y = Math.Max(max.Y, box.max.Y);
-                max.Z = Math.Max(max.Z, box.max.Z);
-            }
-            return new Box(min, max);
+            BoundingBox = IntersectionHelper.CreateBound(triangles);
         }
 
         public readonly Surfel? Intersect(in Ray ray)
@@ -55,7 +45,7 @@ namespace CowLibrary
             {
                 triangle.Apply(in matrix);
             }
-            BoundingBox = CreateBox();
+            BoundingBox = IntersectionHelper.CreateBound(triangles);
         }
     }
 }

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using Cowject;
     using CowRenderer;
+    using ILGPURenderer;
     using ImageWorker;
 
     public class Program
@@ -13,6 +14,7 @@
             new CoreModule(),
             new ImageModule(),
             new RendererModule(),
+            new ILGPUModule(),
             new ObjModule(),
             new SceneModule()
         };

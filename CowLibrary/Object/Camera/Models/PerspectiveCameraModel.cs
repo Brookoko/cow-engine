@@ -34,7 +34,7 @@ public readonly struct PerspectiveCameraModel : ICameraModel
         var rays = new Ray[samples];
         for (var i = 0; i < samples; i++)
         {
-            var sample = Mathf.CreateSample() - 0.5f * Vector2.One;
+            var sample = RandomF.CreateSample() - 0.5f * Vector2.One;
             rays[i] = ScreenPointToRay(screenPoint + sample, in localToWorldMatrix);
         }
         return rays;

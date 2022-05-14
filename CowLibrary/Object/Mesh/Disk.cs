@@ -4,9 +4,7 @@ namespace CowLibrary
 
     public struct Disk : IMesh
     {
-        public Box BoundingBox => box;
-
-        private Box box;
+        public Bound BoundingBox { get; private set; }
 
         private Vector3 normal;
         private Vector3 point;
@@ -17,12 +15,12 @@ namespace CowLibrary
             this.radius = radius;
             point = Vector3.Zero;
             normal = -Vector3.UnitY;
-            box = CreateBox();
+            BoundingBox = CreateBound();
         }
         
-        private Box CreateBox()
+        private Bound CreateBound()
         {
-            return new Box(point, 2 * radius);
+            return new Bound(point, 2 * radius);
         }
 
         public readonly Surfel? Intersect(in Ray ray)
@@ -57,7 +55,7 @@ namespace CowLibrary
             point = matrix.MultiplyPoint(point);
             radius = matrix.ExtractScale().Min() * radius;
             normal = matrix.MultiplyVector(normal).Normalize();
-            box = CreateBox();
+            BoundingBox = CreateBound();
         }
     }
 }

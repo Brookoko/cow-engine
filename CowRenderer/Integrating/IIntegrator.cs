@@ -4,6 +4,6 @@ namespace CowRenderer
 
     public interface IIntegrator
     {
-        Color GetColor(Scene scene, Surfel surfel);
+        Color GetColor(Scene scene, in Surfel surfel);
     }
 }

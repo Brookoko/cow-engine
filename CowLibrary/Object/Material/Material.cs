@@ -13,6 +13,6 @@ namespace CowLibrary
 
         public abstract Color GetColor(Vector3 wo, Vector3 wi);
 
-        public abstract float Sample(Surfel surfel, out Vector3 wi, out float pdf);
+        public abstract float Sample(in Surfel surfel, out Vector3 wi, out float pdf);
     }
 }

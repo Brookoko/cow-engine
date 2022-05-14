@@ -29,8 +29,12 @@ namespace CowRenderer.Rendering
             {
                 for (var x = 0; x < w; x++)
                 {
+                    if (x == w / 2 && y == h / 2)
+                    {
+                        Console.WriteLine($"Center");
+                    }
                     var surfels = Raycast(camera, new Vector2(x, y));
-                    image[y, x] = Integrate(scene, surfels);
+                    image[y, x] = Integrate(scene, in surfels);
                 }
             }
 
@@ -51,10 +55,10 @@ namespace CowRenderer.Rendering
             return surfels;
         }
 
-        private Color Integrate(Scene scene, Surfel[] surfels)
+        private Color Integrate(Scene scene, in Surfel[] surfels)
         {
             var color = surfels
-                .Select(s => Integrator.GetColor(scene, s))
+                .Select(s => Integrator.GetColor(scene, in s))
                 .Aggregate(Color.Black, (acc, c) => acc + c);
             return color / surfels.Length;
         }

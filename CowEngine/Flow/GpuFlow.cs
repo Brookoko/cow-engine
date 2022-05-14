@@ -1,20 +1,33 @@
 ﻿namespace CowEngine
 {
     using Cowject;
+    using CowRenderer;
 
     public class GpuFlow : IFlow<GpuOption>
     {
+        [Inject(Name = KernelMode.Gpu)]
+        public IRenderer Renderer { get; set; }
+
         [Inject]
         public IWatch Watch { get; set; }
-        
+
         [Inject]
         public ISceneLoader SceneLoader { get; set; }
-        
+
         public int Process(GpuOption option)
         {
             Watch.Start();
             var scene = SceneLoader.LoadSceneFromOptions(option);
             Watch.Stop("Loading scene");
+
+            Watch.Start();
+            scene.PrepareScene();
+            Watch.Stop("Preparing scene");
+
+            Watch.Start();
+            var image = Renderer.Render(scene);
+            Watch.Stop("Rendering scene");
+
             return 0;
         }
     }

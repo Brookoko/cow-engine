@@ -5,12 +5,12 @@ namespace CowLibrary
 
     public struct Box : IMesh
     {
-        public Vector3 center;
-        public Vector3 min;
-        public Vector3 max;
-        public Vector3 size;
+        public Bound BoundingBox { get; }
 
-        public Box BoundingBox => this;
+        private Vector3 center;
+        private Vector3 min;
+        private Vector3 max;
+        private Vector3 size;
 
         public Box(Vector3 min, Vector3 max)
         {
@@ -18,14 +18,7 @@ namespace CowLibrary
             this.max = max;
             center = new Vector3((min.X + max.X) * 0.5f, (min.Y + max.Y) * 0.5f, (min.Z + max.Z) * 0.5f);
             size = max - center;
-        }
-
-        public Box(Vector3 center, float sideLength)
-        {
-            this.center = center;
-            size = new Vector3(sideLength / 2);
-            min = center - size;
-            max = center + size;
+            BoundingBox = new Bound(min, max);
         }
 
         public Box(Vector3 size)
@@ -34,66 +27,20 @@ namespace CowLibrary
             center = Vector3.Zero;
             min = center - size;
             max = center + size;
+            BoundingBox = new Bound(min, max);
         }
 
         public readonly Surfel? Intersect(in Ray ray)
         {
-            var invdir = new Vector3(1 / ray.direction.X, 1 / ray.direction.Y, 1 / ray.direction.Z);
-
-            var xmin = invdir.X >= 0 ? min.X : max.X;
-            var xmax = invdir.X >= 0 ? max.X : min.X;
-            var tmin = (xmin - ray.origin.X) * invdir.X;
-            var tmax = (xmax - ray.origin.X) * invdir.X;
-
-            var ymin = invdir.Y >= 0 ? min.Y : max.Y;
-            var ymax = invdir.Y >= 0 ? max.Y : min.Y;
-            var tymin = (ymin - ray.origin.Y) * invdir.Y;
-            var tymax = (ymax - ray.origin.Y) * invdir.Y;
-
-            if (tmin > tymax || tymin > tmax)
+            var surfel = BoundingBox.Intersect(in ray);
+            if (!surfel.HasValue)
             {
                 return null;
             }
-            tmin = Math.Max(tmin, tymin);
-            tmax = Math.Min(tmax, tymax);
-
-            var zmin = invdir.Z >= 0 ? min.Z : max.Z;
-            var zmax = invdir.Z >= 0 ? max.Z : min.Z;
-            var tzmin = (zmin - ray.origin.Z) * invdir.Z;
-            var tzmax = (zmax - ray.origin.Z) * invdir.Z;
-
-            if (tmin > tzmax || tzmin > tmax)
-            {
-                return null;
-            }
-            tmin = Math.Max(tmin, tzmin);
-            tmax = Math.Min(tmax, tzmax);
-
-            float t;
-            if (tmin < 0)
-            {
-                if (tmax < 0)
-                {
-                    return null;
-                }
-                t = tmax;
-            }
-            else
-            {
-                t = Math.Min(tmin, tmax);
-            }
-
-            var p = ray.GetPoint(t);
-
-            return new Surfel()
-            {
-                t = t,
-                point = p,
-                normal = GetNormal(in p),
-            };
+            return surfel.Value with { normal = GetNormal(surfel.Value.point) };
         }
 
-        private Vector3 GetNormal(in Vector3 point)
+        private readonly Vector3 GetNormal(in Vector3 point)
         {
             var localPoint = point - center;
             var min = Math.Abs(size.X - Math.Abs(localPoint.X));

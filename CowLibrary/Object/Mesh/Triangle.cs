@@ -5,7 +5,7 @@ namespace CowLibrary
 
     public struct Triangle : IMesh
     {
-        public Box BoundingBox { get; private set; }
+        public Bound BoundingBox { get; private set; }
 
         private Vector3 v0;
         private Vector3 v1;
@@ -20,10 +20,10 @@ namespace CowLibrary
             this.v0 = v0;
             this.v1 = v1;
             this.v2 = v2;
-            BoundingBox = CreateBox();
+            BoundingBox = CreateBound();
         }
 
-        private Box CreateBox()
+        private Bound CreateBound()
         {
             Vector3 min, max;
             min.X = Math.Min(v0.X, Math.Min(v1.X, v2.X));
@@ -32,7 +32,7 @@ namespace CowLibrary
             max.X = Math.Max(v0.X, Math.Max(v1.X, v2.X));
             max.Y = Math.Max(v0.Y, Math.Max(v1.Y, v2.Y));
             max.Z = Math.Max(v0.Z, Math.Max(v1.Z, v2.Z));
-            return new Box(min, max);
+            return new Bound(min, max);
         }
 
         public void SetNormal(Vector3 n0, Vector3 n1, Vector3 n2)
@@ -99,7 +99,7 @@ namespace CowLibrary
             n0 = matrix.MultiplyVector(n0).Normalize();
             n1 = matrix.MultiplyVector(n1).Normalize();
             n2 = matrix.MultiplyVector(n2).Normalize();
-            BoundingBox = CreateBox();
+            BoundingBox = CreateBound();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace CowRenderer.Integration
 
         private readonly (Color, Color) lerpingColors = (new Color(20, 207, 220), new Color(15, 50, 210));
 
-        public Color GetColor(Scene scene, Surfel surfel)
+        public Color GetColor(Scene scene, in Surfel surfel)
         {
             if (surfel.material == null)
             {

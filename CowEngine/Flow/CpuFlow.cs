@@ -6,7 +6,7 @@
 
     public class CpuFlow : IFlow<CpuOption>
     {
-        [Inject]
+        [Inject(Name = KernelMode.Cpu)]
         public IRenderer Renderer { get; set; }
 
         [Inject]

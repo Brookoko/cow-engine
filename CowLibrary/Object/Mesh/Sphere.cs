@@ -5,15 +5,21 @@ namespace CowLibrary
 
     public struct Sphere : IMesh
     {
-        public Box BoundingBox { get; private set; }
+        public Bound BoundingBox { get; private set; }
 
         private float radius;
-        private Vector3 center = Vector3.Zero;
+        private Vector3 center;
 
-        public Sphere(float radius)
+        public Sphere(float radius) : this()
         {
             this.radius = radius;
-            BoundingBox = new Box(center, radius * 2);
+            center = Vector3.Zero;
+            BoundingBox = CreateBound();
+        }
+
+        private Bound CreateBound()
+        {
+            return new Bound(center, radius * 2);
         }
 
         public readonly Surfel? Intersect(in Ray ray)
@@ -67,7 +73,7 @@ namespace CowLibrary
         {
             center = matrix.MultiplyPoint(center);
             radius = matrix.ExtractScale().Min() * radius;
-            BoundingBox = new Box(center, radius * 2);
+            BoundingBox = CreateBound();
         }
     }
 }

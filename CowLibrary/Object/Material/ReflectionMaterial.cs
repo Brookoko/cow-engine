@@ -17,9 +17,9 @@ namespace CowLibrary
             return brdf.Evaluate(wo, wi) * Color;
         }
 
-        public override float Sample(Surfel surfel, out Vector3 wi, out float pdf)
+        public override float Sample(in Surfel surfel, out Vector3 wi, out float pdf)
         {
-            return brdf.Sample(surfel, out wi, Mathf.CreateSample(), out pdf);
+            return brdf.Sample(surfel, out wi, RandomF.CreateSample(), out pdf);
         }
     }
 }

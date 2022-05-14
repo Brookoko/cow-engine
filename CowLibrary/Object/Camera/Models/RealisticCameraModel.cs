@@ -34,7 +34,7 @@ public readonly struct RealisticCameraModel : ICameraModel
         var rays = new Ray[samples];
         for (var i = 0; i < samples; i++)
         {
-            var sample = Mathf.ConcentricSampleDisk(Mathf.CreateSample()).Normalize();
+            var sample = Mathf.ConcentricSampleDisk(RandomF.CreateSample()).Normalize();
             var lensPoint = lensCenter + new Vector3(sample * lens.radius, 0);
             var direction = focusPoint - lensPoint;
             lensPoint.Z = 0;
