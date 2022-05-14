@@ -4,7 +4,7 @@ namespace CowEngine.ImageWorker
 
     public interface IImageEncoder
     {
-        byte[] Encode(Image image);
+        byte[] Encode(in Image image);
 
         bool CanWorkWith(string extension);
     }

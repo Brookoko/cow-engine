@@ -38,7 +38,7 @@ namespace CowRenderer.Rendering
                     var to = new Vector2(toX, (j + 1) * yStep);
 
                     var renderer = DiContainer.Get<ThreadRenderer>();
-                    renderer.Init(scene, image, from, to);
+                    renderer.Init(scene, in image, from, to);
 
                     var thread = new Thread(renderer.Render);
                     thread.Start();

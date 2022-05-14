@@ -4,12 +4,12 @@ namespace CowEngine.ImageWorker.Png
 
     internal interface IImageByteConverter
     {
-        byte[,] ToBytes(Image image);
+        byte[,] ToBytes(in Image image);
     }
 
     internal class ImageByteConverter : IImageByteConverter
     {
-        public byte[,] ToBytes(Image image)
+        public byte[,] ToBytes(in Image image)
         {
             var h = image.Height;
             var w = image.Width;

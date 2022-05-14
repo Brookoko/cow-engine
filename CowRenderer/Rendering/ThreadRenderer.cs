@@ -20,7 +20,7 @@ namespace CowRenderer
         protected Vector2 from;
         protected Vector2 to;
 
-        public void Init(Scene scene, Image image, Vector2 from, Vector2 to)
+        public void Init(Scene scene, in Image image, Vector2 from, Vector2 to)
         {
             this.scene = scene;
             this.image = image;

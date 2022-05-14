@@ -33,7 +33,7 @@
             Watch.Stop("Rendering scene");
 
             Watch.Start();
-            ImageWorker.SaveImage(image, option.Output);
+            ImageWorker.SaveImage(in image, option.Output);
             Watch.Stop("Saving render");
 
             return 0;

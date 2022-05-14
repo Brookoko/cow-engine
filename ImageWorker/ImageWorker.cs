@@ -5,7 +5,7 @@ namespace CowEngine.ImageWorker
 
     public interface IImageWorker
     {
-        void SaveImage(Image image, string extension);
+        void SaveImage(in Image image, string extension);
     }
 
     public class ImageWorker : IImageWorker
@@ -16,11 +16,11 @@ namespace CowEngine.ImageWorker
         [Inject]
         internal IImageEncoderProvider ImageEncoderProvider { get; set; }
 
-        public void SaveImage(Image image, string path)
+        public void SaveImage(in Image image, string path)
         {
             var extension = path.GetExtension();
             var encoder = ImageEncoderProvider.FindEncoder(extension);
-            var bytes = encoder.Encode(image);
+            var bytes = encoder.Encode(in image);
             IoWorker.Write(bytes, path);
         }
     }

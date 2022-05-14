@@ -1,6 +1,6 @@
 namespace CowLibrary
 {
-    public class Image
+    public readonly struct Image
     {
         public int Height => data.GetLength(0);
         public int Width => data.GetLength(1);

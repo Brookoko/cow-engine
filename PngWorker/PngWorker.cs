@@ -17,10 +17,10 @@ namespace CowEngine.ImageWorker.Png
             return extension == "png";
         }
 
-        public byte[] Encode(Image image)
+        public byte[] Encode(in Image image)
         {
-            var header = CreateHeader(image);
-            var data = imageByteConverter.ToBytes(image);
+            var header = CreateHeader(in image);
+            var data = imageByteConverter.ToBytes(in image);
             var filtered = byteFilterer.Filter(data, FilterType.None);
             var encoded = deflate.Encode(filtered);
 
@@ -31,7 +31,7 @@ namespace CowEngine.ImageWorker.Png
             return pngHeader.Concat(content).ToArray();
         }
 
-        private Header CreateHeader(Image image)
+        private Header CreateHeader(in Image image)
         {
             return new Header()
             {
