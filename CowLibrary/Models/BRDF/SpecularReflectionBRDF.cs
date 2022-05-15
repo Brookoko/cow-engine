@@ -3,12 +3,12 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class SpecularReflectionBrdf : IBrdf
+    public readonly struct SpecularReflectionBrdf : IBrdf
     {
         private readonly float r;
-        private readonly Fresnel fresnel;
+        private readonly IFresnel fresnel;
 
-        public SpecularReflectionBrdf(float r, Fresnel fresnel)
+        public SpecularReflectionBrdf(float r, IFresnel fresnel)
         {
             this.r = r;
             this.fresnel = fresnel;

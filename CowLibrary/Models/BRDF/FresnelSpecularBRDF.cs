@@ -2,7 +2,7 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class FresnelSpecularBrdf : IBrdf
+    public readonly struct FresnelSpecularBrdf : IBrdf
     {
         private readonly DielectricFresnel fresnel;
         private readonly IBrdf reflection;

@@ -2,16 +2,20 @@ namespace CowLibrary
 {
     using System;
 
-    public class ConductorFresnel : Fresnel
+    public readonly struct ConductorFresnel : IFresnel
     {
+        private readonly float etaI;
+        private readonly float etaT;
         private readonly float k;
 
-        public ConductorFresnel(float etaI, float etaT, float k) : base(etaI, etaT)
+        public ConductorFresnel(float etaI, float etaT, float k)
         {
+            this.etaI = etaI;
+            this.etaT = etaT;
             this.k = k;
         }
 
-        public override float Evaluate(float cosThetaI)
+        public float Evaluate(float cosThetaI)
         {
             cosThetaI = Math.Clamp(cosThetaI, -1, 1);
             var eta = etaT / etaI;

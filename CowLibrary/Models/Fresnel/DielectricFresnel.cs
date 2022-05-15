@@ -2,13 +2,18 @@ namespace CowLibrary
 {
     using System;
 
-    public class DielectricFresnel : Fresnel
+    public readonly struct DielectricFresnel : IFresnel
     {
-        public DielectricFresnel(float etaI, float etaT) : base(etaI, etaT)
+        private readonly float etaI;
+        private readonly float etaT;
+        
+        public DielectricFresnel(float etaI, float etaT)
         {
+            this.etaI = etaI;
+            this.etaT = etaT;
         }
 
-        public override float Evaluate(float cosThetaI)
+        public float Evaluate(float cosThetaI)
         {
             cosThetaI = Math.Clamp(cosThetaI, -1, 1);
             var etaI = this.etaI;

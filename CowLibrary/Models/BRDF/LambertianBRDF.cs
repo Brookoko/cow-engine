@@ -3,7 +3,7 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class LambertianBrdf : IBrdf
+    public readonly struct LambertianBrdf : IBrdf
     {
         private readonly float r;
 

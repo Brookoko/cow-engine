@@ -3,7 +3,7 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class SpecularTransmissionBrdf : IBrdf
+    public readonly struct SpecularTransmissionBrdf : IBrdf
     {
         private readonly float t;
         private readonly float etaA;
