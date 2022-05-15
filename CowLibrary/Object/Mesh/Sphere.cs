@@ -35,7 +35,7 @@ namespace CowLibrary
             var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;
             if (discriminant < 0)
             {
-                return new RayHit();
+                return Const.Miss;
             }
 
             float t;
@@ -53,7 +53,7 @@ namespace CowLibrary
                 k2 = k2 > 0 ? k2 : k1;
                 if (k2 < 0)
                 {
-                    return new RayHit();
+                    return Const.Miss;
                 }
 
                 t = (float)Math.Min(k1, k2);

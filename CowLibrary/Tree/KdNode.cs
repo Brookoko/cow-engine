@@ -24,26 +24,21 @@ namespace CowLibrary
 
         public RayHit Intersect(in Ray ray, in KdNode[] nodes)
         {
-            if (!HasChildren() && mesh.triangles.Length == 0)
+            if (index < 0 && mesh.triangles.Length == 0)
             {
-                return new RayHit();
+                return Const.Miss;
             }
             var boundHit = bound.Intersect(in ray);
             if (!boundHit.HasHit)
             {
                 return boundHit;
             }
-            return HasChildren() ? IntersectChildren(in ray, in nodes) : mesh.Intersect(in ray);
-        }
-
-        private bool HasChildren()
-        {
-            return index >= 0;
+            return index >= 0 ? IntersectChildren(in ray, in nodes) : mesh.Intersect(in ray);
         }
 
         private RayHit IntersectChildren(in Ray ray, in KdNode[] nodes)
         {
-            var hit = new RayHit();
+            var hit = Const.Miss;
             for (var i = 1; i <= ChildCount; i++)
             {
                 var child = nodes[ChildCount * index + i];

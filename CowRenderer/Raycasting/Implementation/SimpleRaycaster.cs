@@ -14,7 +14,7 @@ namespace CowRenderer.Raycasting
 
         public Surfel Raycast(in Ray ray)
         {
-            var bestHit = new RayHit();
+            var bestHit = Const.Miss;
             var hitIndex = 0;
             for (var i = 0; i < objects.Count; i++)
             {

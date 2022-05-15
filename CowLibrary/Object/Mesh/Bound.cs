@@ -42,7 +42,7 @@ public struct Bound : IIntersectable
 
         if (tmin > tymax || tymin > tmax)
         {
-            return new RayHit();
+            return Const.Miss;
         }
         tmin = Math.Max(tmin, tymin);
         tmax = Math.Min(tmax, tymax);
@@ -54,7 +54,7 @@ public struct Bound : IIntersectable
 
         if (tmin > tzmax || tzmin > tmax)
         {
-            return new RayHit();
+            return Const.Miss;
         }
         tmin = Math.Max(tmin, tzmin);
         tmax = Math.Min(tmax, tzmax);
@@ -64,7 +64,7 @@ public struct Bound : IIntersectable
         {
             if (tmax < 0)
             {
-                return new RayHit();
+                return Const.Miss;
             }
             t = tmax;
         }

@@ -21,7 +21,7 @@ namespace CowLibrary
 
         public readonly RayHit Intersect(in Ray ray)
         {
-            var hit = new RayHit();
+            var hit = Const.Miss;
             for (var i = 0; i < triangles.Length; i++)
             {
                 var tHit = triangles[i].Intersect(in ray);

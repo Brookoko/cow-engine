@@ -59,7 +59,7 @@ namespace CowLibrary
             var a = Vector3.Dot(edge1, h);
             if (Math.Abs(a) < Const.Epsilon)
             {
-                return new RayHit();
+                return Const.Miss;
             }
 
             var f = 1f / a;
@@ -67,20 +67,20 @@ namespace CowLibrary
             var u = f * Vector3.Dot(s, h);
             if (u < 0 || u > 1)
             {
-                return new RayHit();
+                return Const.Miss;
             }
 
             var q = Vector3.Cross(s, edge1);
             var v = f * Vector3.Dot(ray.direction, q);
             if (v < 0 || u + v > 1)
             {
-                return new RayHit();
+                return Const.Miss;
             }
 
             var t = f * Vector3.Dot(edge2, q);
             if (t <= 0)
             {
-                return new RayHit();
+                return Const.Miss;
             }
 
             var normal = n0 * (1 - u - v) + n1 * u + n2 * v;

@@ -27,19 +27,19 @@ namespace CowLibrary
             var dot = Vector3.Dot(normal, ray.direction);
             if (dot <= Const.Epsilon)
             {
-                return new RayHit();
+                return Const.Miss;
             }
             var dir = point - ray.origin;
             var t = Vector3.Dot(dir, normal) / dot;
             if (t <= 0)
             {
-                return new RayHit();
+                return Const.Miss;
             }
             var p = ray.GetPoint(t);
             var dist = Vector3.DistanceSquared(p, point);
             if (dist > radius * radius)
             {
-                return new RayHit();
+                return Const.Miss;
             }
             return new RayHit(t, p, -normal);
         }

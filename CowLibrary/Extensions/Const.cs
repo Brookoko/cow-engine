@@ -11,7 +11,9 @@ namespace CowLibrary
         public const float InvPi = (float)(1 / Math.PI);
 
         public const float PiOver4 = (float)(Math.PI * 0.25);
-        
+
         public const float Epsilon = 1e-10f;
+
+        public static readonly RayHit Miss = new();
     }
 }
