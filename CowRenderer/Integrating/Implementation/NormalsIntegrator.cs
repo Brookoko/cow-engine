@@ -14,7 +14,7 @@ namespace CowRenderer.Integration
                 return negativeColor;
             }
 
-            var normal = surfel.normal;
+            var normal = surfel.hit.normal;
             normal = (normal + Vector3.One) * 0.5f;
             return new Color(normal.X, normal.Y, normal.Z);
         }

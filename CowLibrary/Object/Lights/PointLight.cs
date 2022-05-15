@@ -14,9 +14,9 @@ namespace CowLibrary.Lights
             this.intensity = intensity;
         }
 
-        public override ShadingInfo GetShadingInfo(in Surfel surfel)
+        public override ShadingInfo GetShadingInfo(in RayHit rayHit)
         {
-            var direction = Transform.Position - surfel.point;
+            var direction = Transform.Position - rayHit.point;
             var sqrtDistance = direction.LengthSquared();
             var distance = (float)Math.Sqrt(sqrtDistance);
             return new ShadingInfo

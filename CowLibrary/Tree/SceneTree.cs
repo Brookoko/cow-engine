@@ -4,7 +4,7 @@ namespace CowLibrary
     using System.Linq;
     using System.Numerics;
 
-    public class SceneTree : IIntersectable
+    public class SceneTree
     {
         private const int MinNumberOfObjects = 8;
         private const int MaxDepth = 16;

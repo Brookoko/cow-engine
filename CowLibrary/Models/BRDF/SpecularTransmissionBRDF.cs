@@ -20,19 +20,18 @@ namespace CowLibrary
             fresnel = new DielectricFresnel(etaA, etaB);
         }
 
-        public float Evaluate(Vector3 wo, Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi)
         {
             return 0;
         }
 
-        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
+        public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
         {
-            var wo = surfel.ray;
-            var entering = Vector3.Dot(wo, surfel.normal) < 0;
+            var entering = Vector3.Dot(wo, normal) < 0;
             var etaI = entering ? etaA : etaB;
             var etaT = entering ? etaB : etaA;
             var eta = etaI / etaT;
-            var n = Vector3Extensions.Faceforward(surfel.normal, wo);
+            var n = Vector3Extensions.Faceforward(normal, wo);
 
             if (!wo.Refract(n, eta, out wi))
             {
@@ -41,7 +40,7 @@ namespace CowLibrary
             }
 
             pdf = 1;
-            var cos = Vector3.Dot(wi, surfel.normal);
+            var cos = Vector3.Dot(wi, normal);
             var ft = t * (1 - fresnel.Evaluate(cos));
             if (mode == TransportMode.Radiance)
             {

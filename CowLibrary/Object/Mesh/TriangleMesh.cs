@@ -22,9 +22,9 @@ namespace CowLibrary
             BoundingBox = IntersectionHelper.CreateBound(triangles);
         }
 
-        public readonly Surfel? Intersect(in Ray ray)
+        public readonly RayHit? Intersect(in Ray ray)
         {
-            Surfel? surfel = null;
+            RayHit? surfel = null;
             foreach (var t in triangles)
             {
                 var s = t.Intersect(in ray);

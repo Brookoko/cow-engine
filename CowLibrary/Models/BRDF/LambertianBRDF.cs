@@ -12,17 +12,15 @@ namespace CowLibrary
             this.r = Math.Clamp(r, 0, 1);
         }
 
-        public float Evaluate(Vector3 wo, Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi)
         {
             return r * Const.InvPi;
         }
 
-        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
+        public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
         {
-            var wo = surfel.ray;
-            var up = surfel.normal;
-            wi = Mathf.CosineSampleHemisphere(up, sample);
-            if (Vector3.Dot(wo, up) < 0)
+            wi = Mathf.CosineSampleHemisphere(normal, sample);
+            if (Vector3.Dot(wo, normal) < 0)
             {
                 wi.Z *= -1;
             }

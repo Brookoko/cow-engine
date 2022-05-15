@@ -23,7 +23,7 @@ namespace CowLibrary
             return new Bound(point, 2 * radius);
         }
 
-        public readonly Surfel? Intersect(in Ray ray)
+        public readonly RayHit? Intersect(in Ray ray)
         {
             var dot = Vector3.Dot(normal, ray.direction);
             if (dot <= Const.Epsilon)
@@ -42,7 +42,7 @@ namespace CowLibrary
             {
                 return null;
             }
-            return new Surfel()
+            return new RayHit()
             {
                 t = t,
                 point = p,

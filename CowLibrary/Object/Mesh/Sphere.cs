@@ -22,7 +22,7 @@ namespace CowLibrary
             return new Bound(center, radius * 2);
         }
 
-        public readonly Surfel? Intersect(in Ray ray)
+        public readonly RayHit? Intersect(in Ray ray)
         {
             var f1 = ray.origin.X - center.X;
             var f2 = ray.origin.Y - center.Y;
@@ -61,7 +61,7 @@ namespace CowLibrary
             }
 
             var p = ray.GetPoint(t);
-            return new Surfel()
+            return new RayHit()
             {
                 point = p,
                 normal = (p - center).Normalize(),

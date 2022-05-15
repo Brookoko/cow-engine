@@ -5,7 +5,7 @@ namespace CowLibrary
     using System.Linq;
     using System.Numerics;
 
-    public class SceneNode : IIntersectable
+    public class SceneNode
     {
         public readonly List<RenderableObject> objects;
         public readonly List<SceneNode> children = new List<SceneNode>();
@@ -49,24 +49,49 @@ namespace CowLibrary
 
         private Surfel? IntersectChildren(in Ray ray)
         {
-            return IntersectionHelper.Intersect(children, in ray);
+            Surfel? surfel = null;
+            foreach (var child in children)
+            {
+                var s = child.Intersect(in ray);
+                if (!s.HasValue)
+                {
+                    continue;
+                }
+                if (!surfel.HasValue || surfel.Value.hit.t > s.Value.hit.t)
+                {
+                    surfel = s;
+                }
+            }
+            return surfel;
         }
 
         private Surfel? IntersectObjects(in Ray ray)
         {
-            Surfel? surfel = default;
-            foreach (var obj in objects)
+            RayHit bestHit = default;
+            var intersected = false;
+            var hitIndex = 0;
+            for (var i = 0; i < objects.Count; i++)
             {
-                var s = obj.Mesh.Intersect(in ray);
-                if (s.HasValue)
+                var obj = objects[i];
+                var hit = obj.Mesh.Intersect(in ray);
+                if (!hit.HasValue)
                 {
-                    if (!surfel.HasValue || surfel.Value.t > s.Value.t)
-                    {
-                        surfel = s.Value with { material = obj.Material, ray = ray.direction };
-                    }
+                    continue;
+                }
+                if (!intersected || bestHit.t > hit.Value.t)
+                {
+                    bestHit = hit.Value;
+                    intersected = true;
+                    hitIndex = i;
                 }
             }
-            return surfel;
+            var surfel = new Surfel()
+            {
+                hit = bestHit,
+                material = objects[hitIndex].Material,
+                ray = ray.direction
+            };
+            return intersected ? surfel : null;
         }
     }
 }

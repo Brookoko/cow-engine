@@ -27,7 +27,7 @@ namespace CowRenderer.Integration
                 return backgroundColor;
             }
 
-            return directIntegrator.GetColor(scene, surfel) + indirectIntegrator.GetColor(scene, surfel);
+            return directIntegrator.GetColor(scene, in surfel) + indirectIntegrator.GetColor(scene, in surfel);
         }
     }
 }

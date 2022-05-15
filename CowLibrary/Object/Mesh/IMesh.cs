@@ -11,6 +11,6 @@ namespace CowLibrary
 
     public interface IIntersectable
     {
-        public Surfel? Intersect(in Ray ray);
+        public RayHit? Intersect(in Ray ray);
     }
 }

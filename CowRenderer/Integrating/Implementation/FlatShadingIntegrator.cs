@@ -19,8 +19,8 @@ namespace CowRenderer.Integration
             var result = new Color(0, 0, 0);
             foreach (var light in scene.lights)
             {
-                var shading = light.GetShadingInfo(surfel);
-                var dot = Vector3.Dot(shading.direction, surfel.normal);
+                var shading = light.GetShadingInfo(in surfel.hit);
+                var dot = Vector3.Dot(shading.direction, surfel.hit.normal);
                 dot = Math.Max(dot, 0);
                 result += baseColor * shading.color * dot;
             }

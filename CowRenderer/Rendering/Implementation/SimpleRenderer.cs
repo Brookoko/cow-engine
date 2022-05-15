@@ -1,6 +1,5 @@
 namespace CowRenderer.Rendering
 {
-    using System;
     using System.Linq;
     using System.Numerics;
     using Cowject;
@@ -29,10 +28,6 @@ namespace CowRenderer.Rendering
             {
                 for (var x = 0; x < w; x++)
                 {
-                    if (x == w / 2 && y == h / 2)
-                    {
-                        Console.WriteLine($"Center");
-                    }
                     var surfels = Raycast(camera, new Vector2(x, y));
                     image[y, x] = Integrate(scene, in surfels);
                 }

@@ -30,7 +30,7 @@ namespace CowLibrary
             BoundingBox = new Bound(min, max);
         }
 
-        public readonly Surfel? Intersect(in Ray ray)
+        public readonly RayHit? Intersect(in Ray ray)
         {
             var surfel = BoundingBox.Intersect(in ray);
             if (!surfel.HasValue)

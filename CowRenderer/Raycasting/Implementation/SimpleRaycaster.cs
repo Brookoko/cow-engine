@@ -14,27 +14,31 @@ namespace CowRenderer.Raycasting
 
         public bool Raycast(in Ray ray, out Surfel surfel)
         {
-            Surfel? closestSurfel = null;
-            foreach (var renderableObject in objects)
+            RayHit bestHit = default;
+            var intersected = false;
+            var hitIndex = 0;
+            for (var i = 0; i < objects.Count; i++)
             {
-                var hitSurfel = renderableObject.Mesh.Intersect(in ray);
-                if (hitSurfel.HasValue)
+                var obj = objects[i];
+                var hit = obj.Mesh.Intersect(in ray);
+                if (!hit.HasValue)
                 {
-                    if (hitSurfel.Value.t > closestSurfel?.t)
-                    {
-                        continue;
-                    }
-                    closestSurfel = hitSurfel.Value with { material = renderableObject.Material, ray = ray.direction };
+                    continue;
+                }
+                if (!intersected || bestHit.t > hit.Value.t)
+                {
+                    bestHit = hit.Value;
+                    intersected = true;
+                    hitIndex = i;
                 }
             }
-
-            if (!closestSurfel.HasValue)
+            surfel = new Surfel()
             {
-                surfel = new Surfel() { ray = ray.direction };
-                return false;
-            }
-            surfel = closestSurfel.Value;
-            return true;
+                hit = bestHit,
+                material = objects[hitIndex].Material,
+                ray = ray.direction
+            };
+            return intersected;
         }
     }
 }

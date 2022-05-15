@@ -14,14 +14,14 @@ namespace CowLibrary
             brdf = new FresnelSpecularBrdf(r, t, 1, eta, TransportMode.Importance);
         }
 
-        public override Color GetColor(Vector3 wo, Vector3 wi)
+        public override Color GetColor(in Vector3 wo, in Vector3 wi)
         {
-            return brdf.Evaluate(wo, wi) * Color;
+            return brdf.Evaluate(in wo, in wi) * Color;
         }
 
-        public override float Sample(in Surfel surfel, out Vector3 wi, out float pdf)
+        public override float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, out float pdf)
         {
-            return brdf.Sample(surfel, out wi, sampler.CreateSample(), out pdf);
+            return brdf.Sample(in normal, in wo, out wi, sampler.CreateSample(), out pdf);
         }
     }
 }

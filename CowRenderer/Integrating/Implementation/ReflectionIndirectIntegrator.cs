@@ -30,22 +30,22 @@ namespace CowRenderer.Integration
             {
                 return backgroundColor;
             }
-            return TraceRecursive(scene, surfel, 0);
+            return TraceRecursive(scene, in surfel, 0);
         }
 
-        private Color TraceRecursive(Scene scene, Surfel surfel, int depth)
+        private Color TraceRecursive(Scene scene, in Surfel surfel, int depth)
         {
             if (depth >= RenderConfig.rayDepth)
             {
                 return new Color(0f);
             }
-            var dir = surfel.ray.Reflect(surfel.normal);
-            var p = surfel.point + surfel.normal * RenderConfig.bias;
+            var dir = surfel.ray.Reflect(surfel.hit.normal);
+            var p = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
             var ray = new Ray(p, dir);
-            if (Raycaster.Raycast(ray, out surfel))
+            if (Raycaster.Raycast(ray, out var surfelHit))
             {
-                var dot = Vector3.Dot(surfel.normal, dir);
-                return dot * (directIntegrator.GetColor(scene, surfel) + TraceRecursive(scene, surfel, depth + 1));
+                var dot = Vector3.Dot(surfelHit.hit.normal, dir);
+                return dot * (directIntegrator.GetColor(scene, in surfelHit) + TraceRecursive(scene, in surfelHit, depth + 1));
             }
             return new Color(0f);
         }

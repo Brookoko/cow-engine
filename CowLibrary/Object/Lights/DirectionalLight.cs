@@ -13,7 +13,7 @@ namespace CowLibrary.Lights
             this.intensity = intensity;
         }
 
-        public override ShadingInfo GetShadingInfo(in Surfel surfel)
+        public override ShadingInfo GetShadingInfo(in RayHit rayHit)
         {
             return new ShadingInfo()
             {

@@ -88,7 +88,7 @@ namespace CowLibrary
             return v.Get(depth % 3);
         }
 
-        public Surfel? Intersect(in Ray ray)
+        public RayHit? Intersect(in Ray ray)
         {
             return root.Intersect(in ray);
         }

@@ -15,7 +15,7 @@ namespace CowLibrary
             tree = default;
         }
 
-        public readonly Surfel? Intersect(in Ray ray)
+        public readonly RayHit? Intersect(in Ray ray)
         {
             return tree.Intersect(in ray);
         }

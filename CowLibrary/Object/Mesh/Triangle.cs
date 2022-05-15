@@ -50,7 +50,7 @@ namespace CowLibrary
             n0 = n1 = n2 = n;
         }
 
-        public readonly Surfel? Intersect(in Ray ray)
+        public readonly RayHit? Intersect(in Ray ray)
         {
             var edge1 = v1 - v0;
             var edge2 = v2 - v0;
@@ -83,7 +83,7 @@ namespace CowLibrary
                 return null;
             }
 
-            return new Surfel()
+            return new RayHit()
             {
                 point = ray.GetPoint(t),
                 normal = n0 * (1 - u - v) + n1 * u + n2 * v,

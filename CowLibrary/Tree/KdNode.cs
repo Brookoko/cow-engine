@@ -23,7 +23,7 @@ namespace CowLibrary
             children[2] = rightNode;
         }
 
-        public Surfel? Intersect(in Ray ray)
+        public RayHit? Intersect(in Ray ray)
         {
             if (children.Length == 0 && mesh.triangles.Length == 0)
             {
@@ -42,9 +42,9 @@ namespace CowLibrary
             return children.Length > 0;
         }
 
-        private Surfel? IntersectChildren(in Ray ray)
+        private RayHit? IntersectChildren(in Ray ray)
         {
-            Surfel? surfel = null;
+            RayHit? surfel = null;
             foreach (var child in children)
             {
                 var s = child.Intersect(in ray);

@@ -16,11 +16,11 @@ namespace CowLibrary.Lights
             this.sampler = sampler;
         }
 
-        public override ShadingInfo GetShadingInfo(in Surfel surfel)
+        public override ShadingInfo GetShadingInfo(in RayHit rayHit)
         {
             return new ShadingInfo()
             {
-                direction = Mathf.CosineSampleHemisphere(surfel.normal, sampler.CreateSample()),
+                direction = Mathf.CosineSampleHemisphere(rayHit.normal, sampler.CreateSample()),
                 distance = float.PositiveInfinity,
                 color = color * intensity
             };

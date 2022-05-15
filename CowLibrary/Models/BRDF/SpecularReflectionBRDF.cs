@@ -14,17 +14,16 @@ namespace CowLibrary
             this.fresnel = fresnel;
         }
 
-        public float Evaluate(Vector3 wo, Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi)
         {
             return 0;
         }
 
-        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
+        public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
         {
             pdf = 1;
-            var wo = surfel.ray;
-            wi = wo.Reflect(surfel.normal);
-            var cos = Vector3.Dot(wi, surfel.normal);
+            wi = wo.Reflect(normal);
+            var cos = Vector3.Dot(wi, normal);
             return fresnel.Evaluate(cos) * r / Math.Abs(cos);
         }
     }
