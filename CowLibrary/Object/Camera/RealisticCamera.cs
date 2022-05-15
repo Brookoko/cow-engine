@@ -1,6 +1,5 @@
 namespace CowLibrary
 {
-    using System.Numerics;
     using Models;
     using Mathematics.Sampler;
 
@@ -8,7 +7,7 @@ namespace CowLibrary
     {
         public double Fov { get; }
 
-        public override ICameraModelLocal Model => model;
+        public override ICameraModel Model => model;
 
         private readonly RealisticCameraModel model;
 
@@ -16,16 +15,6 @@ namespace CowLibrary
         {
             Fov = fov;
             model = new RealisticCameraModel(width, height, fov, lens);
-        }
-
-        public override Ray ScreenPointToRay(in Vector2 screenPoint)
-        {
-            return model.ScreenPointToRay(in screenPoint, Transform.LocalToWorldMatrix, sampler);
-        }
-
-        public override Ray[] Sample(in Vector2 screenPoint, int samples)
-        {
-            return model.Sample(in screenPoint, Transform.LocalToWorldMatrix, sampler, samples);
         }
     }
 }

@@ -142,13 +142,13 @@
             switch (parsedLight.LightCase)
             {
                 case SceneFormat.Light.LightOneofCase.Point:
-                    return new PointLight(color, 1)
+                    return new PointLight(color, 1, SamplerProvider.Sampler)
                     {
                         Id = parsedLight.Id,
                         Transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Directional:
-                    return new DirectionalLight(color, 1)
+                    return new DirectionalLight(color, 1, SamplerProvider.Sampler)
                     {
                         Id = parsedLight.Id,
                         Transform = tran,
