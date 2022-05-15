@@ -6,6 +6,6 @@ namespace CowRenderer
     {
         void Init(Scene scene);
 
-        bool Raycast(in Ray ray, out Surfel surfel);
+        Surfel Raycast(in Ray ray);
     }
 }

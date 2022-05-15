@@ -12,9 +12,9 @@ namespace CowRenderer.Raycasting
             objects = scene.objects;
         }
 
-        public bool Raycast(in Ray ray, out Surfel surfel)
+        public Surfel Raycast(in Ray ray)
         {
-            RayHit bestHit = default;
+            var bestHit = new RayHit() { t = float.MaxValue };
             var intersected = false;
             var hitIndex = 0;
             for (var i = 0; i < objects.Count; i++)
@@ -32,13 +32,13 @@ namespace CowRenderer.Raycasting
                     hitIndex = i;
                 }
             }
-            surfel = new Surfel()
+            return new Surfel()
             {
+                hasHit = intersected,
                 hit = bestHit,
                 material = objects[hitIndex].Material,
                 ray = ray.direction
             };
-            return intersected;
         }
     }
 }

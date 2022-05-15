@@ -26,11 +26,7 @@ namespace CowRenderer.Integration
 
         public Color GetColor(Scene scene, in Surfel surfel)
         {
-            if (surfel.material == null)
-            {
-                return backgroundColor;
-            }
-            return TraceRecursive(scene, in surfel, 0);
+            return surfel.hasHit ? TraceRecursive(scene, in surfel, 0) : backgroundColor;
         }
 
         private Color TraceRecursive(Scene scene, in Surfel surfel, int depth)
@@ -42,10 +38,12 @@ namespace CowRenderer.Integration
             var dir = surfel.ray.Reflect(surfel.hit.normal);
             var p = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
             var ray = new Ray(p, dir);
-            if (Raycaster.Raycast(ray, out var surfelHit))
+            var surfelHit = Raycaster.Raycast(in ray);
+            if (surfelHit.hasHit)
             {
                 var dot = Vector3.Dot(surfelHit.hit.normal, dir);
-                return dot * (directIntegrator.GetColor(scene, in surfelHit) + TraceRecursive(scene, in surfelHit, depth + 1));
+                return dot * (directIntegrator.GetColor(scene, in surfelHit) +
+                              TraceRecursive(scene, in surfelHit, depth + 1));
             }
             return new Color(0f);
         }

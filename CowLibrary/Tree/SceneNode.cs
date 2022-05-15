@@ -67,7 +67,7 @@ namespace CowLibrary
 
         private Surfel? IntersectObjects(in Ray ray)
         {
-            RayHit bestHit = default;
+            var bestHit = new RayHit() { t = float.MaxValue };
             var intersected = false;
             var hitIndex = 0;
             for (var i = 0; i < objects.Count; i++)

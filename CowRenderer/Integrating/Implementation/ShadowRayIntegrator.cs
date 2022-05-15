@@ -17,7 +17,7 @@ namespace CowRenderer.Integration
 
         public Color GetColor(Scene scene, in Surfel surfel)
         {
-            if (surfel.material == null)
+            if (!surfel.hasHit)
             {
                 return backgroundColor;
             }
@@ -38,8 +38,8 @@ namespace CowRenderer.Integration
         private float TraceShadowRay(in Surfel surfel, in Vector3 direction, float distance)
         {
             var position = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
-            var isHit = Raycaster.Raycast(new Ray(position, direction), out var surfelHit);
-            return isHit && surfelHit.hit.t < distance ? 0 : 1;
+            var surfelHit = Raycaster.Raycast(new Ray(position, direction));
+            return surfelHit.hasHit && surfelHit.hit.t < distance ? 0 : 1;
         }
     }
 }

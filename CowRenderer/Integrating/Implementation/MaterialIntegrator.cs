@@ -19,7 +19,7 @@ namespace CowRenderer.Integration
 
         public Color GetColor(Scene scene, in Surfel surfel)
         {
-            if (surfel.material == null)
+            if (!surfel.hasHit)
             {
                 var environment = scene.lights.FirstOrDefault(l => l is EnvironmentLight);
                 return environment?.Sample(in surfel.ray) ?? Color.Black;
@@ -66,8 +66,8 @@ namespace CowRenderer.Integration
         private float TraceShadowRay(in Surfel surfel, Vector3 direction, float distance)
         {
             var position = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
-            var isHit = Raycaster.Raycast(new Ray(position, direction), out var surfelHit);
-            return isHit && surfelHit.hit.t < distance ? 0 : 1;
+            var surfelHit = Raycaster.Raycast(new Ray(position, direction));
+            return surfelHit.hasHit && surfelHit.hit.t < distance ? 0 : 1;
         }
 
         private Color Trace(in Surfel surfel, Light light, Vector3 direction, int depth)
@@ -78,9 +78,10 @@ namespace CowRenderer.Integration
             }
             var sign = Math.Sign(Vector3.Dot(surfel.hit.normal, direction));
             var position = surfel.hit.point + sign * surfel.hit.normal * RenderConfig.bias;
-            if (Raycaster.Raycast(new Ray(position, direction), out var hit))
+            var surfelHit = Raycaster.Raycast(new Ray(position, direction));
+            if (surfelHit.hasHit)
             {
-                return GetLighting(in hit, light, depth + 1);
+                return GetLighting(in surfelHit, light, depth + 1);
             }
             var lightning = light.Sample(in direction);
             var dot = Vector3.Dot(surfel.hit.normal, direction);

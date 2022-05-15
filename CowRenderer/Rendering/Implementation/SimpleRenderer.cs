@@ -43,8 +43,7 @@ namespace CowRenderer.Rendering
             var rays = camera.Sample(point, numberOfRay);
             for (var i = 0; i < numberOfRay; i++)
             {
-                Raycaster.Raycast(in rays[i], out var surfel);
-                surfels[i] = surfel;
+                surfels[i] = Raycaster.Raycast(in rays[i]);
             }
 
             return surfels;
