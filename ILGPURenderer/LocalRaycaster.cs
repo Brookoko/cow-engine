@@ -21,6 +21,10 @@ public readonly struct LocalRaycaster
     {
         var index = 0;
         var hits = new RayHit[10];
+        for (var i = 0; i < 10; i++)
+        {
+            hits[i] = new RayHit();
+        }
         for (var i = 0; i < meshes.boxes.Length; i++)
         {
             hits[index++] = meshes.boxes[i].Intersect(in ray);
@@ -50,14 +54,13 @@ public readonly struct LocalRaycaster
         //     hits[index++] = mesh.Intersect(in ray, out var hit) ? hit : new RayHit();
         // }
         var rayHit = new RayHit();
-        // for (var i = 0; i < hits.Length; i++)
-        // {
-        //     var hit = hits[i];
-        //     if (rayHit.t > hit.t)
-        //     {
-        //         rayHit = hit;
-        //     }
-        // }
+        foreach (var hit in hits)
+        {
+            if (rayHit.t > hit.t)
+            {
+                rayHit = hit;
+            }
+        }
         return rayHit;
     }
 }

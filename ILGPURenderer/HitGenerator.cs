@@ -9,7 +9,7 @@ using ILGPU.Runtime;
 
 public interface IHitGenerator
 {
-    RayHit[,,] GenerateHits(SceneModel scene, Ray[,,] rays);
+    ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneModel scene, ArrayView3D<Ray, Stride3D.DenseXY> rays);
 }
 
 public class HitGenerator : IHitGenerator
@@ -34,15 +34,12 @@ public class HitGenerator : IHitGenerator
         >(GenerateHits);
     }
 
-    public RayHit[,,] GenerateHits(SceneModel scene, Ray[,,] rays)
+    public ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneModel scene, ArrayView3D<Ray, Stride3D.DenseXY> rays)
     {
-        var size = new LongIndex3D(rays.GetLength(0), rays.GetLength(1), rays.GetLength(2));
-        var rayBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<Ray>(size);
-        rayBuffer.CopyFromCPU(rays);
-        var rayHitBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<RayHit>(size);
+        var rayHitBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<RayHit>(rays.Extent);
         var raycaster = new LocalRaycaster(scene.mesh.Count);
-        hitAction(rayHitBuffer.IntExtent, rayBuffer.View, rayHitBuffer.View, scene.mesh, raycaster);
-        return rayHitBuffer.GetAsArray3D();
+        hitAction(rayHitBuffer.IntExtent, rays, rayHitBuffer.View, scene.mesh, raycaster);
+        return rayHitBuffer;
     }
 
     private static void GenerateHits(Index3D index,

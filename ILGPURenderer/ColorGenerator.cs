@@ -8,7 +8,7 @@ using ILGPU.Runtime;
 
 public interface IColorGenerator
 {
-    Color[,,] GenerateColors(RayHit[,,] hits);
+    ArrayView3D<Color, Stride3D.DenseXY> GenerateColors(ArrayView3D<RayHit, Stride3D.DenseXY> hits);
 }
 
 public class ColorGenerator : IColorGenerator
@@ -32,15 +32,12 @@ public class ColorGenerator : IColorGenerator
         >(GenerateColors);
     }
 
-    public Color[,,] GenerateColors(RayHit[,,] hits)
+    public ArrayView3D<Color, Stride3D.DenseXY> GenerateColors(ArrayView3D<RayHit, Stride3D.DenseXY> hits)
     {
-        var size = new LongIndex3D(hits.GetLength(0), hits.GetLength(1), hits.GetLength(2));
-        var hitBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<RayHit>(size);
-        hitBuffer.CopyFromCPU(hits);
-        var colorBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<Color>(size);
+        var colorBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<Color>(hits.Extent);
         var integrator = new LocalIntegrator();
-        hitAction(colorBuffer.IntExtent, hitBuffer.View, colorBuffer.View, integrator);
-        return colorBuffer.GetAsArray3D();
+        hitAction(colorBuffer.IntExtent, hits, colorBuffer.View, integrator);
+        return colorBuffer;
     }
 
     private static void GenerateColors(Index3D index,

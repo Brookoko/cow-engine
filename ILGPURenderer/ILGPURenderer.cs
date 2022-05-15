@@ -32,17 +32,9 @@
             var image = new Image(w, h);
             var sceneData = CreateSceneData(scene);
             var rays = PrimaryRayGenerator.GeneratePrimaryRays(camera);
-            var ray = rays[w / 2, h / 2, 0];
-            Console.WriteLine($"{ray.origin} -> {ray.direction}");
             var hits = HitGenerator.GenerateHits(sceneData, rays);
-            foreach (var hit in hits)
-            {
-                if (hit.HasHit)
-                {
-                    Console.WriteLine($"E");
-                }
-            }
-            var colors = ColorGenerator.GenerateColors(hits);
+            var colorsBuffer = ColorGenerator.GenerateColors(hits);
+            var colors = colorsBuffer.GetAsArray3D();
             for (var i = 0; i < w; i++)
             {
                 for (var j = 0; j < h; j++)

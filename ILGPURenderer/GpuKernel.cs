@@ -14,7 +14,7 @@
 
         public GpuKernel(KernelMode mode)
         {
-            Context = Context.Create(b => b.Cuda().EnableAlgorithms().Assertions());
+            Context = Context.Create(b => b.Cuda().EnableAlgorithms().CPU(new CPUDevice(4, 4, 1)).Assertions());
             Accelerator = mode.GetAccelerator(Context);
         }
 
