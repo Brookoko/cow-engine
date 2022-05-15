@@ -3,15 +3,13 @@
 using System;
 using Cowject;
 using CowLibrary;
-using CowLibrary.Models;
-using CowRenderer;
 using Data;
 using ILGPU;
 using ILGPU.Runtime;
 
 public interface IHitGenerator
 {
-    ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneModel scene, ArrayView3D<Ray, Stride3D.DenseXY> rays);
+    RayHit[,,] GenerateHits(SceneModel scene, Ray[,,] rays);
 }
 
 public class HitGenerator : IHitGenerator
@@ -36,12 +34,15 @@ public class HitGenerator : IHitGenerator
         >(GenerateHits);
     }
 
-    public ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneModel scene, ArrayView3D<Ray, Stride3D.DenseXY> rays)
+    public RayHit[,,] GenerateHits(SceneModel scene, Ray[,,] rays)
     {
-        var buffer = GpuKernel.Accelerator.Allocate3DDenseXY<RayHit>(rays.Extent);
+        var size = new LongIndex3D(rays.GetLength(0), rays.GetLength(1), rays.GetLength(2));
+        var rayBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<Ray>(size);
+        rayBuffer.CopyFromCPU(rays);
+        var rayHitBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<RayHit>(size);
         var raycaster = new LocalRaycaster(scene.mesh.Count);
-        hitAction(buffer.IntExtent, rays, buffer.View, scene.mesh, raycaster);
-        return buffer.View;
+        hitAction(rayHitBuffer.IntExtent, rayBuffer.View, rayHitBuffer.View, scene.mesh, raycaster);
+        return rayHitBuffer.GetAsArray3D();
     }
 
     private static void GenerateHits(Index3D index,

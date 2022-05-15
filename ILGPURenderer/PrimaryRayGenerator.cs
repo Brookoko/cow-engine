@@ -12,7 +12,7 @@ using ILGPU.Runtime;
 
 public interface IPrimaryRayGenerator
 {
-    ArrayView3D<Ray, Stride3D.DenseXY> GeneratePrimaryRays(Camera camera);
+    Ray[,,] GeneratePrimaryRays(Camera camera);
 }
 
 public class PrimaryRayGenerator : IPrimaryRayGenerator
@@ -33,18 +33,18 @@ public class PrimaryRayGenerator : IPrimaryRayGenerator
     [PostConstruct]
     public void Initialize()
     {
-        // orthographicAction = LoadActionForOrthographic();
-        // perspectiveAction = LoadActionForPerspective();
-        // realisticAction = LoadActionForRealistic();
+        orthographicAction = LoadActionForOrthographic();
+        perspectiveAction = LoadActionForPerspective();
+        realisticAction = LoadActionForRealistic();
     }
 
-    public ArrayView3D<Ray, Stride3D.DenseXY> GeneratePrimaryRays(Camera camera)
+    public Ray[,,] GeneratePrimaryRays(Camera camera)
     {
         var samples = RenderConfig.numberOfRayPerPixel;
         var size = new LongIndex3D(camera.Width, camera.Height, samples);
-        var buffer = GpuKernel.Accelerator.Allocate3DDenseXY<Ray>(size);
+        using var buffer = GpuKernel.Accelerator.Allocate3DDenseXY<Ray>(size);
         GeneratePrimaryRaysForCamera(buffer, camera);
-        return buffer;
+        return buffer.GetAsArray3D();
     }
 
     private void GeneratePrimaryRaysForCamera(in MemoryBuffer3D<Ray, Stride3D.DenseXY> buffer, Camera camera)

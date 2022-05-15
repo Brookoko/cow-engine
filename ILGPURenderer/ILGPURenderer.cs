@@ -1,5 +1,6 @@
 ﻿namespace ILGPURenderer
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Cowject;
@@ -20,6 +21,9 @@
         [Inject]
         public IHitGenerator HitGenerator { get; set; }
 
+        [Inject]
+        public IColorGenerator ColorGenerator { get; set; }
+
         public Image Render(Scene scene)
         {
             var camera = scene.MainCamera;
@@ -28,7 +32,24 @@
             var image = new Image(w, h);
             var sceneData = CreateSceneData(scene);
             var rays = PrimaryRayGenerator.GeneratePrimaryRays(camera);
+            var ray = rays[w / 2, h / 2, 0];
+            Console.WriteLine($"{ray.origin} -> {ray.direction}");
             var hits = HitGenerator.GenerateHits(sceneData, rays);
+            foreach (var hit in hits)
+            {
+                if (hit.HasHit)
+                {
+                    Console.WriteLine($"E");
+                }
+            }
+            var colors = ColorGenerator.GenerateColors(hits);
+            for (var i = 0; i < w; i++)
+            {
+                for (var j = 0; j < h; j++)
+                {
+                    image[j, i] = colors[i, j, 0];
+                }
+            }
             return image;
         }
 
@@ -94,7 +115,7 @@
         {
             return meshes.Where(m => m is T).Cast<T>().ToArray();
         }
-        
+
         private ArrayView1D<T, Stride1D.Dense> ConvertToView<T>(T[] meshes) where T : unmanaged
         {
             var buffer = GpuKernel.Accelerator.Allocate1D<T>(meshes.Length);

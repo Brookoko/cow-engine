@@ -2,6 +2,7 @@
 {
     using Cowject;
     using CowRenderer;
+    using ImageWorker;
 
     public class GpuFlow : IFlow<GpuOption>
     {
@@ -13,6 +14,9 @@
 
         [Inject]
         public ISceneLoader SceneLoader { get; set; }
+
+        [Inject]
+        public IImageWorker ImageWorker { get; set; }
 
         public int Process(GpuOption option)
         {
@@ -27,6 +31,10 @@
             Watch.Start();
             var image = Renderer.Render(scene);
             Watch.Stop("Rendering scene");
+
+            Watch.Start();
+            ImageWorker.SaveImage(in image, option.Output);
+            Watch.Stop("Saving render");
 
             return 0;
         }
