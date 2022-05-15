@@ -26,14 +26,14 @@ public class PrimaryRayGenerator : IPrimaryRayGenerator
     [Inject]
     public RenderConfig RenderConfig { get; set; }
 
-    private Action<Index3D, PrimaryRays, RayGenerationData, OrthographicCameraModel> ortographicAction;
+    private Action<Index3D, PrimaryRays, RayGenerationData, OrthographicCameraModel> orthographicAction;
     private Action<Index3D, PrimaryRays, RayGenerationData, PerspectiveCameraModel> perspectiveAction;
     private Action<Index3D, PrimaryRays, RayGenerationData, RealisticCameraModel> realisticAction;
 
     [PostConstruct]
     public void Initialize()
     {
-        ortographicAction = LoadActionForOrthographic();
+        orthographicAction = LoadActionForOrthographic();
         perspectiveAction = LoadActionForPerspective();
         realisticAction = LoadActionForRealistic();
     }
@@ -56,7 +56,7 @@ public class PrimaryRayGenerator : IPrimaryRayGenerator
         switch (model)
         {
             case OrthographicCameraModel orthographicCameraModel:
-                ortographicAction(buffer.IntExtent, rays, data, orthographicCameraModel);
+                orthographicAction(buffer.IntExtent, rays, data, orthographicCameraModel);
                 break;
             case PerspectiveCameraModel perspectiveCameraModel:
                 perspectiveAction(buffer.IntExtent, rays, data, perspectiveCameraModel);
@@ -99,9 +99,10 @@ public class PrimaryRayGenerator : IPrimaryRayGenerator
 
     private static void GeneratedPrimaryRaysKernel<TCamera>(Index3D index, PrimaryRays rays,
         RayGenerationData data, TCamera camera)
-        where TCamera : struct, ICameraModelLocal
+        where TCamera : struct, ICameraModel
     {
         var point = new Vector2(index.X + 0.5f, index.Y + 0.5f);
-        rays.data[index] = camera.Sample(in point, in data.localToWorldMatrix, in data.sampler, 1)[0];
+        var sample = data.sampler.CreateSample();
+        rays.data[index] = camera.ScreenPointToRay(in point, in data.localToWorldMatrix, in sample);
     }
 }

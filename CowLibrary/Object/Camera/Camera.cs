@@ -1,5 +1,6 @@
 namespace CowLibrary
 {
+    using System.Linq;
     using System.Numerics;
     using Models;
     using Mathematics.Sampler;
@@ -24,12 +25,17 @@ namespace CowLibrary
 
         public Ray ScreenPointToRay(in Vector2 screenPoint)
         {
-            return Model.ScreenPointToRay(in screenPoint, Transform.LocalToWorldMatrix, sampler);
+            return Model.ScreenPointToRay(in screenPoint, Transform.LocalToWorldMatrix, sampler.CreateSample());
         }
 
         public Ray[] Sample(in Vector2 screenPoint, int samples)
         {
-            return Model.Sample(in screenPoint, Transform.LocalToWorldMatrix, sampler, samples);
+            var generatedSamples = new Vector2[samples];
+            for (var i = 0; i < samples; i++)
+            {
+                generatedSamples[i] = sampler.CreateSample();
+            }
+            return Model.Sample(in screenPoint, Transform.LocalToWorldMatrix, in generatedSamples);
         }
     }
 }
