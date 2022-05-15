@@ -53,10 +53,10 @@
 
         private Scene PrepareScene(RenderableObject model)
         {
-            var scene = new AutoAdjustScene(SamplerProvider.GetSampler());
+            var scene = new AutoAdjustScene(SamplerProvider.Sampler);
             DiContainer.Inject(scene);
 
-            var light = new EnvironmentLight(new Color(255, 255, 255), 3, SamplerProvider.GetSampler());
+            var light = new EnvironmentLight(new Color(255, 255, 255), 3, SamplerProvider.Sampler);
             scene.lights.Add(light);
 
             scene.objects.Add(model);

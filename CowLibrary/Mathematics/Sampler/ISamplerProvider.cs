@@ -2,20 +2,15 @@
 
 public interface ISamplerProvider
 {
-    ISampler GetSampler();
+    ISampler Sampler { get; }
 }
 
 public class SamplerProvider : ISamplerProvider
 {
-    private readonly ISampler sampler;
+    public ISampler Sampler { get; }
 
     public SamplerProvider()
     {
-        sampler = new ThreadSafeSampler();
-    }
-
-    public ISampler GetSampler()
-    {
-        return sampler;
+        Sampler = new ThreadSafeSampler();
     }
 }

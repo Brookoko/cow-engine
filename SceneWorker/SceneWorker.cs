@@ -21,7 +21,6 @@
     using Disk = CowLibrary.Disk;
     using Light = CowLibrary.Lights.Light;
     using Color = CowLibrary.Color;
-    using Material = CowLibrary.Material;
     using SceneObject = SceneFormat.SceneObject;
     using Transform = CowLibrary.Transform;
     using Vector3 = System.Numerics.Vector3;
@@ -70,14 +69,14 @@
             switch (parsedCamera.CameraCase)
             {
                 case SceneFormat.Camera.CameraOneofCase.Perspective:
-                    return new PerspectiveCamera(RenderConfig.width, RenderConfig.height, SamplerProvider.GetSampler(),
+                    return new PerspectiveCamera(RenderConfig.width, RenderConfig.height, SamplerProvider.Sampler,
                         (float)parsedCamera.Perspective.Fov)
                     {
                         Id = parsedCamera.Id,
                         Transform = tran,
                     };
                 case SceneFormat.Camera.CameraOneofCase.Orthographic:
-                    return new OrthographicCamera(RenderConfig.width, RenderConfig.height, SamplerProvider.GetSampler())
+                    return new OrthographicCamera(RenderConfig.width, RenderConfig.height, SamplerProvider.Sampler)
                     {
                         Id = parsedCamera.Id,
                         Transform = tran,
@@ -88,7 +87,7 @@
         }
 
         private RenderableObject ConvertToObject(SceneFormat.SceneObject parsedObject,
-            Dictionary<string, Material> materials)
+            Dictionary<string, IMaterial> materials)
         {
             var tran = ConvertTransform(parsedObject.Transform);
             var mesh = GetMesh(parsedObject);
@@ -119,7 +118,7 @@
             }
         }
 
-        private Material GetMaterial(SceneObject parsedObject, Dictionary<string, Material> materials)
+        private IMaterial GetMaterial(SceneObject parsedObject, Dictionary<string, IMaterial> materials)
         {
             switch (parsedObject.ObjectMaterialCase)
             {
@@ -155,7 +154,7 @@
                         Transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Environment:
-                    return new EnvironmentLight(color, 1, SamplerProvider.GetSampler())
+                    return new EnvironmentLight(color, 1, SamplerProvider.Sampler)
                     {
                         Id = parsedLight.Id,
                     };
@@ -166,9 +165,9 @@
             }
         }
 
-        private Dictionary<string, Material> ParseMaterials(RepeatedField<SceneFormat.Material> materials)
+        private Dictionary<string, IMaterial> ParseMaterials(RepeatedField<SceneFormat.Material> materials)
         {
-            var result = new Dictionary<string, Material>();
+            var result = new Dictionary<string, IMaterial>();
             foreach (var material in materials)
             {
                 var mat = ConvertMaterial(material);
@@ -177,14 +176,14 @@
             return result;
         }
 
-        private Material ConvertMaterial(SceneFormat.Material material)
+        private IMaterial ConvertMaterial(SceneFormat.Material material)
         {
             switch (material.MaterialCase)
             {
                 case SceneFormat.Material.MaterialOneofCase.LambertReflection:
-                    return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color), 1, SamplerProvider.GetSampler());
+                    return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color), 1);
                 case SceneFormat.Material.MaterialOneofCase.SpecularReflection:
-                    return new ReflectionMaterial(1, (float)material.SpecularReflection.Eta, SamplerProvider.GetSampler());
+                    return new ReflectionMaterial(1, (float)material.SpecularReflection.Eta);
                 default:
                     throw new Exception("Unsupported material");
             }

@@ -8,6 +8,7 @@ namespace CowRenderer.Integration
     using Cowject;
     using CowLibrary;
     using CowLibrary.Lights;
+    using CowLibrary.Mathematics.Sampler;
 
     public class MaterialIntegrator : IIntegrator
     {
@@ -17,6 +18,9 @@ namespace CowRenderer.Integration
         [Inject]
         public RenderConfig RenderConfig { get; set; }
 
+        [Inject]
+        public ISamplerProvider SamplerProvider { get; set; }
+        
         public Color GetColor(Scene scene, in Surfel surfel)
         {
             if (!surfel.hasHit)
@@ -54,7 +58,8 @@ namespace CowRenderer.Integration
             var n = RenderConfig.numberOfRayPerLight;
             for (var i = 0; i < n; i++)
             {
-                var f = surfel.material.Sample(in surfel.hit.normal, in surfel.ray, out var wi, out var pdf);
+                var sample = SamplerProvider.Sampler.CreateSample();
+                var f = surfel.material.Sample(in surfel.hit.normal, in surfel.ray, out var wi, in sample, out var pdf);
                 if (pdf > 0 && f > 0)
                 {
                     result += f * pdf * Trace(in surfel, light, wi, depth);

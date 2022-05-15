@@ -1,27 +1,27 @@
 namespace CowLibrary
 {
     using System.Numerics;
-    using Mathematics.Sampler;
 
-    public class FresnelMaterial : Material
+    public readonly struct FresnelMaterial : IMaterial
     {
-        private readonly ISampler sampler;
+        public Color Color { get; }
+
         private readonly IBrdf brdf;
 
-        public FresnelMaterial(float r, float t, float eta, ISampler sampler) : base(Color.White)
+        public FresnelMaterial(float r, float t, float eta)
         {
-            this.sampler = sampler;
+            Color = Color.White;
             brdf = new FresnelSpecularBrdf(r, t, 1, eta, TransportMode.Importance);
         }
 
-        public override Color GetColor(in Vector3 wo, in Vector3 wi)
+        public Color GetColor(in Vector3 wo, in Vector3 wi)
         {
             return brdf.Evaluate(in wo, in wi) * Color;
         }
 
-        public override float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, out float pdf)
+        public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
         {
-            return brdf.Sample(in normal, in wo, out wi, sampler.CreateSample(), out pdf);
+            return brdf.Sample(in normal, in wo, out wi, in sample, out pdf);
         }
     }
 }
