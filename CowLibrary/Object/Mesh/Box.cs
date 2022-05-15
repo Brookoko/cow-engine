@@ -5,8 +5,7 @@ namespace CowLibrary
 
     public struct Box : IMesh
     {
-        public Bound BoundingBox { get; }
-
+        private readonly Bound bound;
         private Vector3 center;
         private Vector3 min;
         private Vector3 max;
@@ -18,7 +17,7 @@ namespace CowLibrary
             this.max = max;
             center = new Vector3((min.X + max.X) * 0.5f, (min.Y + max.Y) * 0.5f, (min.Z + max.Z) * 0.5f);
             size = max - center;
-            BoundingBox = new Bound(min, max);
+            bound = new Bound(min, max);
         }
 
         public Box(Vector3 size)
@@ -27,41 +26,39 @@ namespace CowLibrary
             center = Vector3.Zero;
             min = center - size;
             max = center + size;
-            BoundingBox = new Bound(min, max);
+            bound = new Bound(min, max);
         }
 
-        public readonly RayHit? Intersect(in Ray ray)
+        public readonly RayHit Intersect(in Ray ray)
         {
-            var surfel = BoundingBox.Intersect(in ray);
-            if (!surfel.HasValue)
-            {
-                return null;
-            }
-            return surfel.Value with { normal = GetNormal(surfel.Value.point) };
+            var hit = bound.Intersect(in ray);
+            return new RayHit(hit.t, hit.point, GetNormal(hit.point));
         }
 
         private readonly Vector3 GetNormal(in Vector3 point)
         {
             var localPoint = point - center;
             var min = Math.Abs(size.X - Math.Abs(localPoint.X));
-            var normal = Vector3.UnitX;
-            normal *= Math.Sign(localPoint.X);
+            var normal = localPoint.X >= 0 ? Vector3.UnitX : -Vector3.UnitX;
 
             var dist = Math.Abs(size.Y - Math.Abs(localPoint.Y));
             if (dist < min)
             {
                 min = dist;
-                normal = Vector3.UnitY;
-                normal *= Math.Sign(localPoint.Y);
+                normal = localPoint.Y >= 0 ? Vector3.UnitY : -Vector3.UnitY;
             }
             dist = Math.Abs(size.Z - Math.Abs(localPoint.Z));
             if (dist < min)
             {
                 min = dist;
-                normal = Vector3.UnitZ;
-                normal *= Math.Sign(localPoint.Z);
+                normal = localPoint.Z >= 0 ? Vector3.UnitZ : -Vector3.UnitZ;
             }
             return normal;
+        }
+
+        public readonly Bound GetBoundingBox()
+        {
+            return bound;
         }
 
         public void Apply(in Matrix4x4 matrix)

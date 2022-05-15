@@ -5,16 +5,15 @@ namespace CowLibrary
 
     public struct Sphere : IMesh
     {
-        public Bound BoundingBox { get; private set; }
-
-        private float radius;
+        private Bound bound;
         private Vector3 center;
+        private float radius;
 
         public Sphere(float radius) : this()
         {
             this.radius = radius;
             center = Vector3.Zero;
-            BoundingBox = CreateBound();
+            bound = CreateBound();
         }
 
         private Bound CreateBound()
@@ -22,7 +21,7 @@ namespace CowLibrary
             return new Bound(center, radius * 2);
         }
 
-        public readonly RayHit? Intersect(in Ray ray)
+        public readonly RayHit Intersect(in Ray ray)
         {
             var f1 = ray.origin.X - center.X;
             var f2 = ray.origin.Y - center.Y;
@@ -36,7 +35,7 @@ namespace CowLibrary
             var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;
             if (discriminant < 0)
             {
-                return null;
+                return new RayHit();
             }
 
             float t;
@@ -54,26 +53,26 @@ namespace CowLibrary
                 k2 = k2 > 0 ? k2 : k1;
                 if (k2 < 0)
                 {
-                    return null;
+                    return new RayHit();
                 }
 
                 t = (float)Math.Min(k1, k2);
             }
 
             var p = ray.GetPoint(t);
-            return new RayHit()
-            {
-                point = p,
-                normal = (p - center).Normalize(),
-                t = t
-            };
+            return new RayHit(t, p, (p - center).Normalize());
+        }
+
+        public Bound GetBoundingBox()
+        {
+            return bound;
         }
 
         public void Apply(in Matrix4x4 matrix)
         {
             center = matrix.MultiplyPoint(center);
             radius = matrix.ExtractScale().Min() * radius;
-            BoundingBox = CreateBound();
+            bound = CreateBound();
         }
     }
 }

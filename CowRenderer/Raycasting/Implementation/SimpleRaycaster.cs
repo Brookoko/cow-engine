@@ -14,27 +14,20 @@ namespace CowRenderer.Raycasting
 
         public Surfel Raycast(in Ray ray)
         {
-            var bestHit = new RayHit() { t = float.MaxValue };
-            var intersected = false;
+            var bestHit = new RayHit();
             var hitIndex = 0;
             for (var i = 0; i < objects.Count; i++)
             {
                 var obj = objects[i];
                 var hit = obj.Mesh.Intersect(in ray);
-                if (!hit.HasValue)
+                if (bestHit.t > hit.t)
                 {
-                    continue;
-                }
-                if (!intersected || bestHit.t > hit.Value.t)
-                {
-                    bestHit = hit.Value;
-                    intersected = true;
+                    bestHit = hit;
                     hitIndex = i;
                 }
             }
             return new Surfel()
             {
-                hasHit = intersected,
                 hit = bestHit,
                 material = objects[hitIndex].Material,
                 ray = ray.direction

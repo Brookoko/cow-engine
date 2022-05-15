@@ -4,13 +4,13 @@ namespace CowLibrary
 
     public interface IMesh : IIntersectable
     {
-        public Bound BoundingBox { get; }
+        public Bound GetBoundingBox();
 
         public void Apply(in Matrix4x4 matrix);
     }
 
     public interface IIntersectable
     {
-        public RayHit? Intersect(in Ray ray);
+        public RayHit Intersect(in Ray ray);
     }
 }

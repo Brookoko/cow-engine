@@ -1,62 +1,59 @@
 namespace CowLibrary
 {
-    public readonly struct KdNode : IIntersectable
+    public readonly struct KdNode
     {
+        private const int ChildCount = 3;
+        
         public readonly TriangleMesh mesh;
-        public readonly KdNode[] children;
         public readonly Bound bound;
+        public readonly int index;
 
         public KdNode(Triangle[] triangles)
         {
             mesh = new TriangleMesh(triangles);
-            children = new KdNode[0];
-            bound = mesh.BoundingBox;
+            bound = mesh.GetBoundingBox();
+            index = -1;
         }
 
-        public KdNode(in Triangle[] triangles, KdNode leftNode, KdNode middleNode, KdNode rightNode)
+        public KdNode(in Triangle[] triangles, int index)
         {
-            mesh = default;
+            mesh = new TriangleMesh();
             bound = IntersectionHelper.CreateBound(triangles);
-            children = new KdNode[3];
-            children[0] = leftNode;
-            children[1] = middleNode;
-            children[2] = rightNode;
+            this.index = index;
         }
 
-        public RayHit? Intersect(in Ray ray)
+        public RayHit Intersect(in Ray ray, in KdNode[] nodes)
         {
-            if (children.Length == 0 && mesh.triangles.Length == 0)
+            if (!HasChildren() && mesh.triangles.Length == 0)
             {
-                return null;
+                return new RayHit();
             }
-            var surfel = bound.Intersect(in ray);
-            if (!surfel.HasValue)
+            var boundHit = bound.Intersect(in ray);
+            if (!boundHit.HasHit)
             {
-                return null;
+                return boundHit;
             }
-            return HasChildren() ? IntersectChildren(in ray) : mesh.Intersect(in ray);
+            return HasChildren() ? IntersectChildren(in ray, in nodes) : mesh.Intersect(in ray);
         }
 
         private bool HasChildren()
         {
-            return children.Length > 0;
+            return index >= 0;
         }
 
-        private RayHit? IntersectChildren(in Ray ray)
+        private RayHit IntersectChildren(in Ray ray, in KdNode[] nodes)
         {
-            RayHit? surfel = null;
-            foreach (var child in children)
+            var hit = new RayHit();
+            for (var i = 1; i <= ChildCount; i++)
             {
-                var s = child.Intersect(in ray);
-                if (s.HasValue)
+                var child = nodes[ChildCount * index + i];
+                var cHit = child.Intersect(in ray, in nodes);
+                if (hit.t > cHit.t)
                 {
-                    if (!surfel.HasValue || surfel.Value.t > s.Value.t)
-                    {
-                        surfel = s;
-                    }
+                    hit = cHit;
                 }
             }
-            return surfel;
+            return hit;
         }
     }
 }

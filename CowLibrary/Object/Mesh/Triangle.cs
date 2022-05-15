@@ -5,7 +5,7 @@ namespace CowLibrary
 
     public struct Triangle : IMesh
     {
-        public Bound BoundingBox { get; private set; }
+        private Bound bound;
 
         private Vector3 v0;
         private Vector3 v1;
@@ -20,7 +20,7 @@ namespace CowLibrary
             this.v0 = v0;
             this.v1 = v1;
             this.v2 = v2;
-            BoundingBox = CreateBound();
+            bound = CreateBound();
         }
 
         private Bound CreateBound()
@@ -50,7 +50,7 @@ namespace CowLibrary
             n0 = n1 = n2 = n;
         }
 
-        public readonly RayHit? Intersect(in Ray ray)
+        public readonly RayHit Intersect(in Ray ray)
         {
             var edge1 = v1 - v0;
             var edge2 = v2 - v0;
@@ -59,7 +59,7 @@ namespace CowLibrary
             var a = Vector3.Dot(edge1, h);
             if (Math.Abs(a) < Const.Epsilon)
             {
-                return null;
+                return new RayHit();
             }
 
             var f = 1f / a;
@@ -67,28 +67,29 @@ namespace CowLibrary
             var u = f * Vector3.Dot(s, h);
             if (u < 0 || u > 1)
             {
-                return null;
+                return new RayHit();
             }
 
             var q = Vector3.Cross(s, edge1);
             var v = f * Vector3.Dot(ray.direction, q);
             if (v < 0 || u + v > 1)
             {
-                return null;
+                return new RayHit();
             }
 
             var t = f * Vector3.Dot(edge2, q);
             if (t <= 0)
             {
-                return null;
+                return new RayHit();
             }
 
-            return new RayHit()
-            {
-                point = ray.GetPoint(t),
-                normal = n0 * (1 - u - v) + n1 * u + n2 * v,
-                t = t
-            };
+            var normal = n0 * (1 - u - v) + n1 * u + n2 * v;
+            return new RayHit(t, ray.GetPoint(t), normal);
+        }
+
+        public Bound GetBoundingBox()
+        {
+            return bound;
         }
 
         public void Apply(in Matrix4x4 matrix)
@@ -99,7 +100,7 @@ namespace CowLibrary
             n0 = matrix.MultiplyVector(n0).Normalize();
             n1 = matrix.MultiplyVector(n1).Normalize();
             n2 = matrix.MultiplyVector(n2).Normalize();
-            BoundingBox = CreateBound();
+            bound = CreateBound();
         }
     }
 }

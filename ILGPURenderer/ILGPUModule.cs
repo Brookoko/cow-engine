@@ -11,6 +11,7 @@
             container.Bind<GpuKernel>().ToInstance(gpuKernel);
             container.Bind<IRenderer>().WithName(KernelMode.Gpu).To<ILGPURenderer>().ToSingleton();
             container.Bind<IPrimaryRayGenerator>().To<PrimaryRayGenerator>().ToSingleton();
+            container.Bind<IHitGenerator>().To<HitGenerator>().ToSingleton();
             container.Bind<ILocalSamplerProvider>().To<LocalSamplerProvider>().ToSingleton();
         }
     }

@@ -26,7 +26,7 @@ public struct Bound : IIntersectable
         max = center + size;
     }
 
-    public readonly RayHit? Intersect(in Ray ray)
+    public readonly RayHit Intersect(in Ray ray)
     {
         var invdir = new Vector3(1 / ray.direction.X, 1 / ray.direction.Y, 1 / ray.direction.Z);
 
@@ -42,7 +42,7 @@ public struct Bound : IIntersectable
 
         if (tmin > tymax || tymin > tmax)
         {
-            return null;
+            return new RayHit();
         }
         tmin = Math.Max(tmin, tymin);
         tmax = Math.Min(tmax, tymax);
@@ -54,7 +54,7 @@ public struct Bound : IIntersectable
 
         if (tmin > tzmax || tzmin > tmax)
         {
-            return null;
+            return new RayHit();
         }
         tmin = Math.Max(tmin, tzmin);
         tmax = Math.Min(tmax, tzmax);
@@ -64,7 +64,7 @@ public struct Bound : IIntersectable
         {
             if (tmax < 0)
             {
-                return null;
+                return new RayHit();
             }
             t = tmax;
         }
@@ -75,10 +75,6 @@ public struct Bound : IIntersectable
 
         var p = ray.GetPoint(t);
 
-        return new RayHit()
-        {
-            t = t,
-            point = p,
-        };
+        return new RayHit(t, p, Vector3.Zero);
     }
 }

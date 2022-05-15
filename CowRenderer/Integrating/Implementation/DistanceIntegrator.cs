@@ -16,7 +16,7 @@ namespace CowRenderer.Integration
 
         public Color GetColor(Scene scene, in Surfel surfel)
         {
-            if (!surfel.hasHit)
+            if (!surfel.hit.HasHit)
             {
                 return negativeColor;
             }

@@ -4,8 +4,7 @@ namespace CowLibrary
 
     public struct Plane : IMesh
     {
-        public Bound BoundingBox { get; private set; }
-
+        private Bound bound;
         private Vector3 normal;
         private Vector3 point;
 
@@ -14,7 +13,7 @@ namespace CowLibrary
             this = default;
             normal = -Vector3.UnitY;
             point = Vector3.Zero;
-            BoundingBox = CreateBound();
+            bound = CreateBound();
         }
 
         private Bound CreateBound()
@@ -22,32 +21,32 @@ namespace CowLibrary
             return new Bound(point, 1000);
         }
 
-        public readonly RayHit? Intersect(in Ray ray)
+        public readonly RayHit Intersect(in Ray ray)
         {
             var dot = Vector3.Dot(normal, ray.direction);
             if (dot <= Const.Epsilon)
             {
-                return null;
+                return new RayHit();
             }
             var dir = point - ray.origin;
             var t = Vector3.Dot(dir, normal) / dot;
             if (t <= 0)
             {
-                return null;
+                return new RayHit();
             }
-            return new RayHit()
-            {
-                t = t,
-                point = ray.GetPoint(t),
-                normal = -normal
-            };
+            return new RayHit(t, ray.GetPoint(t), -normal);
+        }
+        
+        public readonly Bound GetBoundingBox()
+        {
+            return bound;
         }
 
         public void Apply(in Matrix4x4 matrix)
         {
             normal = matrix.MultiplyVector(normal).Normalize();
             point = matrix.MultiplyPoint(point);
-            BoundingBox = CreateBound();
+            bound = CreateBound();
         }
     }
 }

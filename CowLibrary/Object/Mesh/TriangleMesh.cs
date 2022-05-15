@@ -1,42 +1,41 @@
 namespace CowLibrary
 {
-    using System;
-    using System.Linq;
     using System.Numerics;
 
     public struct TriangleMesh : IMesh
     {
-        public Bound BoundingBox { get; private set; }
-
         public readonly Triangle[] triangles;
+        private Bound bound;
 
         public TriangleMesh()
         {
             triangles = new Triangle[0];
-            BoundingBox = new Bound();
+            bound = new Bound();
         }
-        
+
         public TriangleMesh(Triangle[] triangles) : this()
         {
             this.triangles = triangles;
-            BoundingBox = IntersectionHelper.CreateBound(triangles);
+            bound = IntersectionHelper.CreateBound(triangles);
         }
 
-        public readonly RayHit? Intersect(in Ray ray)
+        public readonly RayHit Intersect(in Ray ray)
         {
-            RayHit? surfel = null;
-            foreach (var t in triangles)
+            var hit = new RayHit();
+            for (var i = 0; i < triangles.Length; i++)
             {
-                var s = t.Intersect(in ray);
-                if (s.HasValue)
+                var tHit = triangles[i].Intersect(in ray);
+                if (hit.t > tHit.t)
                 {
-                    if (!surfel.HasValue || surfel.Value.t > s.Value.t)
-                    {
-                        surfel = s;
-                    }
+                    hit = tHit;
                 }
             }
-            return surfel;
+            return hit;
+        }
+
+        public Bound GetBoundingBox()
+        {
+            return bound;
         }
 
         public void Apply(in Matrix4x4 matrix)
@@ -45,7 +44,7 @@ namespace CowLibrary
             {
                 triangle.Apply(in matrix);
             }
-            BoundingBox = IntersectionHelper.CreateBound(triangles);
+            bound = IntersectionHelper.CreateBound(triangles);
         }
     }
 }

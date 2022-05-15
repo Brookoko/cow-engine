@@ -8,7 +8,7 @@ namespace CowLibrary
     public class SceneNode
     {
         public readonly List<RenderableObject> objects;
-        public readonly List<SceneNode> children = new List<SceneNode>();
+        public readonly List<SceneNode> children = new();
         private readonly Box box;
 
         public SceneNode(List<RenderableObject> objects)
@@ -21,7 +21,7 @@ namespace CowLibrary
         {
             var min = Vector3.One * float.MaxValue;
             var max = Vector3.One * float.MinValue;
-            foreach (var b in objects.Select(obj => obj.Mesh.BoundingBox))
+            foreach (var b in objects.Select(obj => obj.Mesh.GetBoundingBox()))
             {
                 min.X = Math.Min(min.X, b.min.X);
                 min.Y = Math.Min(min.Y, b.min.Y);
@@ -39,8 +39,8 @@ namespace CowLibrary
             {
                 return null;
             }
-            var surfel = box.Intersect(in ray);
-            if (!surfel.HasValue)
+            var boxHit = box.Intersect(in ray);
+            if (!boxHit.HasHit)
             {
                 return null;
             }
@@ -67,21 +67,15 @@ namespace CowLibrary
 
         private Surfel? IntersectObjects(in Ray ray)
         {
-            var bestHit = new RayHit() { t = float.MaxValue };
-            var intersected = false;
+            var bestHit = new RayHit();
             var hitIndex = 0;
             for (var i = 0; i < objects.Count; i++)
             {
                 var obj = objects[i];
-                var hit = obj.Mesh.Intersect(in ray);
-                if (!hit.HasValue)
+                var oHit = obj.Mesh.Intersect(in ray);
+                if (bestHit.t > oHit.t)
                 {
-                    continue;
-                }
-                if (!intersected || bestHit.t > hit.Value.t)
-                {
-                    bestHit = hit.Value;
-                    intersected = true;
+                    bestHit = oHit;
                     hitIndex = i;
                 }
             }
@@ -91,7 +85,7 @@ namespace CowLibrary
                 material = objects[hitIndex].Material,
                 ray = ray.direction
             };
-            return intersected ? surfel : null;
+            return bestHit.HasHit ? surfel : null;
         }
     }
 }
