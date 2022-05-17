@@ -11,7 +11,7 @@ public readonly struct LocalRaycaster
     {
         count = 3;
     }
-    
+
     public LocalRaycaster(long count)
     {
         this.count = count;
@@ -49,10 +49,10 @@ public readonly struct LocalRaycaster
         {
             hits[index++] = meshes.triangleMeshes[i].Intersect(in ray, in meshes.triangles);
         }
-        // foreach (var mesh in meshes.optimizedMeshes)
-        // {
-        //     hits[index++] = mesh.Intersect(in ray, out var hit) ? hit : new RayHit();
-        // }
+        for (var i = 0; i < meshes.trees.Length; i++)
+        {
+            hits[index++] = meshes.trees[i].Intersect(in ray, in meshes.triangles, in meshes.nodes);
+        }
         var rayHit = Const.Miss;
         foreach (var hit in hits)
         {

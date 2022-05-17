@@ -5,7 +5,7 @@ namespace CowLibrary
     public struct OptimizedMesh : IMesh
     {
         public readonly TriangleMesh mesh;
-        private KdTree tree;
+        public KdTree tree;
 
         public OptimizedMesh(Triangle[] triangles)
         {

@@ -15,5 +15,11 @@ namespace CowLibrary
         public const float Epsilon = 1e-10f;
 
         public static readonly RayHit Miss = new();
+
+        public const int KdNodeCount = 3;
+
+        public const int MinNumberOfTriangles = 8;
+
+        public const int MaxDepth = 8;
     }
 }

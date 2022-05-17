@@ -22,7 +22,6 @@
         {
             Watch.Start();
             var scene = SceneLoader.LoadSceneFromOptions(option);
-            scene.objects.RemoveAt(0);
             Watch.Stop("Loading scene");
 
             Watch.Start();

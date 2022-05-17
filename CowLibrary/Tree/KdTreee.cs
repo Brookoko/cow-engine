@@ -2,7 +2,7 @@ namespace CowLibrary
 {
     public readonly struct KdTree : IIntersectable
     {
-        private readonly KdNode[] nodes;
+        public readonly KdNode[] nodes;
 
         public KdTree(KdNode[] nodes) : this()
         {

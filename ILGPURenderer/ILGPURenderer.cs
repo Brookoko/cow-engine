@@ -32,8 +32,11 @@
             var image = new Image(w, h);
             var sceneData = CreateSceneData(scene);
             var rays = PrimaryRayGenerator.GeneratePrimaryRays(camera);
+            GpuKernel.Accelerator.Synchronize();
             var hits = HitGenerator.GenerateHits(sceneData, rays);
+            GpuKernel.Accelerator.Synchronize();
             var colorsBuffer = ColorGenerator.GenerateColors(hits);
+            GpuKernel.Accelerator.Synchronize();
             var colors = colorsBuffer.GetAsArray3D();
             for (var i = 0; i < w; i++)
             {
@@ -58,11 +61,13 @@
             var planes = LoadMesh<Plane>(meshes);
             var spheres = LoadMesh<Sphere>(meshes);
             var triangleObjects = LoadMesh<Triangle>(meshes);
-            var triangles = LoadTriangles(meshes);
-            var triangleMeshes = LoadTriangleMeshes(meshes);
-            // var triangleMeshes = LoadMesh<TriangleMesh>(meshes);
-            // var optimizedMeshes = LoadMesh<OptimizedMesh>(meshes);
-            return new MeshModel(boxes, disks, planes, spheres, triangleObjects, triangles, triangleMeshes);
+            var (triangles, triangleMeshes, trees, nodes) = LoadTriangles(meshes);
+            var trianglesView = ConvertToView(triangles.ToArray());
+            var triangleMeshesView = ConvertToView(triangleMeshes.ToArray());
+            var treesView = ConvertToView(trees.ToArray());
+            var nodesView = ConvertToView(nodes.ToArray());
+            return new MeshModel(boxes, disks, planes, spheres, triangleObjects, trianglesView, triangleMeshesView,
+                treesView, nodesView);
         }
 
         private ArrayView1D<T, Stride1D.Dense> LoadMesh<T>(IMesh[] meshes) where T : unmanaged, IMesh
@@ -71,36 +76,61 @@
             return ConvertToView(foundMeshes);
         }
 
-        private ArrayView1D<Triangle, Stride1D.Dense> LoadTriangles(IMesh[] meshes)
+        private (
+            List<Triangle> triangles,
+            List<TriangleMeshModel> triangleMeshModels,
+            List<KdTreeModel> trees,
+            List<KdNodeModel> nodes) LoadTriangles(IMesh[] meshes)
         {
             var triangleMeshes = FindMeshes<TriangleMesh>(meshes);
             var optimizedMeshes = FindMeshes<OptimizedMesh>(meshes);
             var triangles = new List<Triangle>();
-            foreach (var triangleMesh in triangleMeshes)
-            {
-                triangles.AddRange(triangleMesh.triangles);
-            }
-            foreach (var triangleMesh in optimizedMeshes)
-            {
-                triangles.AddRange(triangleMesh.mesh.triangles);
-            }
-            return ConvertToView(triangles.ToArray());
+            var (trees, nodes) = LoadOptimizedMeshes(optimizedMeshes, triangles);
+            var triangleMeshModels = LoadTriangleMeshes(triangleMeshes, triangles);
+            return (triangles, triangleMeshModels, trees, nodes);
         }
 
-        private ArrayView1D<TriangleMeshModel, Stride1D.Dense> LoadTriangleMeshes(IMesh[] meshes)
+        private (List<KdTreeModel> trees, List<KdNodeModel> nodes) LoadOptimizedMeshes(
+            OptimizedMesh[] optimizedMeshes, List<Triangle> triangles)
         {
-            var triangleMeshes = FindMeshes<TriangleMesh>(meshes);
-            var triangleMeshModels = new TriangleMeshModel[triangleMeshes.Length];
-            var offset = 0;
-            for (var i = 0; i < triangleMeshes.Length; i++)
+            var trees = new List<KdTreeModel>();
+            var nodes = new List<KdNodeModel>();
+            var triangleOffset = triangles.Count;
+            var indexOffset = 0;
+            for (var i = 0; i < optimizedMeshes.Length; i++)
             {
-                var triangleMesh = triangleMeshes[i];
+                var tree = optimizedMeshes[i].tree;
+                foreach (var node in tree.nodes)
+                {
+                    if (node.mesh.triangles != null)
+                    {
+                        triangles.AddRange(node.mesh.triangles);
+                    }
+                    var trianglesLength = node.mesh.triangles?.Length ?? 0;
+                    var model = new KdNodeModel(node.bound, node.index, triangleOffset, trianglesLength);
+                    nodes.Add(model);
+                    triangleOffset += trianglesLength;
+                }
+                var treeModel = new KdTreeModel(indexOffset);
+                trees.Add(treeModel);
+                indexOffset += tree.nodes.Length;
+            }
+            return (trees, nodes);
+        }
+
+        private List<TriangleMeshModel> LoadTriangleMeshes(TriangleMesh[] triangleMeshes, List<Triangle> triangles)
+        {
+            var triangleMeshModels = new List<TriangleMeshModel>(triangleMeshes.Length);
+            var offset = triangles.Count;
+            foreach (var triangleMesh in triangleMeshes)
+            {
                 var count = triangleMesh.triangles.Length;
                 var model = new TriangleMeshModel(offset, count);
+                triangleMeshModels.Add(model);
+                triangles.AddRange(triangleMesh.triangles);
                 offset += count;
-                triangleMeshModels[i] = model;
             }
-            return ConvertToView(triangleMeshModels);
+            return triangleMeshModels;
         }
 
         private T[] FindMeshes<T>(IMesh[] meshes) where T : struct, IMesh

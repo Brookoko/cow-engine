@@ -6,8 +6,7 @@ using System.Numerics;
 
 public class KdTreeBuilder
 {
-    private const int MinNumberOfTriangles = 8;
-    private const int MaxDepth = 8;
+    private static readonly KdNode EmptyNode = new KdNode();
 
     public static KdTree Build(in Triangle[] triangles)
     {
@@ -18,7 +17,7 @@ public class KdTreeBuilder
 
     private static void BuildNode(in Triangle[] triangles, List<KdNode> nodes, int depth, int count)
     {
-        if (triangles.Length <= MinNumberOfTriangles || depth >= MaxDepth)
+        if (triangles.Length <= Const.MinNumberOfTriangles || depth >= Const.MaxDepth)
         {
             AddNode(nodes, new KdNode(triangles), count);
             return;
@@ -49,7 +48,7 @@ public class KdTreeBuilder
         {
             for (var i = 0; i < nodesToFill; i++)
             {
-                nodes.Add(new KdNode());
+                nodes.Add(EmptyNode);
             }
         }
         nodes[count] = node;
