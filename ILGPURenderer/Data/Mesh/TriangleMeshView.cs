@@ -4,12 +4,12 @@ using CowLibrary;
 using ILGPU;
 using ILGPU.Runtime;
 
-public readonly struct TriangleMeshModel
+public readonly struct TriangleMeshView
 {
     public readonly int trianglesOffset;
     public readonly int trianglesCount;
 
-    public TriangleMeshModel(int trianglesOffset, int trianglesCount)
+    public TriangleMeshView(int trianglesOffset, int trianglesCount)
     {
         this.trianglesOffset = trianglesOffset;
         this.trianglesCount = trianglesCount;

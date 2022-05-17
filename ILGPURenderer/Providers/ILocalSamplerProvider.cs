@@ -10,7 +10,7 @@ public interface ILocalSamplerProvider
     LocalSampler GetSampler();
 }
 
-public class LocalSamplerProvider : ILocalSamplerProvider
+public class LocalSamplerProvider : ILocalSamplerProvider, IDisposable
 {
     [Inject]
     public GpuKernel GpuKernel { get; set; }

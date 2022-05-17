@@ -10,12 +10,12 @@ using Data;
 using ILGPU;
 using ILGPU.Runtime;
 
-public interface IPrimaryRayGenerator
+public interface IPrimaryRayKernel
 {
     ArrayView3D<Ray, Stride3D.DenseXY> GeneratePrimaryRays(Camera camera);
 }
 
-public class PrimaryRayGenerator : IPrimaryRayGenerator
+public class PrimaryRayKernel : IPrimaryRayKernel
 {
     [Inject]
     public GpuKernel GpuKernel { get; set; }

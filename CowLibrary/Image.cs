@@ -7,9 +7,13 @@ namespace CowLibrary
 
         private readonly Color[,] data;
 
-        public Image(int w, int h)
+        public Image(int w, int h) : this(new Color[h, w])
         {
-            data = new Color[h, w];
+        }
+
+        public Image(Color[,] colors)
+        {
+            data = colors;
         }
 
         public Color this[int i, int j]

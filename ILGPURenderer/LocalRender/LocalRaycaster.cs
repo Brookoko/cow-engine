@@ -17,7 +17,7 @@ public readonly struct LocalRaycaster
         this.count = count;
     }
 
-    public RayHit Raycast(in MeshModel meshes, in Ray ray)
+    public RayHit Raycast(in MeshView meshes, in Ray ray)
     {
         var index = 0;
         var hits = new RayHit[10];

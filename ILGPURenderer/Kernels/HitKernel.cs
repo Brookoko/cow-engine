@@ -7,12 +7,12 @@ using Data;
 using ILGPU;
 using ILGPU.Runtime;
 
-public interface IHitGenerator
+public interface IHitKernel
 {
-    ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneModel scene, ArrayView3D<Ray, Stride3D.DenseXY> rays);
+    ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneView scene, ArrayView3D<Ray, Stride3D.DenseXY> rays);
 }
 
-public class HitGenerator : IHitGenerator
+public class HitKernel : IHitKernel
 {
     [Inject]
     public GpuKernel GpuKernel { get; set; }
@@ -20,7 +20,7 @@ public class HitGenerator : IHitGenerator
     private Action<Index3D,
         ArrayView3D<Ray, Stride3D.DenseXY>,
         ArrayView3D<RayHit, Stride3D.DenseXY>,
-        MeshModel, LocalRaycaster> hitAction;
+        MeshView, LocalRaycaster> hitAction;
 
     [PostConstruct]
     public void Initialize()
@@ -29,12 +29,12 @@ public class HitGenerator : IHitGenerator
             Index3D,
             ArrayView3D<Ray, Stride3D.DenseXY>,
             ArrayView3D<RayHit, Stride3D.DenseXY>,
-            MeshModel,
+            MeshView,
             LocalRaycaster
         >(GenerateHits);
     }
 
-    public ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneModel scene, ArrayView3D<Ray, Stride3D.DenseXY> rays)
+    public ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneView scene, ArrayView3D<Ray, Stride3D.DenseXY> rays)
     {
         var rayHitBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<RayHit>(rays.Extent);
         var raycaster = new LocalRaycaster(scene.mesh.count);
@@ -45,7 +45,7 @@ public class HitGenerator : IHitGenerator
     private static void GenerateHits(Index3D index,
         ArrayView3D<Ray, Stride3D.DenseXY> rays,
         ArrayView3D<RayHit, Stride3D.DenseXY> hits,
-        MeshModel mesh, LocalRaycaster raycaster)
+        MeshView mesh, LocalRaycaster raycaster)
     {
         hits[index] = raycaster.Raycast(in mesh, in rays[index]);
     }

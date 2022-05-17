@@ -22,6 +22,13 @@
             Accelerator = mode.GetAccelerator(Context);
         }
 
+        public ArrayView1D<T, Stride1D.Dense> ConvertToView<T>(T[] array) where T : unmanaged
+        {
+            var buffer = Accelerator.Allocate1D<T>(array.Length);
+            buffer.CopyFromCPU(array);
+            return buffer.View;
+        }
+
         public void Dispose()
         {
             Accelerator.Dispose();

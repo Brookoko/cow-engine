@@ -6,7 +6,7 @@ namespace CowLibrary
     {
         public Color Color { get; }
 
-        private readonly IBrdf brdf;
+        private readonly LambertianBrdf brdf;
 
         public DiffuseMaterial(Color color, float r)
         {

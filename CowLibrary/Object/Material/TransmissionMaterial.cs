@@ -6,7 +6,7 @@ namespace CowLibrary
     {
         public Color Color { get; }
 
-        private readonly IBrdf brdf;
+        private readonly SpecularTransmissionBrdf brdf;
 
         public TransmissionMaterial(float t, float eta)
         {

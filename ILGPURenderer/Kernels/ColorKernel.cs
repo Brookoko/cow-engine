@@ -6,12 +6,12 @@ using CowLibrary;
 using ILGPU;
 using ILGPU.Runtime;
 
-public interface IColorGenerator
+public interface IColorKernel
 {
     ArrayView3D<Color, Stride3D.DenseXY> GenerateColors(ArrayView3D<RayHit, Stride3D.DenseXY> hits);
 }
 
-public class ColorGenerator : IColorGenerator
+public class ColorKernel : IColorKernel
 {
     [Inject]
     public GpuKernel GpuKernel { get; set; }
