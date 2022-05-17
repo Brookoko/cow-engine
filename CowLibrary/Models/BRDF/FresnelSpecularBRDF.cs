@@ -5,8 +5,8 @@ namespace CowLibrary
     public readonly struct FresnelSpecularBrdf : IBrdf
     {
         private readonly DielectricFresnel fresnel;
-        private readonly IBrdf reflection;
-        private readonly IBrdf transmission;
+        private readonly SpecularReflectionBrdf reflection;
+        private readonly SpecularTransmissionBrdf transmission;
 
         public FresnelSpecularBrdf(float r, float t, float etaA, float etaB, TransportMode mode)
         {

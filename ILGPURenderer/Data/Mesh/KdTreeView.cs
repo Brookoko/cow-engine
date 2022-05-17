@@ -14,15 +14,15 @@ public readonly struct KdTreeView
     }
 
     public RayHit Intersect(in Ray ray,
-        in ArrayView1D<Triangle, Stride1D.Dense> triangles,
-        in ArrayView1D<KdNodeView, Stride1D.Dense> nodes)
+        in ArrayView<Triangle> triangles,
+        in ArrayView<KdNodeView> nodes)
     {
         return IsInBound(in ray, in nodes[index]) ? IntersectNodes(in ray, in triangles, in nodes) : Const.Miss;
     }
 
     private RayHit IntersectNodes(in Ray ray,
-        in ArrayView1D<Triangle, Stride1D.Dense> triangles,
-        in ArrayView1D<KdNodeView, Stride1D.Dense> nodes)
+        in ArrayView<Triangle> triangles,
+        in ArrayView<KdNodeView> nodes)
     {
         var childNumbers = new short[Const.MaxDepth + 1];
         var depth = 0;

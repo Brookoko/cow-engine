@@ -8,26 +8,26 @@ public readonly struct MeshView
 {
     public readonly long count;
 
-    public readonly ArrayView1D<Box, Stride1D.Dense> boxes;
-    public readonly ArrayView1D<Disk, Stride1D.Dense> disks;
-    public readonly ArrayView1D<Plane, Stride1D.Dense> planes;
-    public readonly ArrayView1D<Sphere, Stride1D.Dense> spheres;
-    public readonly ArrayView1D<Triangle, Stride1D.Dense> triangleObjects;
-    public readonly ArrayView1D<Triangle, Stride1D.Dense> triangles;
-    public readonly ArrayView1D<TriangleMeshView, Stride1D.Dense> triangleMeshes;
-    public readonly ArrayView1D<KdTreeView, Stride1D.Dense> trees;
-    public readonly ArrayView1D<KdNodeView, Stride1D.Dense> nodes;
+    public readonly ArrayView<Box> boxes;
+    public readonly ArrayView<Disk> disks;
+    public readonly ArrayView<Plane> planes;
+    public readonly ArrayView<Sphere> spheres;
+    public readonly ArrayView<Triangle> triangleObjects;
+    public readonly ArrayView<Triangle> triangles;
+    public readonly ArrayView<TriangleMeshView> triangleMeshes;
+    public readonly ArrayView<KdTreeView> trees;
+    public readonly ArrayView<KdNodeView> nodes;
 
     public MeshView(
-        ArrayView1D<Box, Stride1D.Dense> boxes,
-        ArrayView1D<Disk, Stride1D.Dense> disks,
-        ArrayView1D<Plane, Stride1D.Dense> planes,
-        ArrayView1D<Sphere, Stride1D.Dense> spheres,
-        ArrayView1D<Triangle, Stride1D.Dense> triangleObjects,
-        ArrayView1D<Triangle, Stride1D.Dense> triangles,
-        ArrayView1D<TriangleMeshView, Stride1D.Dense> triangleMeshes,
-        ArrayView1D<KdTreeView, Stride1D.Dense> trees,
-        ArrayView1D<KdNodeView, Stride1D.Dense> nodes)
+        ArrayView<Box> boxes,
+        ArrayView<Disk> disks,
+        ArrayView<Plane> planes,
+        ArrayView<Sphere> spheres,
+        ArrayView<Triangle> triangleObjects,
+        ArrayView<Triangle> triangles,
+        ArrayView<TriangleMeshView> triangleMeshes,
+        ArrayView<KdTreeView> trees,
+        ArrayView<KdNodeView> nodes)
     {
         this.boxes = boxes;
         this.disks = disks;

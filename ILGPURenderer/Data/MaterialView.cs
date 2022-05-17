@@ -1,16 +1,20 @@
 ﻿namespace ILGPURenderer.Data;
 
 using CowLibrary;
+using ILGPU;
 
 public readonly struct MaterialView
 {
-    public readonly DiffuseMaterial[] diffuseMaterials;
-    public readonly FresnelMaterial[] fresnelMaterials;
-    public readonly ReflectionMaterial[] reflectionMaterials;
-    public readonly TransmissionMaterial[] transmissionMaterials;
+    public readonly ArrayView<DiffuseMaterial> diffuseMaterials;
+    public readonly ArrayView<FresnelMaterial> fresnelMaterials;
+    public readonly ArrayView<ReflectionMaterial> reflectionMaterials;
+    public readonly ArrayView<TransmissionMaterial> transmissionMaterials;
 
-    public MaterialView(DiffuseMaterial[] diffuseMaterials, FresnelMaterial[] fresnelMaterials,
-        ReflectionMaterial[] reflectionMaterials, TransmissionMaterial[] transmissionMaterials)
+    public MaterialView(
+        ArrayView<DiffuseMaterial> diffuseMaterials,
+        ArrayView<FresnelMaterial> fresnelMaterials,
+        ArrayView<ReflectionMaterial> reflectionMaterials,
+        ArrayView<TransmissionMaterial> transmissionMaterials)
     {
         this.diffuseMaterials = diffuseMaterials;
         this.fresnelMaterials = fresnelMaterials;

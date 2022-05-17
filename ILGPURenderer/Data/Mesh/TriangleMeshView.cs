@@ -15,7 +15,7 @@ public readonly struct TriangleMeshView
         this.trianglesCount = trianglesCount;
     }
 
-    public RayHit Intersect(in Ray ray, in ArrayView1D<Triangle, Stride1D.Dense> triangles)
+    public RayHit Intersect(in Ray ray, in ArrayView<Triangle> triangles)
     {
         var hit = Const.Miss;
         for (var i = 0; i < trianglesCount; i++)

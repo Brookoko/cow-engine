@@ -28,11 +28,11 @@ public class SceneConverter : ISceneConverter
     private MeshView CreateMeshData(Scene scene)
     {
         var meshes = scene.objects.Select(obj => obj.Mesh).ToArray();
-        var boxes = LoadMesh<Box>(meshes);
-        var disks = LoadMesh<Disk>(meshes);
-        var planes = LoadMesh<Plane>(meshes);
-        var spheres = LoadMesh<Sphere>(meshes);
-        var triangleObjects = LoadMesh<Triangle>(meshes);
+        var boxes = LoadDerived<Box, IMesh>(meshes);
+        var disks = LoadDerived<Disk, IMesh>(meshes);
+        var planes = LoadDerived<Plane, IMesh>(meshes);
+        var spheres = LoadDerived<Sphere, IMesh>(meshes);
+        var triangleObjects = LoadDerived<Triangle, IMesh>(meshes);
         var (triangles, triangleMeshes, trees, nodes) = LoadTriangles(meshes);
         return new MeshView(boxes, disks, planes, spheres, triangleObjects, triangles, triangleMeshes, trees, nodes);
     }
@@ -98,16 +98,16 @@ public class SceneConverter : ISceneConverter
     private MaterialView CreateMaterialData(Scene scene)
     {
         var materials = scene.objects.Select(obj => obj.Material).ToArray();
-        var diffuse = materials.Where(m => m is DiffuseMaterial).Cast<DiffuseMaterial>().ToArray();
-        var fresnel = materials.Where(m => m is FresnelMaterial).Cast<FresnelMaterial>().ToArray();
-        var reflection = materials.Where(m => m is ReflectionMaterial).Cast<ReflectionMaterial>().ToArray();
-        var transmission = materials.Where(m => m is TransmissionMaterial).Cast<TransmissionMaterial>().ToArray();
+        var diffuse = LoadDerived<DiffuseMaterial, IMaterial>(materials);
+        var fresnel = LoadDerived<FresnelMaterial, IMaterial>(materials);
+        var reflection = LoadDerived<ReflectionMaterial, IMaterial>(materials);
+        var transmission = LoadDerived<TransmissionMaterial, IMaterial>(materials);
         return new MaterialView(diffuse, fresnel, reflection, transmission);
     }
 
-    private ArrayView1D<T, Stride1D.Dense> LoadMesh<T>(IMesh[] meshes) where T : unmanaged, IMesh
+    private ArrayView<TDerived> LoadDerived<TDerived, TBase>(IEnumerable<TBase> array) where TDerived : unmanaged, TBase
     {
-        var foundMeshes = Utils.FindDerived<T, IMesh>(meshes);
-        return GpuKernel.ConvertToView(foundMeshes);
+        var derived = Utils.FindDerived<TDerived, TBase>(array);
+        return GpuKernel.ConvertToView(derived);
     }
 }

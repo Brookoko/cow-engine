@@ -6,9 +6,9 @@ namespace CowLibrary
     public readonly struct SpecularReflectionBrdf : IBrdf
     {
         private readonly float r;
-        private readonly IFresnel fresnel;
+        private readonly DielectricFresnel fresnel;
 
-        public SpecularReflectionBrdf(float r, IFresnel fresnel)
+        public SpecularReflectionBrdf(float r, DielectricFresnel fresnel)
         {
             this.r = r;
             this.fresnel = fresnel;
