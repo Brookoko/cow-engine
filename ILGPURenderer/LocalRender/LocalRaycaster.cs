@@ -6,7 +6,7 @@ using ILGPU;
 
 public readonly struct LocalRaycaster
 {
-    public RayHit Raycast(in MeshView meshes, in Ray ray)
+    public Raycast Raycast(in MeshView meshes, in Ray ray)
     {
         var hit = Const.Miss;
         Raycast(in meshes.boxes, in ray, ref hit);
@@ -16,7 +16,7 @@ public readonly struct LocalRaycaster
         Raycast(in meshes.triangleObjects, in ray, ref hit);
         RaycastTriangleMeshes(in meshes, in ray, ref hit);
         RaycastKdTrees(in meshes, in ray, ref hit);
-        return hit;
+        return new Raycast(hit, ray);
     }
 
     private void Raycast<T>(in ArrayView<T> meshes, in Ray ray, ref RayHit hit) where T : unmanaged, IIntersectable

@@ -153,8 +153,8 @@ public class RenderKernel : IRenderKernel
         {
             var sample = sampler.CreateSample();
             var ray = camera.ScreenPointToRay(in point, in cameraLocalToWorld, in sample);
-            var hitRay = raycaster.Raycast(in sceneView.mesh, in ray);
-            color += integrator.GetColor(in sceneView, in renderData, in hitRay, in ray);
+            var raycast = raycaster.Raycast(in sceneView.mesh, in ray);
+            color += integrator.GetColor(in sceneView, in renderData, in raycast);
         }
         colors[index] = color / renderData.numberOfRayPerPixel;
     }

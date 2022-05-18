@@ -47,6 +47,6 @@ public class HitKernel : IHitKernel
         ArrayView3D<RayHit, Stride3D.DenseXY> hits,
         MeshView mesh, LocalRaycaster raycaster)
     {
-        hits[index] = raycaster.Raycast(in mesh, in rays[index]);
+        // hits[index] = raycaster.Raycast(in mesh, in rays[index]);
     }
 }
