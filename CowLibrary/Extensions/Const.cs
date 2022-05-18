@@ -14,6 +14,8 @@ namespace CowLibrary
 
         public const float Epsilon = 1e-10f;
 
+        public const float Bias = 0.00001f;
+        
         public static readonly RayHit Miss = new();
 
         public const int KdNodeCount = 3;

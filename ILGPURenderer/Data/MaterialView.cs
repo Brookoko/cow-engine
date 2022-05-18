@@ -1,5 +1,6 @@
 ﻿namespace ILGPURenderer.Data;
 
+using System.Numerics;
 using CowLibrary;
 using ILGPU;
 
@@ -20,5 +21,38 @@ public readonly struct MaterialView
         this.fresnelMaterials = fresnelMaterials;
         this.reflectionMaterials = reflectionMaterials;
         this.transmissionMaterials = transmissionMaterials;
+    }
+
+    public Color GetMaterialColor(in int id, in Vector3 wo, in Vector3 wi)
+    {
+        for (var i = 0; i < diffuseMaterials.Length; i++)
+        {
+            if (diffuseMaterials[i].Id == id)
+            {
+                return diffuseMaterials[i].GetColor(in wo, in wi);
+            }
+        }
+        for (var i = 0; i < fresnelMaterials.Length; i++)
+        {
+            if (fresnelMaterials[i].Id == id)
+            {
+                return fresnelMaterials[i].GetColor(in wo, in wi);
+            }
+        }
+        for (var i = 0; i < reflectionMaterials.Length; i++)
+        {
+            if (reflectionMaterials[i].Id == id)
+            {
+                return reflectionMaterials[i].GetColor(in wo, in wi);
+            }
+        }
+        for (var i = 0; i < transmissionMaterials.Length; i++)
+        {
+            if (transmissionMaterials[i].Id == id)
+            {
+                return transmissionMaterials[i].GetColor(in wo, in wi);
+            }
+        }
+        return Color.Black;
     }
 }

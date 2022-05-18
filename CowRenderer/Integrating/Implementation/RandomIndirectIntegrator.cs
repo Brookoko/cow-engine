@@ -39,7 +39,7 @@ namespace CowRenderer.Integration
             {
                 return new Color(0f);
             }
-            var p = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
+            var p = surfel.hit.point + surfel.hit.normal * Const.Bias;
             var color = new Color(0f);
             for (var i = 0; i < RenderConfig.numberOfRayPerLight; i++)
             {

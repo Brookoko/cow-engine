@@ -36,7 +36,7 @@ namespace CowRenderer.Integration
                 return new Color(0f);
             }
             var dir = surfel.ray.Reflect(surfel.hit.normal);
-            var p = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
+            var p = surfel.hit.point + surfel.hit.normal * Const.Bias;
             var ray = new Ray(p, dir);
             var surfelHit = Raycaster.Raycast(in ray);
             if (surfelHit.hit.HasHit)

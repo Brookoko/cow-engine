@@ -17,7 +17,7 @@
         {
             var sceneData = SceneConverter.Convert(scene);
             var camera = scene.MainCamera;
-            var colors = RenderKernel.Render(sceneData, camera);
+            var colors = RenderKernel.Render(in sceneData, camera);
             return new Image(colors);
         }
     }

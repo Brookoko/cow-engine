@@ -56,7 +56,7 @@
             var scene = new AutoAdjustScene(model, SamplerProvider.Sampler);
             DiContainer.Inject(scene);
 
-            var light = new EnvironmentLight(new Color(255, 255, 255), 3, SamplerProvider.Sampler);
+            var light = new EnvironmentLight(new Color(255, 255, 255), 3, 0, SamplerProvider.Sampler);
             scene.lights.Add(light);
 
             scene.PrepareScene();

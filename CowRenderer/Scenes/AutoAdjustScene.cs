@@ -69,7 +69,7 @@ namespace CowRenderer
 
         private void PlacePlane(Bound box)
         {
-            var plane = new RenderableObject(new Disk(100, 1), new DiffuseMaterial(Color.Red, 1));
+            var plane = new RenderableObject(new Disk(100, 1), new DiffuseMaterial(Color.Red, 1, 1));
             plane.Transform.Position = box.min.Y * Vector3.UnitY;
             objects.Add(plane);
         }

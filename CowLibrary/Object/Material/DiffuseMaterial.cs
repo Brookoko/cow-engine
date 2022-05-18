@@ -6,12 +6,19 @@ namespace CowLibrary
     {
         public Color Color { get; }
 
+        public int Id { get; }
+
         private readonly LambertianBrdf brdf;
 
-        public DiffuseMaterial(Color color, float r)
+        public DiffuseMaterial(Color color, float r, int id) : this(color, new LambertianBrdf(r), id)
+        {
+        }
+
+        private DiffuseMaterial(Color color, LambertianBrdf brdf, int id)
         {
             Color = color;
-            brdf = new LambertianBrdf(r);
+            this.brdf = brdf;
+            Id = id;
         }
 
         public Color GetColor(in Vector3 wo, in Vector3 wi)
@@ -22,6 +29,11 @@ namespace CowLibrary
         public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
         {
             return brdf.Sample(in normal, in wo, out wi, in sample, out pdf);
+        }
+
+        public IMaterial Copy(int id)
+        {
+            return new DiffuseMaterial(Color, brdf, id);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cowject;
 using CowLibrary;
+using CowLibrary.Lights.Models;
 using CowRenderer;
 using Data;
 using ILGPU;
@@ -22,7 +23,7 @@ public class SceneConverter : ISceneConverter
 
     public SceneView Convert(Scene scene)
     {
-        return new SceneView(CreateMeshData(scene), CreateMaterialData(scene));
+        return new SceneView(CreateMeshData(scene), CreateMaterialData(scene), CreateLightData(scene));
     }
 
     private MeshView CreateMeshData(Scene scene)
@@ -103,6 +104,17 @@ public class SceneConverter : ISceneConverter
         var reflection = LoadDerived<ReflectionMaterial, IMaterial>(materials);
         var transmission = LoadDerived<TransmissionMaterial, IMaterial>(materials);
         return new MaterialView(diffuse, fresnel, reflection, transmission);
+    }
+
+    private LightView CreateLightData(Scene scene)
+    {
+        var lights = scene.lights.Select(l => l.Model).ToArray();
+        var directional = LoadDerived<DirectionalLightModel, ILightModel>(lights);
+        var point = LoadDerived<PointLightModel, ILightModel>(lights);
+        var environment = LoadDerived<EnvironmentLightModel, ILightModel>(lights);
+        var matrices = scene.lights.Select(l => l.Transform.LocalToWorldMatrix).ToArray();
+        var matricesView = GpuKernel.ConvertToView(matrices);
+        return new LightView(directional, point, environment, matricesView);
     }
 
     private ArrayView<TDerived> LoadDerived<TDerived, TBase>(IEnumerable<TBase> array) where TDerived : unmanaged, TBase

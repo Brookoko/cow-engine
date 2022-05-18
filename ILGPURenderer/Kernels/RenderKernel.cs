@@ -159,20 +159,23 @@ public class RenderKernel : IRenderKernel
     {
         var sampler = LocalSamplerProvider.GetSampler();
         var raycaster = new LocalRaycaster();
-        var integrator = new LocalIntegrator();
+        var integrator = new LocalIntegrator(sampler, raycaster);
         var matrix = camera.Transform.LocalToWorldMatrix;
         var samples = RenderConfig.numberOfRayPerPixel;
         var model = camera.Model;
         switch (model)
         {
             case OrthographicCameraModel orthographicCameraModel:
-                orthographicAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator, orthographicCameraModel, matrix, samples);
+                orthographicAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator,
+                    orthographicCameraModel, matrix, samples);
                 break;
             case PerspectiveCameraModel perspectiveCameraModel:
-                perspectiveAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator, perspectiveCameraModel, matrix, samples);
+                perspectiveAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator,
+                    perspectiveCameraModel, matrix, samples);
                 break;
             case RealisticCameraModel realisticCameraModel:
-                realisticAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator, realisticCameraModel, matrix, samples);
+                realisticAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator,
+                    realisticCameraModel, matrix, samples);
                 break;
         }
     }
@@ -196,7 +199,7 @@ public class RenderKernel : IRenderKernel
             var sample = sampler.CreateSample();
             var ray = camera.ScreenPointToRay(in point, in cameraLocalToWorld, in sample);
             var hitRay = raycaster.Raycast(in sceneView.mesh, in ray);
-            color += integrator.GetColor(in hitRay);
+            color += integrator.GetColor(in sceneView, in hitRay, in ray);
         }
         colors[index] = color / samples;
     }

@@ -6,11 +6,14 @@ public readonly struct DirectionalLightModel : ILightModel
 {
     private readonly Color color;
 
-    public DirectionalLightModel(Color color)
+    public int Id { get; }
+
+    public DirectionalLightModel(Color color, int id)
     {
         this.color = color;
+        Id = id;
     }
-    
+
     public ShadingInfo GetShadingInfo(in RayHit rayHit, in Matrix4x4 localToWorldMatrix, in Vector2 sample)
     {
         return new ShadingInfo(localToWorldMatrix.Forward(), color, float.PositiveInfinity);

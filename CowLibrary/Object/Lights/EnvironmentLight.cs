@@ -7,9 +7,9 @@ namespace CowLibrary.Lights
     {
         public override ILightModel Model { get; }
 
-        public EnvironmentLight(Color color, float intensity, ISampler sampler) : base(sampler)
+        public EnvironmentLight(Color color, float intensity, int id, ISampler sampler) : base(sampler)
         {
-            Model = new EnvironmentLightModel(color * intensity);
+            Model = new EnvironmentLightModel(color * intensity, id);
         }
     }
 }

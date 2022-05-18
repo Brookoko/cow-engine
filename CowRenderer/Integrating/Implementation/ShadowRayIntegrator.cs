@@ -37,7 +37,7 @@ namespace CowRenderer.Integration
 
         private float TraceShadowRay(in Surfel surfel, in Vector3 direction, float distance)
         {
-            var position = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
+            var position = surfel.hit.point + surfel.hit.normal * Const.Bias;
             var surfelHit = Raycaster.Raycast(new Ray(position, direction));
             return surfelHit.hit.HasHit && surfelHit.hit.t < distance ? 0 : 1;
         }

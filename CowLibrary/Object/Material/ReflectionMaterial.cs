@@ -6,13 +6,20 @@ namespace CowLibrary
     {
         public Color Color { get; }
 
+        public int Id { get; }
+
         private readonly SpecularReflectionBrdf brdf;
 
-        public ReflectionMaterial(float r, float eta)
+        public ReflectionMaterial(float r, float eta, int id) :
+            this(new SpecularReflectionBrdf(r, new DielectricFresnel(1, eta)), id)
+        {
+        }
+
+        private ReflectionMaterial(SpecularReflectionBrdf brdf, int id)
         {
             Color = Color.White;
-            var fresnel = new DielectricFresnel(1, eta);
-            brdf = new SpecularReflectionBrdf(r, fresnel);
+            this.brdf = brdf;
+            Id = id;
         }
 
         public Color GetColor(in Vector3 wo, in Vector3 wi)
@@ -23,6 +30,11 @@ namespace CowLibrary
         public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
         {
             return brdf.Sample(in normal, in wo, out wi, in sample, out pdf);
+        }
+
+        public IMaterial Copy(int id)
+        {
+            return new ReflectionMaterial(brdf, id);
         }
     }
 }

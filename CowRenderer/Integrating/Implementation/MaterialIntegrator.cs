@@ -39,7 +39,7 @@ namespace CowRenderer.Integration
 
         private Color GetLighting(in Surfel surfel, Light light, int depth)
         {
-            return GetDirectLighting(in surfel, light) + GetIndirectLighting(in surfel, light, depth);
+            return GetDirectLighting(in surfel, light);
         }
 
         private Color GetDirectLighting(in Surfel surfel, Light light)
@@ -70,7 +70,7 @@ namespace CowRenderer.Integration
 
         private float TraceShadowRay(in Surfel surfel, Vector3 direction, float distance)
         {
-            var position = surfel.hit.point + surfel.hit.normal * RenderConfig.bias;
+            var position = surfel.hit.point + surfel.hit.normal * Const.Bias;
             var surfelHit = Raycaster.Raycast(new Ray(position, direction));
             return surfelHit.hit.HasHit && surfelHit.hit.t < distance ? 0 : 1;
         }
@@ -82,7 +82,7 @@ namespace CowRenderer.Integration
                 return Color.Black;
             }
             var sign = Math.Sign(Vector3.Dot(surfel.hit.normal, direction));
-            var position = surfel.hit.point + sign * surfel.hit.normal * RenderConfig.bias;
+            var position = surfel.hit.point + sign * surfel.hit.normal * Const.Bias;
             var surfelHit = Raycaster.Raycast(new Ray(position, direction));
             if (surfelHit.hit.HasHit)
             {

@@ -7,11 +7,14 @@ public readonly struct PointLightModel : ILightModel
 {
     private readonly Color color;
 
-    public PointLightModel(Color color)
+    public int Id { get; }
+
+    public PointLightModel(Color color, int id)
     {
         this.color = color;
+        Id = id;
     }
-    
+
     public ShadingInfo GetShadingInfo(in RayHit rayHit, in Matrix4x4 localToWorldMatrix, in Vector2 sample)
     {
         var direction = localToWorldMatrix.ExtractTranslation() - rayHit.point;

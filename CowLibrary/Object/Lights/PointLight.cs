@@ -7,9 +7,9 @@ namespace CowLibrary.Lights
     {
         public override ILightModel Model { get; }
 
-        public PointLight(Color color, float intensity, ISampler sampler) : base(sampler)
+        public PointLight(Color color, float intensity, int id, ISampler sampler) : base(sampler)
         {
-            Model = new PointLightModel(color * intensity);
+            Model = new PointLightModel(color * intensity, id);
         }
     }
 }

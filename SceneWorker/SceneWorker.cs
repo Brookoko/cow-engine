@@ -126,36 +126,36 @@
                 case SceneObject.ObjectMaterialOneofCase.MaterialId:
                     if (materials.TryGetValue(parsedObject.MaterialId, out var material))
                     {
-                        return material;
+                        return material.Copy(id);
                     }
                     throw new Exception("Invalid material id");
                 case SceneObject.ObjectMaterialOneofCase.Material:
-                    return ConvertMaterial(parsedObject.Material);
+                    return ConvertMaterial(parsedObject.Material, id);
                 default:
                     throw new Exception("Unsupported material");
             }
         }
 
-        private Light ConvertToLight(SceneFormat.Light parsedLight)
+        private Light ConvertToLight(SceneFormat.Light parsedLight, int id)
         {
             var tran = ConvertTransform(parsedLight.Transform);
             var color = ConvertColor(parsedLight.Color);
             switch (parsedLight.LightCase)
             {
                 case SceneFormat.Light.LightOneofCase.Point:
-                    return new PointLight(color, 1, SamplerProvider.Sampler)
+                    return new PointLight(color, 1, id, SamplerProvider.Sampler)
                     {
                         Id = parsedLight.Id,
                         Transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Directional:
-                    return new DirectionalLight(color, 1, SamplerProvider.Sampler)
+                    return new DirectionalLight(color, 1, id, SamplerProvider.Sampler)
                     {
                         Id = parsedLight.Id,
                         Transform = tran,
                     };
                 case SceneFormat.Light.LightOneofCase.Environment:
-                    return new EnvironmentLight(color, 1, SamplerProvider.Sampler)
+                    return new EnvironmentLight(color, 1, id, SamplerProvider.Sampler)
                     {
                         Id = parsedLight.Id,
                     };
@@ -171,20 +171,20 @@
             var result = new Dictionary<string, IMaterial>();
             foreach (var material in materials)
             {
-                var mat = ConvertMaterial(material);
+                var mat = ConvertMaterial(material, -1);
                 result[material.Id] = mat;
             }
             return result;
         }
 
-        private IMaterial ConvertMaterial(SceneFormat.Material material)
+        private IMaterial ConvertMaterial(SceneFormat.Material material, int id)
         {
             switch (material.MaterialCase)
             {
                 case SceneFormat.Material.MaterialOneofCase.LambertReflection:
-                    return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color), 1);
+                    return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color), 1, id);
                 case SceneFormat.Material.MaterialOneofCase.SpecularReflection:
-                    return new ReflectionMaterial(1, (float)material.SpecularReflection.Eta);
+                    return new ReflectionMaterial(1, (float)material.SpecularReflection.Eta, id);
                 default:
                     throw new Exception("Unsupported material");
             }
