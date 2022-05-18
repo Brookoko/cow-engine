@@ -25,7 +25,7 @@ namespace CowLibrary
             return 0;
         }
 
-        public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
+        public float Sample(in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
         {
             var entering = Vector3.Dot(wo, normal) < 0;
             var etaI = entering ? etaA : etaB;

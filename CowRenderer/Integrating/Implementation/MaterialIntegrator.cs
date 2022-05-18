@@ -59,7 +59,7 @@ namespace CowRenderer.Integration
             for (var i = 0; i < n; i++)
             {
                 var sample = SamplerProvider.Sampler.CreateSample();
-                var f = surfel.material.Sample(in surfel.hit.normal, in surfel.ray, out var wi, in sample, out var pdf);
+                var f = surfel.material.Sample(in surfel.hit.normal, in surfel.ray, in sample, out var wi, out var pdf);
                 if (pdf > 0 && f > 0)
                 {
                     result += f * pdf * Trace(in surfel, light, wi, depth);

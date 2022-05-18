@@ -20,18 +20,18 @@ namespace CowLibrary
             return 0;
         }
 
-        public float Sample(in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
+        public float Sample(in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
         {
             float res;
             var f = fresnel.Evaluate(Vector3.Dot(normal, wo));
             if (sample.X < f)
             {
-                res = reflection.Sample(in normal, in wo, out wi, in sample, out pdf);
+                res = reflection.Sample(in normal, in wo, in sample, out wi, out pdf);
                 pdf = f;
             }
             else
             {
-                res = transmission.Sample(in normal, in wo, out wi, in sample, out pdf);
+                res = transmission.Sample(in normal, in wo, in sample, out wi, out pdf);
                 pdf = 1 - f;
             }
             return res;

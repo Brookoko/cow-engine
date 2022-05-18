@@ -25,102 +25,86 @@ public readonly struct MaterialView
 
     public Color GetMaterialRawColor(in int id)
     {
-        for (var i = 0; i < diffuseMaterials.Length; i++)
-        {
-            if (diffuseMaterials[i].Id == id)
-            {
-                return diffuseMaterials[i].Color;
-            }
-        }
-        for (var i = 0; i < fresnelMaterials.Length; i++)
-        {
-            if (fresnelMaterials[i].Id == id)
-            {
-                return fresnelMaterials[i].Color;
-            }
-        }
-        for (var i = 0; i < reflectionMaterials.Length; i++)
-        {
-            if (reflectionMaterials[i].Id == id)
-            {
-                return reflectionMaterials[i].Color;
-            }
-        }
-        for (var i = 0; i < transmissionMaterials.Length; i++)
-        {
-            if (transmissionMaterials[i].Id == id)
-            {
-                return transmissionMaterials[i].Color;
-            }
-        }
-        return Color.Black;
-    }
-    
-    public Color GetMaterialColor(in int id, in Vector3 wo, in Vector3 wi)
-    {
-        for (var i = 0; i < diffuseMaterials.Length; i++)
-        {
-            if (diffuseMaterials[i].Id == id)
-            {
-                return diffuseMaterials[i].GetColor(in wo, in wi);
-            }
-        }
-        for (var i = 0; i < fresnelMaterials.Length; i++)
-        {
-            if (fresnelMaterials[i].Id == id)
-            {
-                return fresnelMaterials[i].GetColor(in wo, in wi);
-            }
-        }
-        for (var i = 0; i < reflectionMaterials.Length; i++)
-        {
-            if (reflectionMaterials[i].Id == id)
-            {
-                return reflectionMaterials[i].GetColor(in wo, in wi);
-            }
-        }
-        for (var i = 0; i < transmissionMaterials.Length; i++)
-        {
-            if (transmissionMaterials[i].Id == id)
-            {
-                return transmissionMaterials[i].GetColor(in wo, in wi);
-            }
-        }
-        return Color.Black;
+        var color = Color.Black;
+        GetMaterialRawColor(in diffuseMaterials, in id, ref color);
+        GetMaterialRawColor(in fresnelMaterials, in id, ref color);
+        GetMaterialRawColor(in reflectionMaterials, in id, ref color);
+        GetMaterialRawColor(in transmissionMaterials, in id, ref color);
+        return color;
     }
 
-    public float Sample(in int id, in Vector3 normal, in Vector3 wo, out Vector3 wi, in Vector2 sample, out float pdf)
+    private void GetMaterialRawColor<T>(in ArrayView<T> materials, in int id, ref Color color)
+        where T : unmanaged, IMaterial
     {
-        for (var i = 0; i < diffuseMaterials.Length; i++)
+        if (color != Color.Black)
         {
-            if (diffuseMaterials[i].Id == id)
+            return;
+        }
+        for (var i = 0; i < materials.Length; i++)
+        {
+            if (materials[i].Id == id)
             {
-                return diffuseMaterials[i].Sample(in normal, in wo, out wi, in sample, out pdf);
+                color = materials[i].Color;
+                return;
             }
         }
-        for (var i = 0; i < fresnelMaterials.Length; i++)
+    }
+
+    public Color GetMaterialColor(in int id, in Vector3 wo, in Vector3 wi)
+    {
+        var color = Color.Black;
+        GetMaterialColor(in diffuseMaterials, in id, wo, wi, ref color);
+        GetMaterialColor(in fresnelMaterials, in id, wo, wi, ref color);
+        GetMaterialColor(in reflectionMaterials, in id, wo, wi, ref color);
+        GetMaterialColor(in transmissionMaterials, in id, wo, wi, ref color);
+        return color;
+    }
+
+    private void GetMaterialColor<T>(in ArrayView<T> materials, in int id, in Vector3 wo, in Vector3 wi,
+        ref Color color)
+        where T : unmanaged, IMaterial
+    {
+        if (color != Color.Black)
         {
-            if (fresnelMaterials[i].Id == id)
+            return;
+        }
+        for (var i = 0; i < materials.Length; i++)
+        {
+            if (materials[i].Id == id)
             {
-                return fresnelMaterials[i].Sample(in normal, in wo, out wi, in sample, out pdf);
+                color = materials[i].GetColor(in wo, in wi);
+                return;
             }
         }
-        for (var i = 0; i < reflectionMaterials.Length; i++)
-        {
-            if (reflectionMaterials[i].Id == id)
-            {
-                return reflectionMaterials[i].Sample(in normal, in wo, out wi, in sample, out pdf);
-            }
-        }
-        for (var i = 0; i < transmissionMaterials.Length; i++)
-        {
-            if (transmissionMaterials[i].Id == id)
-            {
-                return transmissionMaterials[i].Sample(in normal, in wo, out wi, in sample, out pdf);
-            }
-        }
+    }
+
+    public float Sample(in int id, in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+    {
+        var f = -1f;
         wi = Vector3.Zero;
         pdf = 0;
-        return 0f;
+        Sample(in diffuseMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in fresnelMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in reflectionMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in transmissionMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
+        return f;
+    }
+
+    private void Sample<T>(in ArrayView<T> materials, in int id, in Vector3 normal, in Vector3 wo, in Vector2 sample,
+        ref Vector3 wi, ref float pdf, ref float f)
+        where T : unmanaged, IMaterial
+    {
+        if (f >= 0)
+        {
+            return;
+        }
+        for (var i = 0; i < materials.Length; i++)
+        {
+            if (materials[i].Id == id)
+            {
+                f = materials[i].Sample(in normal, in wo, in sample, out wi, out pdf);
+                return;
+            }
+        }
     }
 }

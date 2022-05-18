@@ -56,7 +56,6 @@ public readonly struct LocalIntegrator
         int depth)
         where T : struct, ILightModel
     {
-        // return GetDirectLighting(in sceneView, in hit, in ray, in light, in matrix);
         return GetDirectLighting(in sceneView, in raycast, in light) +
                GetIndirectLighting(in sceneView, in renderData, in raycast, in light, depth);
     }
@@ -91,7 +90,7 @@ public readonly struct LocalIntegrator
         {
             var sample = sampler.CreateSample();
             var f = sceneView.material.Sample(in raycast.hit.id, in raycast.hit.normal, in raycast.ray.direction,
-                out var wi, in sample, out var pdf);
+                in sample, out var wi, out var pdf);
             if (pdf > 0 && f > 0)
             {
                 result += f * pdf * Trace(in sceneView, in renderData, in raycast, in light, in wi, depth);
