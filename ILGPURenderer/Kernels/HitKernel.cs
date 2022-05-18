@@ -37,7 +37,7 @@ public class HitKernel : IHitKernel
     public ArrayView3D<RayHit, Stride3D.DenseXY> GenerateHits(SceneView scene, ArrayView3D<Ray, Stride3D.DenseXY> rays)
     {
         var rayHitBuffer = GpuKernel.Accelerator.Allocate3DDenseXY<RayHit>(rays.Extent);
-        var raycaster = new LocalRaycaster(scene.mesh.count);
+        var raycaster = new LocalRaycaster();
         hitAction(rayHitBuffer.IntExtent, rays, rayHitBuffer.View, scene.mesh, raycaster);
         return rayHitBuffer;
     }

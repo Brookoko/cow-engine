@@ -2,65 +2,56 @@
 
 using CowLibrary;
 using Data;
+using ILGPU;
 
 public readonly struct LocalRaycaster
 {
-    private readonly long count;
-
-    public LocalRaycaster()
-    {
-        count = 3;
-    }
-
-    public LocalRaycaster(long count)
-    {
-        this.count = count;
-    }
-
     public RayHit Raycast(in MeshView meshes, in Ray ray)
     {
-        var index = 0;
-        var hits = new RayHit[10];
-        for (var i = 0; i < 10; i++)
+        var hit = Const.Miss;
+        Raycast(in meshes.boxes, in ray, ref hit);
+        Raycast(in meshes.disks, in ray, ref hit);
+        Raycast(in meshes.planes, in ray, ref hit);
+        Raycast(in meshes.spheres, in ray, ref hit);
+        Raycast(in meshes.triangleObjects, in ray, ref hit);
+        RaycastTriangleMeshes(in meshes, in ray, ref hit);
+        RaycastKdTrees(in meshes, in ray, ref hit);
+        return hit;
+    }
+
+    private void Raycast<T>(in ArrayView<T> meshes, in Ray ray, ref RayHit hit) where T : unmanaged, IIntersectable
+    {
+        for (var i = 0; i < meshes.Length; i++)
         {
-            hits[i] = Const.Miss;
-        }
-        for (var i = 0; i < meshes.boxes.Length; i++)
-        {
-            hits[index++] = meshes.boxes[i].Intersect(in ray);
-        }
-        for (var i = 0; i < meshes.disks.Length; i++)
-        {
-            hits[index++] = meshes.disks[i].Intersect(in ray);
-        }
-        for (var i = 0; i < meshes.planes.Length; i++)
-        {
-            hits[index++] = meshes.planes[i].Intersect(in ray);
-        }
-        for (var i = 0; i < meshes.spheres.Length; i++)
-        {
-            hits[index++] = meshes.spheres[i].Intersect(in ray);
-        }
-        for (var i = 0; i < meshes.triangleObjects.Length; i++)
-        {
-            hits[index++] = meshes.triangleObjects[i].Intersect(in ray);
-        }
-        for (var i = 0; i < meshes.triangleMeshes.Length; i++)
-        {
-            hits[index++] = meshes.triangleMeshes[i].Intersect(in ray, in meshes.triangles);
-        }
-        for (var i = 0; i < meshes.trees.Length; i++)
-        {
-            hits[index++] = meshes.trees[i].Intersect(in ray, in meshes.triangles, in meshes.nodes);
-        }
-        var rayHit = Const.Miss;
-        foreach (var hit in hits)
-        {
-            if (rayHit.t > hit.t)
+            var iHit = meshes[i].Intersect(in ray);
+            if (iHit.t < hit.t)
             {
-                rayHit = hit;
+                hit = iHit;
             }
         }
-        return rayHit;
+    }
+
+    private void RaycastTriangleMeshes(in MeshView meshes, in Ray ray, ref RayHit hit)
+    {
+        for (var i = 0; i < meshes.triangleMeshes.Length; i++)
+        {
+            var iHit = meshes.triangleMeshes[i].Intersect(in ray, in meshes.triangles);
+            if (iHit.t < hit.t)
+            {
+                hit = iHit;
+            }
+        }
+    }
+
+    private void RaycastKdTrees(in MeshView meshes, in Ray ray, ref RayHit hit)
+    {
+        for (var i = 0; i < meshes.trees.Length; i++)
+        {
+            var iHit = meshes.trees[i].Intersect(in ray, in meshes.triangles, in meshes.nodes);
+            if (iHit.t < hit.t)
+            {
+                hit = iHit;
+            }
+        }
     }
 }

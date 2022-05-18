@@ -6,8 +6,6 @@ using ILGPU.Runtime;
 
 public readonly struct MeshView
 {
-    public readonly long count;
-
     public readonly ArrayView<Box> boxes;
     public readonly ArrayView<Disk> disks;
     public readonly ArrayView<Plane> planes;
@@ -38,11 +36,5 @@ public readonly struct MeshView
         this.triangleMeshes = triangleMeshes;
         this.nodes = nodes;
         this.trees = trees;
-        count = boxes.Length +
-                disks.Length +
-                planes.Length +
-                spheres.Length +
-                triangleObjects.Length +
-                trees.Length;
     }
 }
