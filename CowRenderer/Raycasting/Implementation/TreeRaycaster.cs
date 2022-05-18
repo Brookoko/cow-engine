@@ -14,7 +14,7 @@ namespace CowRenderer.Raycasting
         public Surfel Raycast(in Ray ray)
         {
             var intersect = tree.Intersect(ray);
-            return intersect ?? new Surfel() { ray = ray.direction };
+            return intersect ?? new Surfel(ray.direction);
         }
     }
 }

@@ -75,6 +75,6 @@ public struct Bound : IIntersectable
 
         var p = ray.GetPoint(t);
 
-        return new RayHit(t, p, Vector3.Zero);
+        return new RayHit(t, p, Vector3.Zero, -1);
     }
 }

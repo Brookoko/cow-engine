@@ -15,12 +15,15 @@ namespace CowLibrary
         private Vector3 n1;
         private Vector3 n2;
 
-        public Triangle(Vector3 v0, Vector3 v1, Vector3 v2) : this()
+        public int Id { get; }
+
+        public Triangle(Vector3 v0, Vector3 v1, Vector3 v2, int id) : this()
         {
             this.v0 = v0;
             this.v1 = v1;
             this.v2 = v2;
             bound = CreateBound();
+            Id = id;
         }
 
         private Bound CreateBound()
@@ -84,7 +87,7 @@ namespace CowLibrary
             }
 
             var normal = n0 * (1 - u - v) + n1 * u + n2 * v;
-            return new RayHit(t, ray.GetPoint(t), normal);
+            return new RayHit(t, ray.GetPoint(t), normal, Id);
         }
 
         public Bound GetBoundingBox()

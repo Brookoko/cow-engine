@@ -9,7 +9,7 @@ namespace CowLibrary
     {
         public readonly List<RenderableObject> objects;
         public readonly List<SceneNode> children = new();
-        private readonly Box box;
+        private readonly Bound box;
 
         public SceneNode(List<RenderableObject> objects)
         {
@@ -17,7 +17,7 @@ namespace CowLibrary
             box = CreateBox();
         }
 
-        private Box CreateBox()
+        private Bound CreateBox()
         {
             var min = Vector3.One * float.MaxValue;
             var max = Vector3.One * float.MinValue;
@@ -30,7 +30,7 @@ namespace CowLibrary
                 max.Y = Math.Max(max.Y, b.max.Y);
                 max.Z = Math.Max(max.Z, b.max.Z);
             }
-            return new Box(min, max);
+            return new Bound(min, max);
         }
 
         public Surfel? Intersect(in Ray ray)
@@ -68,7 +68,6 @@ namespace CowLibrary
         private Surfel? IntersectObjects(in Ray ray)
         {
             var bestHit = Const.Miss;
-            var hitIndex = 0;
             for (var i = 0; i < objects.Count; i++)
             {
                 var obj = objects[i];
@@ -76,16 +75,13 @@ namespace CowLibrary
                 if (bestHit.t > oHit.t)
                 {
                     bestHit = oHit;
-                    hitIndex = i;
                 }
             }
-            var surfel = new Surfel()
+            if (bestHit.HasHit)
             {
-                hit = bestHit,
-                material = objects[hitIndex].Material,
-                ray = ray.direction
-            };
-            return bestHit.HasHit ? surfel : null;
+                return new Surfel(bestHit, ray.direction, objects[bestHit.id].Material);
+            }
+            return null;
         }
     }
 }

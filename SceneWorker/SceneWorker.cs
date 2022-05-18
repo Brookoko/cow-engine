@@ -58,7 +58,8 @@
             scene.cameras.AddRange(parsedScene.Cameras.Select(ConvertToCamera));
             scene.SetMainCamera(parsedScene.RenderOptions.CameraId);
             var materials = ParseMaterials(parsedScene.Materials);
-            scene.objects.AddRange(parsedScene.SceneObjects.Select(obj => ConvertToObject(obj, materials)));
+            scene.objects.AddRange(
+                parsedScene.SceneObjects.Select((obj, index) => ConvertToObject(obj, materials, index)));
             scene.lights.AddRange(parsedScene.Lights.Select(ConvertToLight));
             return scene;
         }
@@ -87,11 +88,11 @@
         }
 
         private RenderableObject ConvertToObject(SceneFormat.SceneObject parsedObject,
-            Dictionary<string, IMaterial> materials)
+            Dictionary<string, IMaterial> materials, int id)
         {
             var tran = ConvertTransform(parsedObject.Transform);
-            var mesh = GetMesh(parsedObject);
-            var material = GetMaterial(parsedObject, materials);
+            var mesh = GetMesh(parsedObject, id);
+            var material = GetMaterial(parsedObject, materials, id);
             return new RenderableObject(mesh, material)
             {
                 Id = parsedObject.Id,
@@ -99,26 +100,26 @@
             };
         }
 
-        private IMesh GetMesh(SceneFormat.SceneObject parsedObject)
+        private IMesh GetMesh(SceneFormat.SceneObject parsedObject, int id)
         {
             switch (parsedObject.MeshCase)
             {
                 case SceneFormat.SceneObject.MeshOneofCase.Sphere:
-                    return new Sphere((float)parsedObject.Sphere.Radius);
+                    return new Sphere((float)parsedObject.Sphere.Radius, id);
                 case SceneFormat.SceneObject.MeshOneofCase.Cube:
-                    return new Box(ConvertVector(parsedObject.Cube.Size) * 0.5f);
+                    return new Box(ConvertVector(parsedObject.Cube.Size) * 0.5f, id);
                 case SceneFormat.SceneObject.MeshOneofCase.Plane:
-                    return new Plane();
+                    return new Plane(id);
                 case SceneFormat.SceneObject.MeshOneofCase.Disk:
-                    return new Disk((float)parsedObject.Disk.Radius);
+                    return new Disk((float)parsedObject.Disk.Radius, id);
                 case SceneFormat.SceneObject.MeshOneofCase.MeshedObject:
-                    return ObjWorker.Parse(parsedObject.MeshedObject.Reference);
+                    return ObjWorker.Parse(parsedObject.MeshedObject.Reference, id);
                 default:
                     throw new Exception("Unsupported mesh");
             }
         }
 
-        private IMaterial GetMaterial(SceneObject parsedObject, Dictionary<string, IMaterial> materials)
+        private IMaterial GetMaterial(SceneObject parsedObject, Dictionary<string, IMaterial> materials, int id)
         {
             switch (parsedObject.ObjectMaterialCase)
             {

@@ -8,24 +8,24 @@ namespace CowEngine
 
     public interface IModelToObjectConverter
     {
-        IMesh Convert(LoadResult result);
+        IMesh Convert(LoadResult result, int id);
     }
 
     public class ModelToMeshConverter : IModelToObjectConverter
     {
-        public IMesh Convert(LoadResult result)
+        public IMesh Convert(LoadResult result, int id)
         {
-            return ExtractMesh(result, result.Groups[0]);
+            return ExtractMesh(result, result.Groups[0], id);
         }
 
-        private IMesh ExtractMesh(LoadResult result, Group group)
+        private IMesh ExtractMesh(LoadResult result, Group group, int id)
         {
             var triangles = new Triangle[group.Faces.Count];
             for (var i = 0; i < group.Faces.Count; i++)
             {
                 var face = group.Faces[i];
                 var (v0, v1, v2) = GetVertices(result, face);
-                var t = new Triangle(v0, v1, v2);
+                var t = new Triangle(v0, v1, v2, id);
                 if (result.Normals.Count == 0)
                 {
                     t.CalculateNormal();
@@ -37,7 +37,7 @@ namespace CowEngine
                 }
                 triangles[i] = t;
             }
-            return new OptimizedMesh(triangles);
+            return new OptimizedMesh(triangles, id);
         }
 
         private (Vector3 v0, Vector3 v1, Vector3 v2) GetVertices(LoadResult result, Face face)

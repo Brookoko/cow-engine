@@ -18,8 +18,9 @@ namespace CowRenderer
         private readonly ISampler sampler;
         private RealisticCamera camera;
 
-        public AutoAdjustScene(ISampler sampler)
+        public AutoAdjustScene(RenderableObject obj, ISampler sampler)
         {
+            objects.Add(obj);
             this.sampler = sampler;
         }
 
@@ -68,7 +69,7 @@ namespace CowRenderer
 
         private void PlacePlane(Bound box)
         {
-            var plane = new RenderableObject(new Disk(100), new DiffuseMaterial(Color.Red, 1));
+            var plane = new RenderableObject(new Disk(100, 1), new DiffuseMaterial(Color.Red, 1));
             plane.Transform.Position = box.min.Y * Vector3.UnitY;
             objects.Add(plane);
         }

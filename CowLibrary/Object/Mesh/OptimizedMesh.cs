@@ -4,13 +4,16 @@ namespace CowLibrary
 
     public struct OptimizedMesh : IMesh
     {
-        public readonly TriangleMesh mesh;
         public KdTree tree;
+        public readonly TriangleMesh mesh;
 
-        public OptimizedMesh(Triangle[] triangles)
+        public int Id { get; }
+        
+        public OptimizedMesh(Triangle[] triangles, int id)
         {
-            mesh = new TriangleMesh(triangles);
+            mesh = new TriangleMesh(triangles, id);
             tree = default;
+            Id = id;
         }
 
         public readonly RayHit Intersect(in Ray ray)
@@ -26,7 +29,7 @@ namespace CowLibrary
         public void Apply(in Matrix4x4 matrix)
         {
             mesh.Apply(in matrix);
-            tree = KdTreeBuilder.Build(mesh.triangles);
+            tree = KdTreeBuilder.Build(mesh.triangles, Id);
         }
     }
 }

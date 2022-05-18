@@ -47,19 +47,18 @@
 
         private Scene ExtractFromModelFile(string source)
         {
-            var model = RenderableObjectWorker.Parse(source);
+            var model = RenderableObjectWorker.Parse(source, 0);
             return PrepareScene(model);
         }
 
         private Scene PrepareScene(RenderableObject model)
         {
-            var scene = new AutoAdjustScene(SamplerProvider.Sampler);
+            var scene = new AutoAdjustScene(model, SamplerProvider.Sampler);
             DiContainer.Inject(scene);
 
             var light = new EnvironmentLight(new Color(255, 255, 255), 3, SamplerProvider.Sampler);
             scene.lights.Add(light);
 
-            scene.objects.Add(model);
             scene.PrepareScene();
             return scene;
         }

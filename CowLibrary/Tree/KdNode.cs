@@ -8,9 +8,9 @@ namespace CowLibrary
         public readonly Bound bound;
         public readonly int index;
 
-        public KdNode(Triangle[] triangles)
+        public KdNode(Triangle[] triangles, int id)
         {
-            mesh = new TriangleMesh(triangles);
+            mesh = new TriangleMesh(triangles, id);
             bound = mesh.GetBoundingBox();
             index = -1;
         }

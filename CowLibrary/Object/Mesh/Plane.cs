@@ -8,12 +8,15 @@ namespace CowLibrary
         private Vector3 normal;
         private Vector3 point;
 
-        public Plane()
+        public int Id { get; }
+
+        public Plane(int id)
         {
             this = default;
             normal = -Vector3.UnitY;
             point = Vector3.Zero;
             bound = CreateBound();
+            Id = id;
         }
 
         private Bound CreateBound()
@@ -34,9 +37,9 @@ namespace CowLibrary
             {
                 return Const.Miss;
             }
-            return new RayHit(t, ray.GetPoint(t), -normal);
+            return new RayHit(t, ray.GetPoint(t), -normal, Id);
         }
-        
+
         public readonly Bound GetBoundingBox()
         {
             return bound;

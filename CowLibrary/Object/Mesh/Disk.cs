@@ -9,12 +9,15 @@ namespace CowLibrary
         private Vector3 point;
         private float radius;
 
-        public Disk(float radius) : this()
+        public int Id { get; }
+        
+        public Disk(float radius, int id) : this()
         {
             this.radius = radius;
             point = Vector3.Zero;
             normal = -Vector3.UnitY;
             bound = CreateBound();
+            Id = id;
         }
 
         private Bound CreateBound()
@@ -41,7 +44,7 @@ namespace CowLibrary
             {
                 return Const.Miss;
             }
-            return new RayHit(t, p, -normal);
+            return new RayHit(t, p, -normal, Id);
         }
 
         public readonly Bound GetBoundingBox()

@@ -8,37 +8,37 @@ public class KdTreeBuilder
 {
     private static readonly KdNode EmptyNode = new KdNode();
 
-    public static KdTree Build(in Triangle[] triangles)
+    public static KdTree Build(in Triangle[] triangles, int id)
     {
         var nodes = new List<KdNode>();
-        BuildNode(in triangles, nodes, 0, 0);
+        BuildNode(in triangles, nodes, 0, 0, id);
         return new KdTree(nodes.ToArray());
     }
 
-    private static void BuildNode(in Triangle[] triangles, List<KdNode> nodes, int depth, int count)
+    private static void BuildNode(in Triangle[] triangles, List<KdNode> nodes, int depth, int count, int id)
     {
         if (triangles.Length <= Const.MinNumberOfTriangles || depth >= Const.MaxDepth)
         {
-            AddNode(nodes, new KdNode(triangles), count);
+            AddNode(nodes, new KdNode(triangles, id), count);
             return;
         }
-        Split(in triangles, nodes, depth, count);
+        Split(in triangles, nodes, depth, count, id);
     }
 
-    private static void Split(in Triangle[] triangles, List<KdNode> nodes, int depth, int count)
+    private static void Split(in Triangle[] triangles, List<KdNode> nodes, int depth, int count, int id)
     {
         var splitValue = GetMedian(triangles, depth);
         var (left, middle, right) = SplitTriangle(triangles, depth, splitValue);
         if (middle.Length == triangles.Length)
         {
-            AddNode(nodes, new KdNode(triangles), count);
+            AddNode(nodes, new KdNode(triangles, id), count);
             return;
         }
         var node = new KdNode(in triangles, count);
         AddNode(nodes, node, count);
-        BuildNode(left, nodes, depth + 1, 3 * count + 1);
-        BuildNode(middle, nodes, depth + 1, 3 * count + 2);
-        BuildNode(right, nodes, depth + 1, 3 * count + 3);
+        BuildNode(left, nodes, depth + 1, 3 * count + 1, id);
+        BuildNode(middle, nodes, depth + 1, 3 * count + 2, id);
+        BuildNode(right, nodes, depth + 1, 3 * count + 3, id);
     }
 
     private static void AddNode(List<KdNode> nodes, in KdNode node, int count)

@@ -9,11 +9,14 @@ namespace CowLibrary
         private Vector3 center;
         private float radius;
 
-        public Sphere(float radius) : this()
+        public int Id { get; }
+
+        public Sphere(float radius, int id) : this()
         {
             this.radius = radius;
             center = Vector3.Zero;
             bound = CreateBound();
+            Id = id;
         }
 
         private Bound CreateBound()
@@ -60,7 +63,7 @@ namespace CowLibrary
             }
 
             var p = ray.GetPoint(t);
-            return new RayHit(t, p, (p - center).Normalize());
+            return new RayHit(t, p, (p - center).Normalize(), Id);
         }
 
         public Bound GetBoundingBox()

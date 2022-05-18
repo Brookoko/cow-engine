@@ -11,28 +11,22 @@ namespace CowLibrary
         private Vector3 max;
         private Vector3 size;
 
-        public Box(Vector3 min, Vector3 max)
-        {
-            this.min = min;
-            this.max = max;
-            center = new Vector3((min.X + max.X) * 0.5f, (min.Y + max.Y) * 0.5f, (min.Z + max.Z) * 0.5f);
-            size = max - center;
-            bound = new Bound(min, max);
-        }
+        public int Id { get; }
 
-        public Box(Vector3 size)
+        public Box(Vector3 size, int id)
         {
             this.size = size;
             center = Vector3.Zero;
             min = center - size;
             max = center + size;
             bound = new Bound(min, max);
+            Id = id;
         }
 
         public readonly RayHit Intersect(in Ray ray)
         {
             var hit = bound.Intersect(in ray);
-            return new RayHit(hit.t, hit.point, GetNormal(hit.point));
+            return new RayHit(hit.t, hit.point, GetNormal(hit.point), Id);
         }
 
         private readonly Vector3 GetNormal(in Vector3 point)

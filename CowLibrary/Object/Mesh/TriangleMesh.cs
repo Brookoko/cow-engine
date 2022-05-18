@@ -7,16 +7,20 @@ namespace CowLibrary
         public readonly Triangle[] triangles;
         private Bound bound;
 
+        public int Id { get; }
+
         public TriangleMesh()
         {
             triangles = new Triangle[0];
             bound = new Bound();
+            Id = -1;
         }
 
-        public TriangleMesh(Triangle[] triangles) : this()
+        public TriangleMesh(Triangle[] triangles, int id) : this()
         {
             this.triangles = triangles;
             bound = IntersectionHelper.CreateBound(triangles);
+            Id = id;
         }
 
         public readonly RayHit Intersect(in Ray ray)
