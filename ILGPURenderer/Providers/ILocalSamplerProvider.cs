@@ -15,14 +15,14 @@ public class LocalSamplerProvider : ILocalSamplerProvider, IDisposable
     [Inject]
     public GpuKernel GpuKernel { get; set; }
 
-    private RNG<XorShift64Star> rng;
+    private RNG<XorShift128Plus> rng;
     private LocalSampler sampler;
 
     [PostConstruct]
     public void Initialize()
     {
         var random = new Random();
-        rng = RNG.Create<XorShift64Star>(GpuKernel.Accelerator, random);
+        rng = RNG.Create<XorShift128Plus>(GpuKernel.Accelerator, random);
         var rngView = rng.GetView(GpuKernel.Accelerator.WarpSize);
         sampler = new LocalSampler(rngView);
     }

@@ -23,7 +23,7 @@ public readonly struct LocalIntegrator
         environmentIntegrator = new EnvironmentIntegrator(sampler, raycaster);
     }
 
-    public Color GetColor(in SceneView sceneView, in RayHit hit, in Ray ray)
+    public Color GetColor(in SceneView sceneView, in RenderData renderData, in RayHit hit, in Ray ray)
     {
         if (!hit.HasHit)
         {
@@ -34,7 +34,7 @@ public readonly struct LocalIntegrator
         {
             var light = sceneView.light.environmentLights[i];
             var matrix = sceneView.light.GetMatrix(light.Id);
-            color += environmentIntegrator.GetLighting(in sceneView, in hit, in ray, in light, in matrix);
+            color += environmentIntegrator.GetLighting(in sceneView, in renderData, in hit, in ray, in light, in matrix, 0);
         }
         return color;
     }

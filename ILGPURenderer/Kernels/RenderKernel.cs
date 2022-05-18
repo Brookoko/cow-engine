@@ -36,7 +36,7 @@ public class RenderKernel : IRenderKernel
             LocalIntegrator,
             OrthographicCameraModel,
             Matrix4x4,
-            int>
+            RenderData>
         orthographicAction;
 
     private Action<
@@ -48,7 +48,7 @@ public class RenderKernel : IRenderKernel
             LocalIntegrator,
             PerspectiveCameraModel,
             Matrix4x4,
-            int>
+            RenderData>
         perspectiveAction;
 
     private Action<
@@ -60,18 +60,13 @@ public class RenderKernel : IRenderKernel
             LocalIntegrator,
             RealisticCameraModel,
             Matrix4x4,
-            int>
+            RenderData>
         realisticAction;
 
     [PostConstruct]
     public void Initialize()
     {
-        orthographicAction = LoadActionForOrthographic();
-        perspectiveAction = LoadActionForPerspective();
-        realisticAction = LoadActionForRealistic();
-    }
-
-    private Action<
+        orthographicAction = GpuKernel.Accelerator.LoadAutoGroupedStreamKernel<
             Index2D,
             ArrayView2D<Color, Stride2D.DenseX>,
             SceneView,
@@ -80,23 +75,9 @@ public class RenderKernel : IRenderKernel
             LocalIntegrator,
             OrthographicCameraModel,
             Matrix4x4,
-            int>
-        LoadActionForOrthographic()
-    {
-        return GpuKernel.Accelerator.LoadAutoGroupedStreamKernel<
-            Index2D,
-            ArrayView2D<Color, Stride2D.DenseX>,
-            SceneView,
-            LocalSampler,
-            LocalRaycaster,
-            LocalIntegrator,
-            OrthographicCameraModel,
-            Matrix4x4,
-            int
+            RenderData
         >(Render);
-    }
-
-    private Action<
+        perspectiveAction = GpuKernel.Accelerator.LoadAutoGroupedStreamKernel<
             Index2D,
             ArrayView2D<Color, Stride2D.DenseX>,
             SceneView,
@@ -105,23 +86,9 @@ public class RenderKernel : IRenderKernel
             LocalIntegrator,
             PerspectiveCameraModel,
             Matrix4x4,
-            int>
-        LoadActionForPerspective()
-    {
-        return GpuKernel.Accelerator.LoadAutoGroupedStreamKernel<
-            Index2D,
-            ArrayView2D<Color, Stride2D.DenseX>,
-            SceneView,
-            LocalSampler,
-            LocalRaycaster,
-            LocalIntegrator,
-            PerspectiveCameraModel,
-            Matrix4x4,
-            int
+            RenderData
         >(Render);
-    }
-
-    private Action<
+        realisticAction = GpuKernel.Accelerator.LoadAutoGroupedStreamKernel<
             Index2D,
             ArrayView2D<Color, Stride2D.DenseX>,
             SceneView,
@@ -130,19 +97,7 @@ public class RenderKernel : IRenderKernel
             LocalIntegrator,
             RealisticCameraModel,
             Matrix4x4,
-            int>
-        LoadActionForRealistic()
-    {
-        return GpuKernel.Accelerator.LoadAutoGroupedStreamKernel<
-            Index2D,
-            ArrayView2D<Color, Stride2D.DenseX>,
-            SceneView,
-            LocalSampler,
-            LocalRaycaster,
-            LocalIntegrator,
-            RealisticCameraModel,
-            Matrix4x4,
-            int
+            RenderData
         >(Render);
     }
 
@@ -161,21 +116,21 @@ public class RenderKernel : IRenderKernel
         var raycaster = new LocalRaycaster();
         var integrator = new LocalIntegrator(sampler, raycaster);
         var matrix = camera.Transform.LocalToWorldMatrix;
-        var samples = RenderConfig.numberOfRayPerPixel;
+        var renderData = new RenderData(RenderConfig);
         var model = camera.Model;
         switch (model)
         {
             case OrthographicCameraModel orthographicCameraModel:
                 orthographicAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator,
-                    orthographicCameraModel, matrix, samples);
+                    orthographicCameraModel, matrix, renderData);
                 break;
             case PerspectiveCameraModel perspectiveCameraModel:
                 perspectiveAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator,
-                    perspectiveCameraModel, matrix, samples);
+                    perspectiveCameraModel, matrix, renderData);
                 break;
             case RealisticCameraModel realisticCameraModel:
                 realisticAction(buffer.IntExtent, buffer.View, sceneView, sampler, raycaster, integrator,
-                    realisticCameraModel, matrix, samples);
+                    realisticCameraModel, matrix, renderData);
                 break;
         }
     }
@@ -189,18 +144,18 @@ public class RenderKernel : IRenderKernel
         LocalIntegrator integrator,
         TCamera camera,
         Matrix4x4 cameraLocalToWorld,
-        int samples)
+        RenderData renderData)
         where TCamera : struct, ICameraModel
     {
         var point = new Vector2(index.Y + 0.5f, index.X + 0.5f);
         var color = Color.Black;
-        for (var i = 0; i < samples; i++)
+        for (var i = 0; i < renderData.numberOfRayPerPixel; i++)
         {
             var sample = sampler.CreateSample();
             var ray = camera.ScreenPointToRay(in point, in cameraLocalToWorld, in sample);
             var hitRay = raycaster.Raycast(in sceneView.mesh, in ray);
-            color += integrator.GetColor(in sceneView, in hitRay, in ray);
+            color += integrator.GetColor(in sceneView, in renderData, in hitRay, in ray);
         }
-        colors[index] = color / samples;
+        colors[index] = color / renderData.numberOfRayPerPixel;
     }
 }

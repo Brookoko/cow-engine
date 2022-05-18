@@ -39,7 +39,7 @@ namespace CowRenderer.Integration
 
         private Color GetLighting(in Surfel surfel, Light light, int depth)
         {
-            return GetDirectLighting(in surfel, light);
+            return GetDirectLighting(in surfel, light) + GetIndirectLighting(in surfel, light, depth);
         }
 
         private Color GetDirectLighting(in Surfel surfel, Light light)
@@ -55,7 +55,7 @@ namespace CowRenderer.Integration
         private Color GetIndirectLighting(in Surfel surfel, Light light, int depth)
         {
             var result = Color.Black;
-            var n = RenderConfig.numberOfRayPerLight;
+            var n = RenderConfig.numberOfRayPerMaterial;
             for (var i = 0; i < n; i++)
             {
                 var sample = SamplerProvider.Sampler.CreateSample();
@@ -65,7 +65,7 @@ namespace CowRenderer.Integration
                     result += f * pdf * Trace(in surfel, light, wi, depth);
                 }
             }
-            return result / RenderConfig.numberOfRayPerLight;
+            return result / RenderConfig.numberOfRayPerMaterial;
         }
 
         private float TraceShadowRay(in Surfel surfel, Vector3 direction, float distance)

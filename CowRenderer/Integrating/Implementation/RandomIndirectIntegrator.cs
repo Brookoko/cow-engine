@@ -41,7 +41,7 @@ namespace CowRenderer.Integration
             }
             var p = surfel.hit.point + surfel.hit.normal * Const.Bias;
             var color = new Color(0f);
-            for (var i = 0; i < RenderConfig.numberOfRayPerLight; i++)
+            for (var i = 0; i < RenderConfig.numberOfRayPerMaterial; i++)
             {
                 var dir = Mathf.CosineSampleHemisphere(surfel.hit.normal, SamplerProvider.Sampler.CreateSample());
                 var ray = new Ray(p, dir);
@@ -52,7 +52,7 @@ namespace CowRenderer.Integration
                     color += dot * (directIntegrator.GetColor(scene, in surfelHit) + TraceRecursive(scene, in surfelHit, depth + 1));
                 }
             }
-            return color / RenderConfig.numberOfRayPerLight;
+            return color / RenderConfig.numberOfRayPerMaterial;
         }
     }
 }

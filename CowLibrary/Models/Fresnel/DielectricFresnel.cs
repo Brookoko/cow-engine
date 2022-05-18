@@ -15,7 +15,7 @@ namespace CowLibrary
 
         public float Evaluate(float cosThetaI)
         {
-            cosThetaI = Math.Clamp(cosThetaI, -1, 1);
+            cosThetaI = Math.Min(Math.Max(cosThetaI, -1), 1);
             var etaI = this.etaI;
             var etaT = this.etaT;
             var entering = cosThetaI > 0;

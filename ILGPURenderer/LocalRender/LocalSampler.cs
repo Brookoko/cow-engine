@@ -5,9 +5,9 @@ using ILGPU.Algorithms.Random;
 
 public readonly struct LocalSampler : ISampler
 {
-    private readonly RNGView<XorShift64Star> random;
+    private readonly RNGView<XorShift128Plus> random;
 
-    public LocalSampler(RNGView<XorShift64Star> random)
+    public LocalSampler(RNGView<XorShift128Plus> random)
     {
         this.random = random;
     }

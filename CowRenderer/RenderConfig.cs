@@ -9,6 +9,6 @@ namespace CowRenderer
         public int numberOfThreadPerDimension = 8;
         public int numberOfRayPerPixel = 16;
         public int rayDepth = 2;
-        public int numberOfRayPerLight = 2;
+        public int numberOfRayPerMaterial = 2;
     }
 }
