@@ -3,7 +3,9 @@
 using System;
 using Cowject;
 using CowLibrary.Mathematics.Sampler;
+using ILGPU;
 using ILGPU.Algorithms.Random;
+using ILGPU.Runtime;
 
 public interface ILocalSamplerProvider
 {
@@ -15,16 +17,21 @@ public class LocalSamplerProvider : ILocalSamplerProvider, IDisposable
     [Inject]
     public GpuKernel GpuKernel { get; set; }
 
-    private RNG<XorShift128Plus> rng;
+    private MemoryBuffer1D<XorShift64Star, Stride1D.Dense> buffer;
     private LocalSampler sampler;
 
     [PostConstruct]
     public void Initialize()
     {
         var random = new Random();
-        rng = RNG.Create<XorShift128Plus>(GpuKernel.Accelerator, random);
-        var rngView = rng.GetView(GpuKernel.Accelerator.WarpSize);
-        sampler = new LocalSampler(rngView);
+        var randoms = new XorShift64Star[GpuKernel.Accelerator.WarpSize];
+        for (var i = 0; i < randoms.Length; i++)
+        {
+            randoms[i] = XorShift64Star.Create(random);
+        }
+        buffer = GpuKernel.Accelerator.Allocate1D<XorShift64Star>(randoms.Length);
+        buffer.CopyFromCPU(randoms);
+        sampler = new LocalSampler(buffer.View);
     }
 
     public LocalSampler GetSampler()
@@ -34,6 +41,6 @@ public class LocalSamplerProvider : ILocalSamplerProvider, IDisposable
 
     public void Dispose()
     {
-        rng?.Dispose();
+        buffer?.Dispose();
     }
 }
