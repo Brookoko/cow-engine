@@ -25,7 +25,8 @@ public readonly struct KdTreeView
         in ArrayView<TriangleView> triangles,
         in ArrayView<KdNodeView> nodes)
     {
-        var childNumbers = new short[Const.MaxDepth + 1];
+        var childNumbers = new byte[Const.MaxDepth + 1];
+        var parent = new int[Const.MaxDepth + 1];
         var depth = 0;
         var nodeIndex = 0;
         var hit = Const.Miss;
@@ -38,12 +39,12 @@ public readonly struct KdTreeView
             if (!IsInBound(in ray, in node))
             {
                 depth--;
-                nodeIndex = (nodeIndex - childNumbers[depth] + 1) / Const.KdNodeCount;
+                nodeIndex = parent[depth];
                 childNumbers[depth]++;
                 continue;
             }
 
-            if (node.index < 0)
+            if (node.leftIndex < 0)
             {
                 var tHit = node.triangleMeshView.Intersect(in ray, in triangles);
                 if (tHit.t < hit.t)
@@ -51,21 +52,22 @@ public readonly struct KdTreeView
                     hit = tHit;
                 }
                 depth--;
-                nodeIndex = (nodeIndex - childNumbers[depth] + 1) / Const.KdNodeCount;
+                nodeIndex = parent[depth];
                 childNumbers[depth]++;
                 continue;
             }
 
             if (childNumbers[depth] < Const.KdNodeCount)
             {
-                nodeIndex = Const.KdNodeCount * nodeIndex + childNumbers[depth] + 1;
+                parent[depth] = nodeIndex;
+                nodeIndex = GetChild(in nodes, in nodeIndex, in childNumbers[depth]);
                 depth++;
                 childNumbers[depth] = 0;
             }
             else
             {
                 depth--;
-                nodeIndex = (nodeIndex - childNumbers[depth] + 1) / Const.KdNodeCount;
+                nodeIndex = parent[depth];
                 childNumbers[depth]++;
             }
         }
@@ -74,11 +76,18 @@ public readonly struct KdTreeView
 
     private bool IsInBound(in Ray ray, in KdNodeView node)
     {
-        if (node.index < 0 && node.triangleMeshView.trianglesCount == 0)
-        {
-            return false;
-        }
         var boundHit = node.bound.Intersect(in ray);
         return boundHit.HasHit;
+    }
+
+    private int GetChild(in ArrayView<KdNodeView> nodes, in int nodeIndex, in byte childNumber)
+    {
+        ref var node = ref nodes[nodeIndex];
+        return childNumber switch
+        {
+            0 => node.leftIndex,
+            1 => node.middleIndex,
+            _ => node.rightIndex
+        };
     }
 }

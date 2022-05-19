@@ -1,57 +1,65 @@
 ﻿namespace CowLibrary;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
 public class KdTreeBuilder
 {
-    private static readonly KdNode EmptyNode = new KdNode();
-
     public static KdTree Build(in Triangle[] triangles, int id)
     {
         var nodes = new List<KdNode>();
-        BuildNode(in triangles, nodes, 0, 0, id);
-        return new KdTree(nodes.ToArray());
+        var count = 0;
+        BuildNode(in triangles, nodes, 0, ref count, id);
+        var reverted = new KdNode[nodes.Count];
+        for (var i = nodes.Count - 1; i >= 0; i--)
+        {
+            var node = nodes[i];
+            var index = Revert(i);
+            var leftIndex = Revert(node.leftIndex);
+            var middleIndex = Revert(node.middleIndex);
+            var rightIndex = Revert(node.rightIndex);
+            reverted[index] = node.Copy(leftIndex, middleIndex, rightIndex);
+        }
+        return new KdTree(reverted);
+
+        int Revert(int index)
+        {
+            return index < 0 ? index : nodes.Count - index - 1;
+        }
     }
 
-    private static void BuildNode(in Triangle[] triangles, List<KdNode> nodes, int depth, int count, int id)
+    private static void BuildNode(in Triangle[] triangles, List<KdNode> nodes, int depth, ref int count, int id)
     {
         if (triangles.Length <= Const.MinNumberOfTriangles || depth >= Const.MaxDepth)
         {
-            AddNode(nodes, new KdNode(triangles, id), count);
+            nodes.Add(new KdNode(triangles, id));
+            count++;
             return;
         }
-        Split(in triangles, nodes, depth, count, id);
+        Split(in triangles, nodes, depth, ref count, id);
     }
 
-    private static void Split(in Triangle[] triangles, List<KdNode> nodes, int depth, int count, int id)
+    private static void Split(in Triangle[] triangles, List<KdNode> nodes, int depth, ref int count, int id)
     {
         var splitValue = GetMedian(triangles, depth);
         var (left, middle, right) = SplitTriangle(triangles, depth, splitValue);
         if (middle.Length == triangles.Length)
         {
-            AddNode(nodes, new KdNode(triangles, id), count);
+            nodes.Add(new KdNode(triangles, id));
+            count++;
             return;
         }
-        var node = new KdNode(in triangles, count);
-        AddNode(nodes, node, count);
-        BuildNode(left, nodes, depth + 1, 3 * count + 1, id);
-        BuildNode(middle, nodes, depth + 1, 3 * count + 2, id);
-        BuildNode(right, nodes, depth + 1, 3 * count + 3, id);
-    }
-
-    private static void AddNode(List<KdNode> nodes, in KdNode node, int count)
-    {
-        var nodesToFill = count + 1 - nodes.Count;
-        if (nodesToFill > 0)
-        {
-            for (var i = 0; i < nodesToFill; i++)
-            {
-                nodes.Add(EmptyNode);
-            }
-        }
-        nodes[count] = node;
+        BuildNode(left, nodes, depth + 1, ref count, id);
+        var leftIndex = count - 1;
+        BuildNode(middle, nodes, depth + 1, ref count, id);
+        var middleIndex = count - 1;
+        BuildNode(right, nodes, depth + 1, ref count, id);
+        var rightIndex = count - 1;
+        var node = new KdNode(in triangles, leftIndex, middleIndex, rightIndex);
+        nodes.Add(node);
+        count++;
     }
 
     private static float GetMedian(Triangle[] triangles, int depth)

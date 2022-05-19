@@ -70,7 +70,8 @@ public class SceneConverter : ISceneConverter
                     triangles.AddRange(node.mesh.triangles);
                 }
                 var trianglesLength = node.mesh.triangles?.Length ?? 0;
-                var model = new KdNodeView(node.bound, triangleOffset, trianglesLength, node.index);
+                var model = new KdNodeView(node.bound, triangleOffset, trianglesLength,
+                    node.leftIndex, node.middleIndex, node.rightIndex);
                 nodes.Add(model);
                 triangleOffset += trianglesLength;
             }

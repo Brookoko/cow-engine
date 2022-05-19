@@ -2,18 +2,20 @@ namespace CowLibrary
 {
     public readonly struct KdTree : IIntersectable
     {
-        public int Id => nodes[0].mesh.Id;
+        public int Id => root.Id;
 
         public readonly KdNode[] nodes;
+        private readonly KdNode root;
 
         public KdTree(KdNode[] nodes) : this()
         {
             this.nodes = nodes;
+            root = nodes[0];
         }
 
         public RayHit Intersect(in Ray ray)
         {
-            return nodes[0].Intersect(in ray, in nodes);
+            return root.Intersect(in ray, in nodes);
         }
     }
 }
