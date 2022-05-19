@@ -85,9 +85,9 @@ public readonly struct KdTreeView
         ref var node = ref nodes[nodeIndex];
         return childNumber switch
         {
-            0 => node.leftIndex,
+            0 => node.rightIndex,
             1 => node.middleIndex,
-            _ => node.rightIndex
+            _ => node.leftIndex
         };
     }
 }
