@@ -13,14 +13,16 @@ namespace CowLibrary
 
         public int Id { get; }
 
+        public IIntersectable View => this;
+
         public Box(Vector3 size, int id)
         {
             this.size = size;
             center = Vector3.Zero;
             min = center - size;
             max = center + size;
-            bound = new Bound(min, max);
             Id = id;
+            bound = new Bound(min, max, id);
         }
 
         public readonly RayHit Intersect(in Ray ray)

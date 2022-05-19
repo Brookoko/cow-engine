@@ -5,25 +5,29 @@ using System.Numerics;
 
 public struct Bound : IIntersectable
 {
+    public int Id { get; }
+
     public Vector3 center;
     public Vector3 min;
     public Vector3 max;
     public Vector3 size;
 
-    public Bound(Vector3 min, Vector3 max)
+    public Bound(Vector3 min, Vector3 max, int id)
     {
         this.min = min;
         this.max = max;
         center = new Vector3((min.X + max.X) * 0.5f, (min.Y + max.Y) * 0.5f, (min.Z + max.Z) * 0.5f);
         size = max - center;
+        Id = id;
     }
 
-    public Bound(Vector3 center, float sideLength)
+    public Bound(Vector3 center, float sideLength, int id)
     {
         this.center = center;
         size = new Vector3(sideLength / 2);
         min = center - size;
         max = center + size;
+        Id = id;
     }
 
     public readonly RayHit Intersect(in Ray ray)
@@ -75,6 +79,6 @@ public struct Bound : IIntersectable
 
         var p = ray.GetPoint(t);
 
-        return new RayHit(t, p, Vector3.Zero, -1);
+        return new RayHit(t, p, Vector3.Zero, Id);
     }
 }

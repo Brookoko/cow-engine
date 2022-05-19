@@ -30,7 +30,7 @@ namespace CowLibrary
                 max.Y = Math.Max(max.Y, b.max.Y);
                 max.Z = Math.Max(max.Z, b.max.Z);
             }
-            return new Bound(min, max);
+            return new Bound(min, max, -1);
         }
 
         public Surfel? Intersect(in Ray ray)

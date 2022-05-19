@@ -5,10 +5,10 @@ using System.Linq;
 using Cowject;
 using CowLibrary;
 using CowLibrary.Lights.Models;
+using CowLibrary.Views;
 using CowRenderer;
 using Data;
 using ILGPU;
-using ILGPU.Runtime;
 using Utils;
 
 public interface ISceneConverter
@@ -29,17 +29,17 @@ public class SceneConverter : ISceneConverter
     private MeshView CreateMeshData(Scene scene)
     {
         var meshes = scene.objects.Select(obj => obj.Mesh).ToArray();
-        var boxes = LoadDerived<Box, IMesh>(meshes);
-        var disks = LoadDerived<Disk, IMesh>(meshes);
-        var planes = LoadDerived<Plane, IMesh>(meshes);
-        var spheres = LoadDerived<Sphere, IMesh>(meshes);
-        var triangleObjects = LoadDerived<Triangle, IMesh>(meshes);
+        var boxes = LoadDerived<Box, IIntersectable>(meshes);
+        var disks = LoadDerived<Disk, IIntersectable>(meshes);
+        var planes = LoadDerived<Plane, IIntersectable>(meshes);
+        var spheres = LoadDerived<Sphere, IIntersectable>(meshes);
+        var triangleObjects = LoadDerived<TriangleView, IIntersectable>(meshes);
         var (triangles, triangleMeshes, trees, nodes) = LoadTriangles(meshes);
         return new MeshView(boxes, disks, planes, spheres, triangleObjects, triangles, triangleMeshes, trees, nodes);
     }
 
     private (
-        ArrayView<Triangle> triangles,
+        ArrayView<TriangleView> triangles,
         ArrayView<TriangleMeshView> triangleMeshModels,
         ArrayView<KdTreeView> trees,
         ArrayView<KdNodeView> nodes) LoadTriangles(IMesh[] meshes)
@@ -49,7 +49,8 @@ public class SceneConverter : ISceneConverter
         var triangles = new List<Triangle>();
         var (trees, nodes) = LoadOptimizedMeshes(optimizedMeshes, triangles);
         var triangleMeshModels = LoadTriangleMeshes(triangleMeshes, triangles);
-        return (GpuKernel.ConvertToView(triangles.ToArray()), triangleMeshModels, trees, nodes);
+        var trianglesView = GpuKernel.ConvertToView(triangles.Select(t => t.view).ToArray());
+        return (trianglesView, triangleMeshModels, trees, nodes);
     }
 
     private (ArrayView<KdTreeView> trees, ArrayView<KdNodeView> nodes) LoadOptimizedMeshes(

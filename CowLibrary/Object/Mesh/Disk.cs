@@ -10,19 +10,21 @@ namespace CowLibrary
         private float radius;
 
         public int Id { get; }
-        
+
+        public IIntersectable View => this;
+
         public Disk(float radius, int id) : this()
         {
             this.radius = radius;
             point = Vector3.Zero;
             normal = -Vector3.UnitY;
-            bound = CreateBound();
             Id = id;
+            bound = CreateBound();
         }
 
         private Bound CreateBound()
         {
-            return new Bound(point, 2 * radius);
+            return new Bound(point, 2 * radius, Id);
         }
 
         public readonly RayHit Intersect(in Ray ray)

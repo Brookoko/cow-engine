@@ -18,7 +18,7 @@ namespace CowLibrary
         public KdNode(in Triangle[] triangles, int index)
         {
             mesh = new TriangleMesh();
-            bound = IntersectionHelper.CreateBound(triangles);
+            bound = IntersectionHelper.CreateBound(triangles, -1);
             this.index = index;
         }
 

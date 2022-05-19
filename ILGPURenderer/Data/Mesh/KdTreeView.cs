@@ -1,6 +1,7 @@
 ﻿namespace ILGPURenderer.Data;
 
 using CowLibrary;
+using CowLibrary.Views;
 using ILGPU;
 using ILGPU.Runtime;
 
@@ -14,14 +15,14 @@ public readonly struct KdTreeView
     }
 
     public RayHit Intersect(in Ray ray,
-        in ArrayView<Triangle> triangles,
+        in ArrayView<TriangleView> triangles,
         in ArrayView<KdNodeView> nodes)
     {
         return IsInBound(in ray, in nodes[index]) ? IntersectNodes(in ray, in triangles, in nodes) : Const.Miss;
     }
 
     private RayHit IntersectNodes(in Ray ray,
-        in ArrayView<Triangle> triangles,
+        in ArrayView<TriangleView> triangles,
         in ArrayView<KdNodeView> nodes)
     {
         var childNumbers = new short[Const.MaxDepth + 1];

@@ -5,7 +5,7 @@
 
     public static class IntersectionHelper
     {
-        public static Bound CreateBound(Triangle[] triangles)
+        public static Bound CreateBound(Triangle[] triangles, int id)
         {
             var min = Vector3.One * float.MaxValue;
             var max = Vector3.One * float.MinValue;
@@ -19,7 +19,7 @@
                 max.Y = Math.Max(max.Y, box.max.Y);
                 max.Z = Math.Max(max.Z, box.max.Z);
             }
-            return new Bound(min, max);
+            return new Bound(min, max, id);
         }
     }
 }

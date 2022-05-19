@@ -8,7 +8,9 @@ namespace CowLibrary
         public readonly TriangleMesh mesh;
 
         public int Id { get; }
-        
+
+        public IIntersectable View => this;
+
         public OptimizedMesh(Triangle[] triangles, int id)
         {
             mesh = new TriangleMesh(triangles, id);
@@ -25,7 +27,7 @@ namespace CowLibrary
         {
             return mesh.GetBoundingBox();
         }
-        
+
         public void Apply(in Matrix4x4 matrix)
         {
             mesh.Apply(in matrix);

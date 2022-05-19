@@ -1,6 +1,7 @@
 ﻿namespace ILGPURenderer.Data;
 
 using CowLibrary;
+using CowLibrary.Views;
 using ILGPU;
 using ILGPU.Runtime;
 
@@ -15,7 +16,7 @@ public readonly struct TriangleMeshView
         this.trianglesCount = trianglesCount;
     }
 
-    public RayHit Intersect(in Ray ray, in ArrayView<Triangle> triangles)
+    public RayHit Intersect(in Ray ray, in ArrayView<TriangleView> triangles)
     {
         var hit = Const.Miss;
         for (var i = 0; i < trianglesCount; i++)

@@ -11,17 +11,19 @@ namespace CowLibrary
 
         public int Id { get; }
 
+        public IIntersectable View => this;
+
         public Sphere(float radius, int id) : this()
         {
             this.radius = radius;
             center = Vector3.Zero;
-            bound = CreateBound();
             Id = id;
+            bound = CreateBound();
         }
 
         private Bound CreateBound()
         {
-            return new Bound(center, radius * 2);
+            return new Bound(center, radius * 2, Id);
         }
 
         public readonly RayHit Intersect(in Ray ray)

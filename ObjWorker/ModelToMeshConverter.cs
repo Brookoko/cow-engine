@@ -25,19 +25,29 @@ namespace CowEngine
             {
                 var face = group.Faces[i];
                 var (v0, v1, v2) = GetVertices(result, face);
-                var t = new Triangle(v0, v1, v2, id);
+                Vector3 n0;
+                Vector3 n1;
+                Vector3 n2;
                 if (result.Normals.Count == 0)
                 {
-                    t.CalculateNormal();
+                    (n0, n1, n2) = CalculateNormal(v0, v1, v2);
                 }
                 else
                 {
-                    var (n0, n1, n2) = GetNormals(result, face);
-                    t.SetNormal(n0, n1, n2);
+                    (n0, n1, n2) = GetNormals(result, face);
                 }
+                var t = new Triangle(v0, v1, v2, n0, n1, n2, id);
                 triangles[i] = t;
             }
             return new OptimizedMesh(triangles, id);
+        }
+
+        public (Vector3 n0, Vector3 n1, Vector3 n2) CalculateNormal(Vector3 v0, Vector3 v1, Vector3 v2)
+        {
+            var v0v1 = v1 - v0;
+            var v0v2 = v2 - v0;
+            var n = Vector3.Cross(v0v2, v0v1);
+            return (n, n, n);
         }
 
         private (Vector3 v0, Vector3 v1, Vector3 v2) GetVertices(LoadResult result, Face face)

@@ -10,18 +10,20 @@ namespace CowLibrary
 
         public int Id { get; }
 
+        public IIntersectable View => this;
+
         public Plane(int id)
         {
             this = default;
             normal = -Vector3.UnitY;
             point = Vector3.Zero;
-            bound = CreateBound();
             Id = id;
+            bound = CreateBound();
         }
 
         private Bound CreateBound()
         {
-            return new Bound(point, 1000);
+            return new Bound(point, 1000, Id);
         }
 
         public readonly RayHit Intersect(in Ray ray)

@@ -1,6 +1,7 @@
 ﻿namespace ILGPURenderer.Data;
 
 using CowLibrary;
+using CowLibrary.Views;
 using ILGPU;
 using ILGPU.Runtime;
 
@@ -10,8 +11,8 @@ public readonly struct MeshView
     public readonly ArrayView<Disk> disks;
     public readonly ArrayView<Plane> planes;
     public readonly ArrayView<Sphere> spheres;
-    public readonly ArrayView<Triangle> triangleObjects;
-    public readonly ArrayView<Triangle> triangles;
+    public readonly ArrayView<TriangleView> triangleObjects;
+    public readonly ArrayView<TriangleView> triangles;
     public readonly ArrayView<TriangleMeshView> triangleMeshes;
     public readonly ArrayView<KdTreeView> trees;
     public readonly ArrayView<KdNodeView> nodes;
@@ -21,8 +22,8 @@ public readonly struct MeshView
         ArrayView<Disk> disks,
         ArrayView<Plane> planes,
         ArrayView<Sphere> spheres,
-        ArrayView<Triangle> triangleObjects,
-        ArrayView<Triangle> triangles,
+        ArrayView<TriangleView> triangleObjects,
+        ArrayView<TriangleView> triangles,
         ArrayView<TriangleMeshView> triangleMeshes,
         ArrayView<KdTreeView> trees,
         ArrayView<KdNodeView> nodes)

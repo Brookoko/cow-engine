@@ -9,6 +9,8 @@ namespace CowLibrary
 
         public int Id { get; }
 
+        public IIntersectable View => this;
+
         public TriangleMesh()
         {
             triangles = new Triangle[0];
@@ -19,7 +21,7 @@ namespace CowLibrary
         public TriangleMesh(Triangle[] triangles, int id) : this()
         {
             this.triangles = triangles;
-            bound = IntersectionHelper.CreateBound(triangles);
+            bound = IntersectionHelper.CreateBound(triangles, id);
             Id = id;
         }
 
@@ -48,7 +50,7 @@ namespace CowLibrary
             {
                 triangle.Apply(in matrix);
             }
-            bound = IntersectionHelper.CreateBound(triangles);
+            bound = IntersectionHelper.CreateBound(triangles, Id);
         }
     }
 }

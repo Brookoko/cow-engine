@@ -55,7 +55,7 @@ namespace CowRenderer
                 max.Z = Math.Max(max.Z, objectBoundingBox.max.Z);
             }
 
-            return new Bound(min, max);
+            return new Bound(min, max, -1);
         }
 
         private void PlaceCamera(Bound box)

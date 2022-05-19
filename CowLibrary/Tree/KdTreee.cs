@@ -2,6 +2,8 @@ namespace CowLibrary
 {
     public readonly struct KdTree : IIntersectable
     {
+        public int Id => nodes[0].mesh.Id;
+
         public readonly KdNode[] nodes;
 
         public KdTree(KdNode[] nodes) : this()

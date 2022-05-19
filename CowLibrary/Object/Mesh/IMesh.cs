@@ -4,7 +4,7 @@ namespace CowLibrary
 
     public interface IMesh : IIntersectable
     {
-        public int Id { get; }
+        public IIntersectable View { get; }
 
         public Bound GetBoundingBox();
 
@@ -13,6 +13,8 @@ namespace CowLibrary
 
     public interface IIntersectable
     {
+        public int Id { get; }
+
         public RayHit Intersect(in Ray ray);
     }
 }
