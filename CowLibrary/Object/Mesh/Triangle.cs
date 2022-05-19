@@ -4,15 +4,14 @@ namespace CowLibrary
     using System.Numerics;
     using Views;
 
-    public struct Triangle : IMesh
+    public struct Triangle : IMesh<TriangleView>
     {
-        private Bound bound;
-
         public int Id => view.Id;
 
-        public IIntersectable View => view;
+        public readonly TriangleView View => view;
 
-        public TriangleView view;
+        private TriangleView view;
+        private Bound bound;
 
         public Triangle(Vector3 v0, Vector3 v1, Vector3 v2, Vector3 n0, Vector3 n1, Vector3 n2, int id) : this()
         {

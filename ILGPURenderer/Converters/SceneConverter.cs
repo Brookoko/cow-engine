@@ -49,7 +49,7 @@ public class SceneConverter : ISceneConverter
         var triangles = new List<Triangle>();
         var (trees, nodes) = LoadOptimizedMeshes(optimizedMeshes, triangles);
         var triangleMeshModels = LoadTriangleMeshes(triangleMeshes, triangles);
-        var trianglesView = GpuKernel.ConvertToView(triangles.Select(t => t.view).ToArray());
+        var trianglesView = GpuKernel.ConvertToView(triangles.Select(t => t.View).ToArray());
         return (trianglesView, triangleMeshModels, trees, nodes);
     }
 
