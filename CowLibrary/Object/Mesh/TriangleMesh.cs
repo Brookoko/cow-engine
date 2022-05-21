@@ -25,18 +25,12 @@ namespace CowLibrary
             Id = id;
         }
 
-        public readonly RayHit Intersect(in Ray ray)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            var hit = Const.Miss;
             for (var i = 0; i < triangles.Length; i++)
             {
-                var tHit = triangles[i].Intersect(in ray);
-                if (hit.t > tHit.t)
-                {
-                    hit = tHit;
-                }
+                triangles[i].Intersect(in ray, ref best);
             }
-            return hit;
         }
 
         public void Apply(in Matrix4x4 matrix)

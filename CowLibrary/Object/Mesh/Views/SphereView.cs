@@ -17,7 +17,7 @@ public readonly struct SphereView : IIntersectable
         Id = id;
     }
 
-    public RayHit Intersect(in Ray ray)
+    public void Intersect(in Ray ray, ref RayHit best)
     {
         var f1 = ray.origin.X - center.X;
         var f2 = ray.origin.Y - center.Y;
@@ -31,7 +31,7 @@ public readonly struct SphereView : IIntersectable
         var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;
         if (discriminant < 0)
         {
-            return Const.Miss;
+            return;
         }
 
         float t;
@@ -49,13 +49,17 @@ public readonly struct SphereView : IIntersectable
             k2 = k2 > 0 ? k2 : k1;
             if (k2 < 0)
             {
-                return Const.Miss;
+                return;
             }
 
             t = (float)Math.Min(k1, k2);
         }
+        if (t >= best.t)
+        {
+            return;
+        }
 
         var p = ray.GetPoint(t);
-        return new RayHit(t, p, (p - center).Normalize(), Id);
+        best = new RayHit(t, p, (p - center).Normalize(), Id);
     }
 }

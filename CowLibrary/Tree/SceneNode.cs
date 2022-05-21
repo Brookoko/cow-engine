@@ -39,7 +39,8 @@ namespace CowLibrary
             {
                 return null;
             }
-            var boxHit = box.Intersect(in ray);
+            var boxHit = Const.Miss;
+            box.Intersect(in ray, ref boxHit);
             if (!boxHit.HasHit)
             {
                 return null;
@@ -68,14 +69,9 @@ namespace CowLibrary
         private Surfel? IntersectObjects(in Ray ray)
         {
             var bestHit = Const.Miss;
-            for (var i = 0; i < objects.Count; i++)
+            foreach (var obj in objects)
             {
-                var obj = objects[i];
-                var oHit = obj.Mesh.Intersect(in ray);
-                if (bestHit.t > oHit.t)
-                {
-                    bestHit = oHit;
-                }
+                obj.Mesh.Intersect(in ray, ref bestHit);
             }
             if (bestHit.HasHit)
             {

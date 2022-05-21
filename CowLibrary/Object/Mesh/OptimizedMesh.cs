@@ -18,9 +18,9 @@ namespace CowLibrary
             Id = id;
         }
 
-        public readonly RayHit Intersect(in Ray ray)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            return tree.Intersect(in ray);
+            tree.Intersect(in ray, ref best);
         }
 
         public void Apply(in Matrix4x4 matrix)

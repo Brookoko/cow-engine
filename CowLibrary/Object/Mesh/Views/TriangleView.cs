@@ -26,7 +26,7 @@ public readonly struct TriangleView : IIntersectable
         Id = id;
     }
 
-    public readonly RayHit Intersect(in Ray ray)
+    public void Intersect(in Ray ray, ref RayHit best)
     {
         var edge1 = v1 - v0;
         var edge2 = v2 - v0;
@@ -35,7 +35,7 @@ public readonly struct TriangleView : IIntersectable
         var a = Vector3.Dot(edge1, h);
         if (Math.Abs(a) < Const.Epsilon)
         {
-            return Const.Miss;
+            return;
         }
 
         var f = 1f / a;
@@ -43,23 +43,23 @@ public readonly struct TriangleView : IIntersectable
         var u = f * Vector3.Dot(s, h);
         if (u < 0 || u > 1)
         {
-            return Const.Miss;
+            return;
         }
 
         var q = Vector3.Cross(s, edge1);
         var v = f * Vector3.Dot(ray.direction, q);
         if (v < 0 || u + v > 1)
         {
-            return Const.Miss;
+            return;
         }
 
         var t = f * Vector3.Dot(edge2, q);
-        if (t <= 0)
+        if (t <= 0 || t >= best.t)
         {
-            return Const.Miss;
+            return;
         }
 
         var normal = n0 * (1 - u - v) + n1 * u + n2 * v;
-        return new RayHit(t, ray.GetPoint(t), normal, Id);
+        best = new RayHit(t, ray.GetPoint(t), normal, Id);
     }
 }

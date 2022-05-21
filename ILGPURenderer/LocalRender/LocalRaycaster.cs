@@ -19,39 +19,27 @@ public readonly struct LocalRaycaster
         return new Raycast(hit, ray);
     }
 
-    private void Raycast<T>(in ArrayView<T> meshes, in Ray ray, ref RayHit hit) where T : unmanaged, IIntersectable
+    private void Raycast<T>(in ArrayView<T> meshes, in Ray ray, ref RayHit best) where T : unmanaged, IIntersectable
     {
         for (var i = 0; i < meshes.Length; i++)
         {
-            var iHit = meshes[i].Intersect(in ray);
-            if (iHit.t < hit.t)
-            {
-                hit = iHit;
-            }
+            meshes[i].Intersect(in ray, ref best);
         }
     }
 
-    private void RaycastTriangleMeshes(in MeshView meshes, in Ray ray, ref RayHit hit)
+    private void RaycastTriangleMeshes(in MeshView meshes, in Ray ray, ref RayHit best)
     {
         for (var i = 0; i < meshes.triangleMeshes.Length; i++)
         {
-            var iHit = meshes.triangleMeshes[i].Intersect(in ray, in meshes.triangles);
-            if (iHit.t < hit.t)
-            {
-                hit = iHit;
-            }
+            meshes.triangleMeshes[i].Intersect(in ray, in meshes.triangles, ref best);
         }
     }
 
-    private void RaycastKdTrees(in MeshView meshes, in Ray ray, ref RayHit hit)
+    private void RaycastKdTrees(in MeshView meshes, in Ray ray, ref RayHit best)
     {
         for (var i = 0; i < meshes.trees.Length; i++)
         {
-            var iHit = meshes.trees[i].Intersect(in ray, in meshes.triangles, in meshes.nodes);
-            if (iHit.t < hit.t)
-            {
-                hit = iHit;
-            }
+            meshes.trees[i].Intersect(in ray, in meshes.triangles, in meshes.nodes, ref best);
         }
     }
 }

@@ -18,25 +18,26 @@ public readonly struct DiskView : IIntersectable
         Id = id;
     }
 
-    public RayHit Intersect(in Ray ray)
+    public void Intersect(in Ray ray, ref RayHit best)
     {
         var dot = -Vector3.Dot(normal, ray.direction);
         if (dot <= Const.Epsilon)
         {
-            return Const.Miss;
+            return;
         }
         var dir = ray.origin - point;
         var t = Vector3.Dot(dir, normal) / dot;
-        if (t <= 0)
+        if (t <= 0 || t >= best.t)
         {
-            return Const.Miss;
+            return;
         }
         var p = ray.GetPoint(t);
         var dist = Vector3.DistanceSquared(p, point);
         if (dist > radius * radius)
         {
-            return Const.Miss;
+            return;
         }
-        return new RayHit(t, p, normal, Id);
+
+        best = new RayHit(t, p, normal, Id);
     }
 }

@@ -17,11 +17,7 @@ namespace CowRenderer.Raycasting
             var bestHit = Const.Miss;
             foreach (var obj in objects)
             {
-                var hit = obj.Mesh.Intersect(in ray);
-                if (bestHit.t > hit.t)
-                {
-                    bestHit = hit;
-                }
+                obj.Mesh.Intersect(in ray, ref bestHit);
             }
             if (bestHit.HasHit)
             {

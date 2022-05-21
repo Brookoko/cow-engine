@@ -25,9 +25,9 @@ namespace CowLibrary
             return new Bound(view.point, 1000, Id);
         }
 
-        public readonly RayHit Intersect(in Ray ray)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            return view.Intersect(in ray);
+            view.Intersect(in ray, ref best);
         }
 
         public void Apply(in Matrix4x4 matrix)

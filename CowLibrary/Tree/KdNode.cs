@@ -37,32 +37,29 @@ namespace CowLibrary
             this.rightIndex = rightIndex;
         }
 
-        public RayHit Intersect(in Ray ray, in KdNode[] nodes)
-        {
-            var boundHit = bound.Intersect(in ray);
-            if (!boundHit.HasHit)
-            {
-                return boundHit;
-            }
-            return leftIndex >= 0 ? IntersectChildren(in ray, in nodes) : mesh.Intersect(in ray);
-        }
-
-        private RayHit IntersectChildren(in Ray ray, in KdNode[] nodes)
+        public void Intersect(in Ray ray, in KdNode[] nodes, ref RayHit best)
         {
             var hit = Const.Miss;
-            IntersectChild(in ray, in nodes, in nodes[leftIndex], ref hit);
-            IntersectChild(in ray, in nodes, in nodes[middleIndex], ref hit);
-            IntersectChild(in ray, in nodes, in nodes[rightIndex], ref hit);
-            return hit;
+            bound.Intersect(in ray, ref hit);
+            if (!hit.HasHit)
+            {
+                return;
+            }
+            if (leftIndex >= 0)
+            {
+                IntersectChildren(in ray, in nodes, ref best);
+            }
+            else
+            {
+                mesh.Intersect(in ray, ref best);
+            }
         }
 
-        private void IntersectChild(in Ray ray, in KdNode[] nodes, in KdNode child, ref RayHit hit)
+        private void IntersectChildren(in Ray ray, in KdNode[] nodes, ref RayHit best)
         {
-            var cHit = child.Intersect(in ray, in nodes);
-            if (hit.t > cHit.t)
-            {
-                hit = cHit;
-            }
+            nodes[rightIndex].Intersect(in ray, in nodes, ref best);
+            nodes[middleIndex].Intersect(in ray, in nodes, ref best);
+            nodes[leftIndex].Intersect(in ray, in nodes, ref best);
         }
 
         public KdNode Copy(int leftIndex, int middleIndex, int rightIndex)

@@ -30,7 +30,7 @@ public readonly struct Bound : IIntersectable
         Id = id;
     }
 
-    public readonly RayHit Intersect(in Ray ray)
+    public void Intersect(in Ray ray, ref RayHit best)
     {
         var xmin = ray.invDirection.X >= 0 ? min.X : max.X;
         var xmax = ray.invDirection.X >= 0 ? max.X : min.X;
@@ -44,7 +44,7 @@ public readonly struct Bound : IIntersectable
 
         if (tmin > tymax || tymin > tmax)
         {
-            return Const.Miss;
+            return;
         }
         tmin = Math.Max(tmin, tymin);
         tmax = Math.Min(tmax, tymax);
@@ -56,18 +56,18 @@ public readonly struct Bound : IIntersectable
 
         if (tmin > tzmax || tzmin > tmax)
         {
-            return Const.Miss;
+            return;
         }
         tmin = Math.Max(tmin, tzmin);
         tmax = Math.Min(tmax, tzmax);
 
         var t = tmin;
         t = t < 0 ? tmax : t;
-        if (t < 0)
+        if (t < 0 || t >= best.t)
         {
-            return Const.Miss;
+            return;
         }
 
-        return new RayHit(t, ray.GetPoint(t), Vector3.Zero, Id);
+        best = new RayHit(t, ray.GetPoint(t), Vector3.Zero, Id);
     }
 }

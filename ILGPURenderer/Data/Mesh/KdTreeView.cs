@@ -13,21 +13,28 @@ public readonly struct KdTreeView
         this.index = index;
     }
 
-    public RayHit Intersect(in Ray ray,
+    public void Intersect(in Ray ray,
         in ArrayView<TriangleView> triangles,
-        in ArrayView<KdNodeView> nodes)
+        in ArrayView<KdNodeView> nodes,
+        ref RayHit best)
     {
-        return IsInBound(in ray, in nodes[index]) ? IntersectNodes(in ray, in triangles, in nodes) : Const.Miss;
+        var checkBound = Const.Miss;
+        if (IsInBound(in ray, in nodes[index], ref checkBound))
+        {
+            IntersectNodes(in ray, in triangles, in nodes, ref best);
+        }
     }
 
     private RayHit IntersectNodes(in Ray ray,
         in ArrayView<TriangleView> triangles,
-        in ArrayView<KdNodeView> nodes)
+        in ArrayView<KdNodeView> nodes,
+        ref RayHit best)
     {
         var childNumbers = new byte[Const.MaxDepth + 1];
         var parent = new int[Const.MaxDepth + 1];
         var depth = 0;
         var nodeIndex = 0;
+        var checkBound = Const.Miss;
         var hit = Const.Miss;
 
         while (childNumbers[0] < Const.KdNodeCount)
@@ -35,7 +42,7 @@ public readonly struct KdTreeView
             var offsetIndex = nodeIndex + index;
             var node = nodes[offsetIndex];
 
-            if (!IsInBound(in ray, in node))
+            if (!IsInBound(in ray, in node, ref checkBound))
             {
                 depth--;
                 nodeIndex = parent[depth];
@@ -45,11 +52,7 @@ public readonly struct KdTreeView
 
             if (node.leftIndex < 0)
             {
-                var tHit = node.triangleMeshView.Intersect(in ray, in triangles);
-                if (tHit.t < hit.t)
-                {
-                    hit = tHit;
-                }
+                node.triangleMeshView.Intersect(in ray, in triangles, ref best);
                 depth--;
                 nodeIndex = parent[depth];
                 childNumbers[depth]++;
@@ -73,10 +76,11 @@ public readonly struct KdTreeView
         return hit;
     }
 
-    private bool IsInBound(in Ray ray, in KdNodeView node)
+    private bool IsInBound(in Ray ray, in KdNodeView node, ref RayHit hit)
     {
-        var boundHit = node.bound.Intersect(in ray);
-        return boundHit.HasHit;
+        hit = Const.Miss;
+        node.bound.Intersect(in ray, ref hit);
+        return hit.HasHit;
     }
 
     private int GetChild(in ArrayView<KdNodeView> nodes, in int nodeIndex, in byte childNumber)

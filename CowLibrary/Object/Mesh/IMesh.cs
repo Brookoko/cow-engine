@@ -18,6 +18,6 @@ namespace CowLibrary
     {
         public int Id { get; }
 
-        public RayHit Intersect(in Ray ray);
+        public void Intersect(in Ray ray, ref RayHit best);
     }
 }

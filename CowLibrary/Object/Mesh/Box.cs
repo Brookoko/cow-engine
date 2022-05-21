@@ -18,10 +18,14 @@ namespace CowLibrary
             view = new Bound(-size, size, id);
         }
 
-        public readonly RayHit Intersect(in Ray ray)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            var hit = view.Intersect(in ray);
-            return new RayHit(hit.t, hit.point, GetNormal(hit.point), Id);
+            var prevBest = best;
+            view.Intersect(in ray, ref best);
+            if (best.t < prevBest.t)
+            {
+                best = new RayHit(best.t, best.point, GetNormal(best.point), Id);
+            }
         }
 
         private readonly Vector3 GetNormal(in Vector3 point)

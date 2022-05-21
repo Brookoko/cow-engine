@@ -13,9 +13,9 @@ namespace CowLibrary
             root = nodes[0];
         }
 
-        public RayHit Intersect(in Ray ray)
+        public void Intersect(in Ray ray, ref RayHit best)
         {
-            return root.Intersect(in ray, in nodes);
+            root.Intersect(in ray, in nodes, ref best);
         }
     }
 }

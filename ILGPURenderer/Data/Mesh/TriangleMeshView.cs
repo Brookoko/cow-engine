@@ -7,8 +7,8 @@ using ILGPU.Runtime;
 
 public readonly struct TriangleMeshView
 {
-    public readonly int trianglesOffset;
-    public readonly int trianglesCount;
+    private readonly int trianglesOffset;
+    private readonly int trianglesCount;
 
     public TriangleMeshView(int trianglesOffset, int trianglesCount)
     {
@@ -16,18 +16,12 @@ public readonly struct TriangleMeshView
         this.trianglesCount = trianglesCount;
     }
 
-    public RayHit Intersect(in Ray ray, in ArrayView<TriangleView> triangles)
+    public void Intersect(in Ray ray, in ArrayView<TriangleView> triangles, ref RayHit best)
     {
-        var hit = Const.Miss;
         for (var i = 0; i < trianglesCount; i++)
         {
             var index = trianglesOffset + i;
-            var tHit = triangles[index].Intersect(in ray);
-            if (hit.t > tHit.t)
-            {
-                hit = tHit;
-            }
+            triangles[index].Intersect(in ray, ref best);
         }
-        return hit;
     }
 }

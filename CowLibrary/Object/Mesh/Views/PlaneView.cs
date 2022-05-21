@@ -16,19 +16,19 @@ public readonly struct PlaneView : IIntersectable
         Id = id;
     }
 
-    public RayHit Intersect(in Ray ray)
+    public void Intersect(in Ray ray, ref RayHit best)
     {
         var dot = -Vector3.Dot(normal, ray.direction);
         if (dot <= Const.Epsilon)
         {
-            return Const.Miss;
+            return;
         }
         var dir = ray.origin - point;
         var t = Vector3.Dot(dir, normal) / dot;
-        if (t <= 0)
+        if (t <= 0 || t >= best.t)
         {
-            return Const.Miss;
+            return;
         }
-        return new RayHit(t, ray.GetPoint(t), normal, Id);
+        best = new RayHit(t, ray.GetPoint(t), normal, Id);
     }
 }
