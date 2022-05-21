@@ -21,7 +21,7 @@ namespace CowLibrary
         {
             var min = Vector3.One * float.MaxValue;
             var max = Vector3.One * float.MinValue;
-            foreach (var b in objects.Select(obj => obj.Mesh.GetBoundingBox()))
+            foreach (var b in objects.Select(obj => obj.Mesh.BoundingBox))
             {
                 min.X = Math.Min(min.X, b.min.X);
                 min.Y = Math.Min(min.Y, b.min.Y);

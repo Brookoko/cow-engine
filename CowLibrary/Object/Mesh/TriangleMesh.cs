@@ -4,12 +4,12 @@ namespace CowLibrary
 
     public struct TriangleMesh : IMesh
     {
-        public readonly Triangle[] triangles;
-        private Bound bound;
-
         public int Id { get; }
 
-        public IIntersectable View => this;
+        public readonly Bound BoundingBox => bound;
+
+        public readonly Triangle[] triangles;
+        private Bound bound;
 
         public TriangleMesh()
         {
@@ -37,11 +37,6 @@ namespace CowLibrary
                 }
             }
             return hit;
-        }
-
-        public Bound GetBoundingBox()
-        {
-            return bound;
         }
 
         public void Apply(in Matrix4x4 matrix)

@@ -42,11 +42,11 @@ namespace CowRenderer
 
         private Bound GetBoundingBoxFor(List<RenderableObject> renderableObjects)
         {
-            var min = renderableObjects.First().Mesh.GetBoundingBox().min;
-            var max = renderableObjects.First().Mesh.GetBoundingBox().max;
+            var min = renderableObjects.First().Mesh.BoundingBox.min;
+            var max = renderableObjects.First().Mesh.BoundingBox.max;
             foreach (var renderableObject in renderableObjects)
             {
-                var objectBoundingBox = renderableObject.Mesh.GetBoundingBox();
+                var objectBoundingBox = renderableObject.Mesh.BoundingBox;
                 min.X = Math.Min(min.X, objectBoundingBox.min.X);
                 min.Y = Math.Min(min.Y, objectBoundingBox.min.Y);
                 min.Z = Math.Min(min.Z, objectBoundingBox.min.Z);

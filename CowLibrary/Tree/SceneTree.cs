@@ -42,7 +42,7 @@ namespace CowLibrary
         private float GetMedian(List<RenderableObject> objects, int depth)
         {
             var sortedAxis = objects
-                .Select(obj => GetDimension(obj.Mesh.GetBoundingBox().center, depth))
+                .Select(obj => GetDimension(obj.Mesh.BoundingBox.center, depth))
                 .OrderBy(v => v)
                 .ToArray();
             var l = sortedAxis.Length;
@@ -58,11 +58,11 @@ namespace CowLibrary
             var middleObjects = new List<RenderableObject>();
             foreach (var obj in objects)
             {
-                if (GetDimension(obj.Mesh.GetBoundingBox().max, depth) <= v)
+                if (GetDimension(obj.Mesh.BoundingBox.max, depth) <= v)
                 {
                     leftObjects.Add(obj);
                 }
-                else if (GetDimension(obj.Mesh.GetBoundingBox().min, depth) >= v)
+                else if (GetDimension(obj.Mesh.BoundingBox.min, depth) >= v)
                 {
                     rightObjects.Add(obj);
                 }

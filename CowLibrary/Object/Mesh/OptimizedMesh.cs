@@ -4,12 +4,12 @@ namespace CowLibrary
 
     public struct OptimizedMesh : IMesh
     {
-        public KdTree tree;
         public readonly TriangleMesh mesh;
+        public KdTree tree;
 
         public int Id { get; }
 
-        public IIntersectable View => this;
+        public readonly Bound BoundingBox => mesh.BoundingBox;
 
         public OptimizedMesh(Triangle[] triangles, int id)
         {
@@ -21,11 +21,6 @@ namespace CowLibrary
         public readonly RayHit Intersect(in Ray ray)
         {
             return tree.Intersect(in ray);
-        }
-
-        public readonly Bound GetBoundingBox()
-        {
-            return mesh.GetBoundingBox();
         }
 
         public void Apply(in Matrix4x4 matrix)

@@ -6,10 +6,12 @@ namespace CowLibrary
 
     public struct Triangle : IMesh<TriangleView>
     {
-        public int Id => view.Id;
+        public readonly int Id => view.Id;
 
         public readonly TriangleView View => view;
 
+        public readonly Bound BoundingBox => bound;
+        
         private TriangleView view;
         private Bound bound;
 
@@ -34,11 +36,6 @@ namespace CowLibrary
         public readonly RayHit Intersect(in Ray ray)
         {
             return view.Intersect(in ray);
-        }
-
-        public Bound GetBoundingBox()
-        {
-            return bound;
         }
 
         public void Apply(in Matrix4x4 matrix)

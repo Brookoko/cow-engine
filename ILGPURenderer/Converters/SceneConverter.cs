@@ -5,6 +5,7 @@ using System.Linq;
 using Cowject;
 using CowLibrary;
 using CowLibrary.Lights.Models;
+using CowLibrary.Object.Mesh.Views;
 using CowLibrary.Views;
 using CowRenderer;
 using Data;
@@ -29,10 +30,14 @@ public class SceneConverter : ISceneConverter
     private MeshView CreateMeshData(Scene scene)
     {
         var meshes = scene.objects.Select(obj => obj.Mesh).ToArray();
-        var boxes = LoadDerived<Box, IIntersectable>(meshes);
-        var disks = LoadDerived<Disk, IIntersectable>(meshes);
-        var planes = LoadDerived<Plane, IIntersectable>(meshes);
-        var spheres = LoadDerived<Sphere, IIntersectable>(meshes);
+        var boxes = LoadDerived<Box, IIntersectable>(meshes.Select(m =>
+            m is IMesh<Box> mb ? mb.View : (IIntersectable)null));
+        var disks = LoadDerived<DiskView, IIntersectable>(meshes.Select(m =>
+            m is IMesh<DiskView> mb ? mb.View : (IIntersectable)null));
+        var planes = LoadDerived<PlaneView, IIntersectable>(meshes.Select(m =>
+            m is IMesh<PlaneView> mb ? mb.View : (IIntersectable)null));
+        var spheres = LoadDerived<SphereView, IIntersectable>(meshes.Select(m =>
+            m is IMesh<SphereView> mb ? mb.View : (IIntersectable)null));
         var triangleObjects = LoadDerived<TriangleView, IIntersectable>(meshes);
         var (triangles, triangleMeshes, trees, nodes) = LoadTriangles(meshes);
         return new MeshView(boxes, disks, planes, spheres, triangleObjects, triangles, triangleMeshes, trees, nodes);
@@ -119,7 +124,8 @@ public class SceneConverter : ISceneConverter
         return new LightView(directional, point, environment, matricesView);
     }
 
-    private ArrayView<TDerived> LoadDerived<TDerived, TBase>(IEnumerable<TBase> array) where TDerived : unmanaged, TBase
+    private ArrayView<TDerived> LoadDerived<TDerived, TBase>(IEnumerable<TBase> array)
+        where TDerived : unmanaged, TBase
     {
         var derived = Utils.FindDerived<TDerived, TBase>(array);
         return GpuKernel.ConvertToView(derived);

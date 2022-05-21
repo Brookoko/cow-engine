@@ -13,7 +13,7 @@ namespace CowLibrary
         public KdNode(Triangle[] triangles, int id)
         {
             mesh = new TriangleMesh(triangles, id);
-            bound = mesh.GetBoundingBox();
+            bound = mesh.BoundingBox;
             leftIndex = -1;
             middleIndex = -1;
             rightIndex = -1;

@@ -6,10 +6,10 @@ namespace CowLibrary
     {
         public T View { get; }
     }
-    
+
     public interface IMesh : IIntersectable
     {
-        public Bound GetBoundingBox();
+        public Bound BoundingBox { get; }
 
         public void Apply(in Matrix4x4 matrix);
     }

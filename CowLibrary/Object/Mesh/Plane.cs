@@ -1,56 +1,40 @@
 namespace CowLibrary
 {
     using System.Numerics;
+    using Object.Mesh.Views;
 
-    public struct Plane : IMesh
+    public struct Plane : IMesh<PlaneView>
     {
+        public readonly int Id => view.Id;
+
+        public readonly PlaneView View => view;
+
+        public readonly Bound BoundingBox => bound;
+
         private Bound bound;
-        private Vector3 normal;
-        private Vector3 point;
+        private PlaneView view;
 
-        public int Id { get; }
-
-        public IIntersectable View => this;
-
-        public Plane(int id)
+        public Plane(int id) : this()
         {
-            this = default;
-            normal = -Vector3.UnitY;
-            point = Vector3.Zero;
-            Id = id;
+            view = new PlaneView(Vector3.Zero, Vector3.UnitY, id);
             bound = CreateBound();
         }
 
         private Bound CreateBound()
         {
-            return new Bound(point, 1000, Id);
+            return new Bound(view.point, 1000, Id);
         }
 
         public readonly RayHit Intersect(in Ray ray)
         {
-            var dot = Vector3.Dot(normal, ray.direction);
-            if (dot <= Const.Epsilon)
-            {
-                return Const.Miss;
-            }
-            var dir = point - ray.origin;
-            var t = Vector3.Dot(dir, normal) / dot;
-            if (t <= 0)
-            {
-                return Const.Miss;
-            }
-            return new RayHit(t, ray.GetPoint(t), -normal, Id);
-        }
-
-        public readonly Bound GetBoundingBox()
-        {
-            return bound;
+            return view.Intersect(in ray);
         }
 
         public void Apply(in Matrix4x4 matrix)
         {
-            normal = matrix.MultiplyVector(normal).Normalize();
-            point = matrix.MultiplyPoint(point);
+            var point = matrix.MultiplyPoint(view.point);
+            var normal = matrix.MultiplyVector(view.normal).Normalize();
+            view = new PlaneView(point, normal, Id);
             bound = CreateBound();
         }
     }

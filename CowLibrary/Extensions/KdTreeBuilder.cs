@@ -67,7 +67,7 @@ public class KdTreeBuilder
         var sortedAxis = new float[triangles.Length];
         for (var j = 0; j < triangles.Length; j++)
         {
-            sortedAxis[j] = GetDimension(triangles[j].GetBoundingBox().center, depth);
+            sortedAxis[j] = GetDimension(triangles[j].BoundingBox.center, depth);
         }
         sortedAxis = sortedAxis
             .OrderBy(v => v)
@@ -88,11 +88,11 @@ public class KdTreeBuilder
         var rightCount = 0;
         foreach (var t in triangles)
         {
-            if (GetDimension(t.GetBoundingBox().max, depth) <= v)
+            if (GetDimension(t.BoundingBox.max, depth) <= v)
             {
                 leftTriangles[leftCount++] = t;
             }
-            else if (GetDimension(t.GetBoundingBox().min, depth) >= v)
+            else if (GetDimension(t.BoundingBox.min, depth) >= v)
             {
                 rightTriangles[rightCount++] = t;
             }

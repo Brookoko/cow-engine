@@ -11,7 +11,7 @@
             var max = Vector3.One * float.MinValue;
             foreach (var t in triangles)
             {
-                var box = t.GetBoundingBox(); 
+                var box = t.BoundingBox; 
                 min.X = Math.Min(min.X, box.min.X);
                 min.Y = Math.Min(min.Y, box.min.Y);
                 min.Z = Math.Min(min.Z, box.min.Z);

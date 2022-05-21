@@ -1,6 +1,7 @@
 ﻿namespace ILGPURenderer.Data;
 
 using CowLibrary;
+using CowLibrary.Object.Mesh.Views;
 using CowLibrary.Views;
 using ILGPU;
 using ILGPU.Runtime;
@@ -8,9 +9,9 @@ using ILGPU.Runtime;
 public readonly struct MeshView
 {
     public readonly ArrayView<Box> boxes;
-    public readonly ArrayView<Disk> disks;
-    public readonly ArrayView<Plane> planes;
-    public readonly ArrayView<Sphere> spheres;
+    public readonly ArrayView<DiskView> disks;
+    public readonly ArrayView<PlaneView> planes;
+    public readonly ArrayView<SphereView> spheres;
     public readonly ArrayView<TriangleView> triangleObjects;
     public readonly ArrayView<TriangleView> triangles;
     public readonly ArrayView<TriangleMeshView> triangleMeshes;
@@ -19,9 +20,9 @@ public readonly struct MeshView
 
     public MeshView(
         ArrayView<Box> boxes,
-        ArrayView<Disk> disks,
-        ArrayView<Plane> planes,
-        ArrayView<Sphere> spheres,
+        ArrayView<DiskView> disks,
+        ArrayView<PlaneView> planes,
+        ArrayView<SphereView> spheres,
         ArrayView<TriangleView> triangleObjects,
         ArrayView<TriangleView> triangles,
         ArrayView<TriangleMeshView> triangleMeshes,

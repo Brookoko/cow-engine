@@ -3,14 +3,14 @@
 using System;
 using System.Numerics;
 
-public struct Bound : IIntersectable
+public readonly struct Bound : IIntersectable
 {
     public int Id { get; }
 
-    public Vector3 center;
-    public Vector3 min;
-    public Vector3 max;
-    public Vector3 size;
+    public readonly Vector3 center;
+    public readonly Vector3 min;
+    public readonly Vector3 max;
+    public readonly Vector3 size;
 
     public Bound(Vector3 min, Vector3 max, int id)
     {

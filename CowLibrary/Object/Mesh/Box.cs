@@ -3,47 +3,40 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public struct Box : IMesh
+    public struct Box : IMesh<Box>
     {
-        private readonly Bound bound;
-        private Vector3 center;
-        private Vector3 min;
-        private Vector3 max;
-        private Vector3 size;
+        public readonly int Id => view.Id;
 
-        public int Id { get; }
+        public readonly Box View => this;
 
-        public IIntersectable View => this;
+        public readonly Bound BoundingBox => view;
+
+        private Bound view;
 
         public Box(Vector3 size, int id)
         {
-            this.size = size;
-            center = Vector3.Zero;
-            min = center - size;
-            max = center + size;
-            Id = id;
-            bound = new Bound(min, max, id);
+            view = new Bound(-size, size, id);
         }
 
         public readonly RayHit Intersect(in Ray ray)
         {
-            var hit = bound.Intersect(in ray);
+            var hit = view.Intersect(in ray);
             return new RayHit(hit.t, hit.point, GetNormal(hit.point), Id);
         }
 
         private readonly Vector3 GetNormal(in Vector3 point)
         {
-            var localPoint = point - center;
-            var min = Math.Abs(size.X - Math.Abs(localPoint.X));
+            var localPoint = point - view.center;
+            var min = Math.Abs(view.size.X - Math.Abs(localPoint.X));
             var normal = localPoint.X >= 0 ? Vector3.UnitX : -Vector3.UnitX;
 
-            var dist = Math.Abs(size.Y - Math.Abs(localPoint.Y));
+            var dist = Math.Abs(view.size.Y - Math.Abs(localPoint.Y));
             if (dist < min)
             {
                 min = dist;
                 normal = localPoint.Y >= 0 ? Vector3.UnitY : -Vector3.UnitY;
             }
-            dist = Math.Abs(size.Z - Math.Abs(localPoint.Z));
+            dist = Math.Abs(view.size.Z - Math.Abs(localPoint.Z));
             if (dist < min)
             {
                 min = dist;
@@ -52,17 +45,13 @@ namespace CowLibrary
             return normal;
         }
 
-        public readonly Bound GetBoundingBox()
-        {
-            return bound;
-        }
-
         public void Apply(in Matrix4x4 matrix)
         {
-            center = matrix.MultiplyPoint(center);
-            size = matrix.MultiplyVector(size);
-            min = center - size;
-            max = center + size;
+            var center = matrix.MultiplyPoint(view.center);
+            var size = matrix.MultiplyVector(view.size);
+            var min = center - size;
+            var max = center + size;
+            view = new Bound(min, max, Id);
         }
     }
 }
