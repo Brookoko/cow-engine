@@ -39,9 +39,7 @@ namespace CowLibrary
 
         public void Intersect(in Ray ray, in KdNode[] nodes, ref RayHit best)
         {
-            var hit = Const.Miss;
-            bound.Intersect(in ray, ref hit);
-            if (!hit.HasHit)
+            if (!bound.Check(in ray, out _, out _))
             {
                 return;
             }

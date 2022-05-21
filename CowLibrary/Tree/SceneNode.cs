@@ -39,9 +39,7 @@ namespace CowLibrary
             {
                 return null;
             }
-            var boxHit = Const.Miss;
-            box.Intersect(in ray, ref boxHit);
-            if (!boxHit.HasHit)
+            if (!box.Check(in ray, out _, out _))
             {
                 return null;
             }

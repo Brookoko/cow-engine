@@ -76,9 +76,7 @@ public readonly struct KdTreeView
 
     private bool IsInBound(in Ray ray, in KdNodeView node)
     {
-        var hit = Const.Miss;
-        node.bound.Intersect(in ray, ref hit);
-        return hit.HasHit;
+        return node.bound.Check(in ray, out _, out _);
     }
 
     private int GetChild(in ArrayView<KdNodeView> nodes, in int nodeIndex, in byte childNumber)
