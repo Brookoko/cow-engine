@@ -24,7 +24,7 @@ public class LocalSamplerProvider : ILocalSamplerProvider, IDisposable
     public void Initialize()
     {
         var random = new Random();
-        var randoms = new XorShift64Star[GpuKernel.Accelerator.WarpSize];
+        var randoms = new XorShift64Star[1];
         for (var i = 0; i < randoms.Length; i++)
         {
             randoms[i] = XorShift64Star.Create(random);
