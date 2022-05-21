@@ -34,32 +34,26 @@ public readonly struct Bound : IIntersectable
     {
         var xmin = ray.invDirection.X >= 0 ? min.X : max.X;
         var xmax = ray.invDirection.X >= 0 ? max.X : min.X;
-        var tmin = (xmin - ray.origin.X) * ray.invDirection.X;
-        var tmax = (xmax - ray.origin.X) * ray.invDirection.X;
+        var txmin = (xmin - ray.origin.X) * ray.invDirection.X;
+        var txmax = (xmax - ray.origin.X) * ray.invDirection.X;
 
         var ymin = ray.invDirection.Y >= 0 ? min.Y : max.Y;
         var ymax = ray.invDirection.Y >= 0 ? max.Y : min.Y;
         var tymin = (ymin - ray.origin.Y) * ray.invDirection.Y;
         var tymax = (ymax - ray.origin.Y) * ray.invDirection.Y;
 
-        if (tmin > tymax || tymin > tmax)
-        {
-            return;
-        }
-        tmin = Math.Max(tmin, tymin);
-        tmax = Math.Min(tmax, tymax);
-
         var zmin = ray.invDirection.Z >= 0 ? min.Z : max.Z;
         var zmax = ray.invDirection.Z >= 0 ? max.Z : min.Z;
         var tzmin = (zmin - ray.origin.Z) * ray.invDirection.Z;
         var tzmax = (zmax - ray.origin.Z) * ray.invDirection.Z;
 
-        if (tmin > tzmax || tzmin > tmax)
+        var tmin = Math.Max(txmin, Math.Max(tymin, tzmin));
+        var tmax = Math.Min(txmax, Math.Min(tymax, tzmax));
+
+        if (tmin > tmax)
         {
             return;
         }
-        tmin = Math.Max(tmin, tzmin);
-        tmax = Math.Min(tmax, tzmax);
 
         var t = tmin;
         t = t < 0 ? tmax : t;
