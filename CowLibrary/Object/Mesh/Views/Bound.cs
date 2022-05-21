@@ -5,26 +5,24 @@ using System.Numerics;
 
 public readonly struct Bound : IIntersectable
 {
-    public int Id { get; }
+    public Vector3 Center => new((min.X + max.X) * 0.5f, (min.Y + max.Y) * 0.5f, (min.Z + max.Z) * 0.5f);
+    public Vector3 Size => max - Center;
 
-    public readonly Vector3 center;
     public readonly Vector3 min;
     public readonly Vector3 max;
-    public readonly Vector3 size;
+
+    public int Id { get; }
 
     public Bound(Vector3 min, Vector3 max, int id)
     {
         this.min = min;
         this.max = max;
-        center = new Vector3((min.X + max.X) * 0.5f, (min.Y + max.Y) * 0.5f, (min.Z + max.Z) * 0.5f);
-        size = max - center;
         Id = id;
     }
 
     public Bound(Vector3 center, float sideLength, int id)
     {
-        this.center = center;
-        size = new Vector3(sideLength / 2);
+        var size = new Vector3(sideLength / 2);
         min = center - size;
         max = center + size;
         Id = id;

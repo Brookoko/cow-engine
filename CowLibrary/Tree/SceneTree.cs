@@ -42,7 +42,7 @@ namespace CowLibrary
         private float GetMedian(List<RenderableObject> objects, int depth)
         {
             var sortedAxis = objects
-                .Select(obj => GetDimension(obj.Mesh.BoundingBox.center, depth))
+                .Select(obj => GetDimension(obj.Mesh.BoundingBox.Center, depth))
                 .OrderBy(v => v)
                 .ToArray();
             var l = sortedAxis.Length;

@@ -67,7 +67,7 @@ public class KdTreeBuilder
         var sortedAxis = new float[triangles.Length];
         for (var j = 0; j < triangles.Length; j++)
         {
-            sortedAxis[j] = GetDimension(triangles[j].BoundingBox.center, depth);
+            sortedAxis[j] = GetDimension(triangles[j].BoundingBox.Center, depth);
         }
         sortedAxis = sortedAxis
             .OrderBy(v => v)

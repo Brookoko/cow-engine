@@ -30,17 +30,17 @@ namespace CowLibrary
 
         private readonly Vector3 GetNormal(in Vector3 point)
         {
-            var localPoint = point - view.center;
-            var min = Math.Abs(view.size.X - Math.Abs(localPoint.X));
+            var localPoint = point - view.Center;
+            var min = Math.Abs(view.Size.X - Math.Abs(localPoint.X));
             var normal = localPoint.X >= 0 ? Vector3.UnitX : -Vector3.UnitX;
 
-            var dist = Math.Abs(view.size.Y - Math.Abs(localPoint.Y));
+            var dist = Math.Abs(view.Size.Y - Math.Abs(localPoint.Y));
             if (dist < min)
             {
                 min = dist;
                 normal = localPoint.Y >= 0 ? Vector3.UnitY : -Vector3.UnitY;
             }
-            dist = Math.Abs(view.size.Z - Math.Abs(localPoint.Z));
+            dist = Math.Abs(view.Size.Z - Math.Abs(localPoint.Z));
             if (dist < min)
             {
                 min = dist;
@@ -51,8 +51,8 @@ namespace CowLibrary
 
         public void Apply(in Matrix4x4 matrix)
         {
-            var center = matrix.MultiplyPoint(view.center);
-            var size = matrix.MultiplyVector(view.size);
+            var center = matrix.MultiplyPoint(view.Center);
+            var size = matrix.MultiplyVector(view.Size);
             var min = center - size;
             var max = center + size;
             view = new Bound(min, max, Id);

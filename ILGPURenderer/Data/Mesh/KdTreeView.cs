@@ -18,8 +18,7 @@ public readonly struct KdTreeView
         in ArrayView<KdNodeView> nodes,
         ref RayHit best)
     {
-        var checkBound = Const.Miss;
-        if (IsInBound(in ray, in nodes[index], ref checkBound))
+        if (IsInBound(in ray, in nodes[index]))
         {
             IntersectNodes(in ray, in triangles, in nodes, ref best);
         }
@@ -34,7 +33,6 @@ public readonly struct KdTreeView
         var parent = new int[Const.MaxDepth + 1];
         var depth = 0;
         var nodeIndex = 0;
-        var checkBound = Const.Miss;
         var hit = Const.Miss;
 
         while (childNumbers[0] < Const.KdNodeCount)
@@ -42,7 +40,7 @@ public readonly struct KdTreeView
             var offsetIndex = nodeIndex + index;
             var node = nodes[offsetIndex];
 
-            if (!IsInBound(in ray, in node, ref checkBound))
+            if (!IsInBound(in ray, in node))
             {
                 depth--;
                 nodeIndex = parent[depth];
@@ -76,9 +74,9 @@ public readonly struct KdTreeView
         return hit;
     }
 
-    private bool IsInBound(in Ray ray, in KdNodeView node, ref RayHit hit)
+    private bool IsInBound(in Ray ray, in KdNodeView node)
     {
-        hit = Const.Miss;
+        var hit = Const.Miss;
         node.bound.Intersect(in ray, ref hit);
         return hit.HasHit;
     }

@@ -60,11 +60,11 @@ namespace CowRenderer
 
         private void PlaceCamera(Bound box)
         {
-            var max = Math.Max(box.size.X * 1.3f, box.size.Y * 1.3f * camera.AspectRatio);
+            var max = Math.Max(box.Size.X * 1.3f, box.Size.Y * 1.3f * camera.AspectRatio);
             var tan = (float)Math.Tan(Const.Deg2Rad * camera.Fov / 2);
             var dist = max / tan;
 
-            camera.Transform.LocalToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.center);
+            camera.Transform.LocalToWorldMatrix = Matrix4x4Extensions.LookAt(new Vector3(0, 0.5f, dist), box.Center);
         }
 
         private void PlacePlane(Bound box)
