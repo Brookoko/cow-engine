@@ -10,13 +10,18 @@
       "id": 1,
       "transform": {
         "position": {
-          "x": 0,
-          "y": 0.3,
-          "z": 1.2
+          "x": -3.2,
+          "y": 1.2,
+          "z": -1.2
+        },
+        "rotation": {
+          "x": -10,
+          "y": -110,
+          "z": 0
         }
       },
       "perspective": {
-        "fov": 60
+        "fov": 80
       }
     }
   ],
@@ -40,7 +45,7 @@
         }
       },
       "meshed_object": {
-        "reference": "C:/Projects/cow-engine/assets/cow2.obj"
+        "reference": "C:/Projects/cow-engine/assets/car.obj"
       }
     },
     {
@@ -64,11 +69,29 @@
       "disk": {
         "radius": 10
       }
+    },
+    {
+      "id": 4,
+      "transform": {
+        "position": {
+          "x": -1.8,
+          "y": 0.3,
+          "z": 0.75
+        }
+      },
+      "material": {
+        "specular_reflection": {
+          "eta": 2
+        }
+      },
+      "sphere": {
+        "radius": 0.3
+      }
     }
   ],
   "lights": [
     {
-      "id": 4,
+      "id": 5,
       "color": {
         "r": 3,
         "g": 3,
