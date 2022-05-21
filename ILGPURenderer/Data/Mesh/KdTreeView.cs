@@ -3,7 +3,6 @@
 using CowLibrary;
 using CowLibrary.Views;
 using ILGPU;
-using ILGPU.Runtime;
 
 public readonly struct KdTreeView
 {

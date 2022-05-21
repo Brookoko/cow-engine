@@ -83,7 +83,7 @@ public readonly struct LocalIntegrator
             {
                 continue;
             }
-            var surfelHit = Reraycast(in sceneView, in raycast, in wi);
+            var surfelHit = Trace(in sceneView, in raycast, in wi);
             if (!surfelHit.hit.HasHit)
             {
                 colors[depth] += f * pdf * SampleLight(in sceneView, in raycast, in light, in wi);
@@ -117,7 +117,7 @@ public readonly struct LocalIntegrator
         return surfaceHit.hit.HasHit && surfaceHit.hit.t < distance ? 0 : 1;
     }
 
-    private Raycast Reraycast(in SceneView sceneView, in Raycast raycast, in Vector3 direction)
+    private Raycast Trace(in SceneView sceneView, in Raycast raycast, in Vector3 direction)
     {
         var sign = Vector3.Dot(raycast.hit.normal, direction) >= 0 ? 1 : -1;
         var position = raycast.hit.point + sign * raycast.hit.normal * Const.Bias;
