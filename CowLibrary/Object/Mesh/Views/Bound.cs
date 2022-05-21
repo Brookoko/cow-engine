@@ -32,17 +32,15 @@ public readonly struct Bound : IIntersectable
 
     public readonly RayHit Intersect(in Ray ray)
     {
-        var invdir = new Vector3(1 / ray.direction.X, 1 / ray.direction.Y, 1 / ray.direction.Z);
+        var xmin = ray.invDirection.X >= 0 ? min.X : max.X;
+        var xmax = ray.invDirection.X >= 0 ? max.X : min.X;
+        var tmin = (xmin - ray.origin.X) * ray.invDirection.X;
+        var tmax = (xmax - ray.origin.X) * ray.invDirection.X;
 
-        var xmin = invdir.X >= 0 ? min.X : max.X;
-        var xmax = invdir.X >= 0 ? max.X : min.X;
-        var tmin = (xmin - ray.origin.X) * invdir.X;
-        var tmax = (xmax - ray.origin.X) * invdir.X;
-
-        var ymin = invdir.Y >= 0 ? min.Y : max.Y;
-        var ymax = invdir.Y >= 0 ? max.Y : min.Y;
-        var tymin = (ymin - ray.origin.Y) * invdir.Y;
-        var tymax = (ymax - ray.origin.Y) * invdir.Y;
+        var ymin = ray.invDirection.Y >= 0 ? min.Y : max.Y;
+        var ymax = ray.invDirection.Y >= 0 ? max.Y : min.Y;
+        var tymin = (ymin - ray.origin.Y) * ray.invDirection.Y;
+        var tymax = (ymax - ray.origin.Y) * ray.invDirection.Y;
 
         if (tmin > tymax || tymin > tmax)
         {
@@ -51,10 +49,10 @@ public readonly struct Bound : IIntersectable
         tmin = Math.Max(tmin, tymin);
         tmax = Math.Min(tmax, tymax);
 
-        var zmin = invdir.Z >= 0 ? min.Z : max.Z;
-        var zmax = invdir.Z >= 0 ? max.Z : min.Z;
-        var tzmin = (zmin - ray.origin.Z) * invdir.Z;
-        var tzmax = (zmax - ray.origin.Z) * invdir.Z;
+        var zmin = ray.invDirection.Z >= 0 ? min.Z : max.Z;
+        var zmax = ray.invDirection.Z >= 0 ? max.Z : min.Z;
+        var tzmin = (zmin - ray.origin.Z) * ray.invDirection.Z;
+        var tzmax = (zmax - ray.origin.Z) * ray.invDirection.Z;
 
         if (tmin > tzmax || tzmin > tmax)
         {
@@ -63,22 +61,13 @@ public readonly struct Bound : IIntersectable
         tmin = Math.Max(tmin, tzmin);
         tmax = Math.Min(tmax, tzmax);
 
-        float t;
-        if (tmin < 0)
+        var t = tmin;
+        t = t < 0 ? tmax : t;
+        if (t < 0)
         {
-            if (tmax < 0)
-            {
-                return Const.Miss;
-            }
-            t = tmax;
-        }
-        else
-        {
-            t = Math.Min(tmin, tmax);
+            return Const.Miss;
         }
 
-        var p = ray.GetPoint(t);
-
-        return new RayHit(t, p, Vector3.Zero, Id);
+        return new RayHit(t, ray.GetPoint(t), Vector3.Zero, Id);
     }
 }
