@@ -172,8 +172,9 @@ public class RenderKernel : IRenderKernel
         where TCamera : struct, ICameraModel
     {
         var index = Grid.GlobalIndex.X;
-        var x = index / 1080;
-        var y = index % 1080;
+        var w = colors.IntExtent.X;
+        var x = index / w;
+        var y = index % w;
         var point = new Vector2(x + 0.5f, y + 0.5f);
         var color = Color.Black;
         for (var i = 0; i < renderData.numberOfRayPerPixel; i++)
