@@ -15,8 +15,7 @@ public readonly struct LocalSampler : ISampler
 
     public Vector2 CreateSample()
     {
-        ref var random = ref randoms[0];
-        random.ShiftPeriod(Warp.LaneIdx);
+        ref var random = ref randoms[Warp.LaneIdx];
         var sample = new Vector2(random.NextFloat(), random.NextFloat());
         return sample;
     }
