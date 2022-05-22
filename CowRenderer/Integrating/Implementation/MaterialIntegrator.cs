@@ -86,7 +86,7 @@ namespace CowRenderer.Integration
             var surfelHit = Raycaster.Raycast(new Ray(position, direction));
             if (surfelHit.hit.HasHit)
             {
-                return GetLighting(in surfelHit, light, depth + 1);
+                return GetIndirectLighting(in surfelHit, light, depth + 1);
             }
             var lightning = light.Sample(in direction);
             var dot = Vector3.Dot(surfel.hit.normal, direction);

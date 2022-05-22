@@ -7,6 +7,7 @@ using CowLibrary.Lights.Models;
 using CowLibrary.Mathematics.Sampler;
 using Data;
 using ILGPU;
+using ILGPU.Algorithms;
 
 public readonly struct LocalIntegrator
 {
@@ -26,11 +27,9 @@ public readonly struct LocalIntegrator
             return GetLightColor(in sceneView, in raycast);
         }
         var color = Color.Black;
-        for (var i = 0; i < sceneView.light.environmentLights.Length; i++)
-        {
-            var light = sceneView.light.environmentLights[i];
-            color += GetLighting(in sceneView, in renderData, raycast, in light);
-        }
+        GetLighting(in sceneView, in renderData, raycast, in sceneView.light.environmentLights, ref color);
+        GetLighting(in sceneView, in renderData, raycast, in sceneView.light.directionalLights, ref color);
+        GetLighting(in sceneView, in renderData, raycast, in sceneView.light.pointLights, ref color);
         return color;
     }
 
@@ -52,16 +51,27 @@ public readonly struct LocalIntegrator
         return color;
     }
 
+    private void GetLighting<T>(in SceneView sceneView, in RenderData renderData, Raycast raycast,
+        in ArrayView<T> lights, ref Color color)
+        where T : unmanaged, ILightModel
+    {
+        for (var i = 0; i < lights.Length; i++)
+        {
+            var light = lights[i];
+            color += GetLighting(in sceneView, in renderData, raycast, in light);
+        }
+    }
+
     private Color GetLighting<T>(in SceneView sceneView, in RenderData renderData, Raycast raycast, in T light)
         where T : struct, ILightModel
     {
         var color = GetDirectLighting(in sceneView, in raycast, in light);
         var colors = new Color[2 + 1];
-        var indirectRays = new Raycast[2];
+        var indirectRays = new Raycast[2 + 1];
         var indirectCount = new int[2];
         indirectRays[0] = raycast;
         var depth = 0;
-        while (indirectCount[0] < renderData.numberOfRayPerMaterial + 1)
+        while (indirectCount[0] <= renderData.numberOfRayPerMaterial)
         {
             if (depth == renderData.rayDepth)
             {
@@ -69,18 +79,14 @@ public readonly struct LocalIntegrator
                 continue;
             }
             indirectCount[depth]++;
-            colors[depth] += colors[depth + 1] / renderData.numberOfRayPerMaterial;
-            colors[depth + 1] = Color.Black;
-            if (indirectCount[depth] > renderData.numberOfRayPerMaterial)
-            {
-                depth--;
-                continue;
-            }
             raycast = indirectRays[depth];
             var f = sceneView.material.Sample(in raycast.hit.id, in raycast.hit.normal, in raycast.ray.direction,
                 sampler.CreateSample(), out var wi, out var pdf);
-            if (f * pdf == 0)
+            colors[depth + 1] /= renderData.numberOfRayPerMaterial;
+            colors[depth] += f * pdf * colors[depth + 1];
+            if (indirectCount[depth] > renderData.numberOfRayPerMaterial)
             {
+                depth--;
                 continue;
             }
             var surfelHit = Trace(in sceneView, in raycast, in wi);
@@ -89,10 +95,10 @@ public readonly struct LocalIntegrator
                 colors[depth] += f * pdf * SampleLight(in sceneView, in raycast, in light, in wi);
                 continue;
             }
-            indirectRays[depth] = raycast;
             depth++;
-            raycast = surfelHit;
-            colors[depth] = GetDirectLighting(in sceneView, in raycast, in light);
+            colors[depth] = Color.Black;
+            indirectRays[depth] = surfelHit;
+            indirectCount[depth] = 0;
         }
         return color + colors[0] / renderData.numberOfRayPerMaterial;
     }
@@ -119,7 +125,7 @@ public readonly struct LocalIntegrator
 
     private Raycast Trace(in SceneView sceneView, in Raycast raycast, in Vector3 direction)
     {
-        var sign = Vector3.Dot(raycast.hit.normal, direction) >= 0 ? 1 : -1;
+        var sign = XMath.Sign(Vector3.Dot(raycast.hit.normal, direction));
         var position = raycast.hit.point + sign * raycast.hit.normal * Const.Bias;
         var ray = new Ray(position, direction);
         return raycaster.Raycast(in sceneView.mesh, in ray);
@@ -132,6 +138,6 @@ public readonly struct LocalIntegrator
         var dot = Vector3.Dot(raycast.hit.normal, direction);
         dot = Math.Max(dot, 0);
         var color = sceneView.material.GetMaterialRawColor(in raycast.hit.id);
-        return color * lightning * dot;
+        return dot * color * lightning;
     }
 }
