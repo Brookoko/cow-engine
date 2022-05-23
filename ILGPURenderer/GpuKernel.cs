@@ -18,7 +18,11 @@
                 .Cuda()
                 .CPU(new CPUDevice(4, 4, 1))
                 .EnableAlgorithms()
-                .Math(MathMode.Fast32BitOnly));
+                .Math(MathMode.Fast32BitOnly)
+                .AutoAssertions()
+                .Inlining(InliningMode.Aggressive)
+                .Optimize(OptimizationLevel.O2)
+                .AutoIOOperations());
             Accelerator = mode.GetAccelerator(Context);
         }
 
