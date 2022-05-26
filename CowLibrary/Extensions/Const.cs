@@ -10,12 +10,14 @@ namespace CowLibrary
 
         public const float InvPi = (float)(1 / Math.PI);
 
+        public const float PiOver2 = (float)(Math.PI * 0.5);
+
         public const float PiOver4 = (float)(Math.PI * 0.25);
 
         public const float Epsilon = 1e-10f;
 
         public const float Bias = 0.00001f;
-        
+
         public static readonly RayHit Miss = new();
 
         public const int KdNodeCount = 3;

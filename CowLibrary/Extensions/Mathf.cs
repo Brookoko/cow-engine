@@ -35,13 +35,18 @@ namespace CowLibrary
                 return Vector2.Zero;
             }
 
-            var r = offset.X;
-            var d = offset.Y;
-            if (Math.Abs(offset.X) < Math.Abs(offset.Y))
+            float r;
+            float theta;
+            if (Math.Abs(offset.X) > Math.Abs(offset.Y))
             {
-                (r, d) = Swap(r, d);
+                r = offset.X;
+                theta = Const.PiOver4 * (offset.Y / offset.X);
             }
-            var theta = Const.PiOver4 * (d / r);
+            else
+            {
+                r = offset.X;
+                theta = Const.PiOver2 - Const.PiOver4 * (offset.X / offset.Y);
+            }
 
             return r * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
         }
