@@ -22,7 +22,8 @@
                 .AutoAssertions()
                 .Inlining(InliningMode.Aggressive)
                 .Optimize(OptimizationLevel.O2)
-                .AutoIOOperations());
+                .AutoIOOperations()
+                .LibDevice());
             Accelerator = mode.GetAccelerator(Context);
         }
 
