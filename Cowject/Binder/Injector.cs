@@ -94,11 +94,30 @@ namespace Cowject
 
         public object Get(Type type, IEnumerable<object> parameters, object name = null)
         {
-            var mapped = mapping.GetMapping(type, name);
-            var obj = InitializeComponent(mapped.ShouldInitialize, mapped.Instance ?? CreateInstance(mapped.Type),
-                parameters);
-            mapped.ShouldInitialize = mapped.Instance == null;
-            return obj;
+            List<Mapping> mappings;
+            if (type.IsArray)
+            {
+                var subType = type.GetElementType();
+                mappings = mapping.GetAllMapping(subType);
+                var obj = Array.CreateInstance(subType, mappings.Count);
+                for (var i = 0; i < obj.Length; i++)
+                {
+                    var mapped = mappings[i];
+                    var subObj = InitializeComponent(mapped.ShouldInitialize, mapped.Instance ?? CreateInstance(mapped.Type),
+                        parameters);
+                    mapped.ShouldInitialize = mapped.Instance == null;
+                    obj.SetValue(subObj, i);
+                }
+                return obj;
+            }
+            else
+            {
+                var mapped = mapping.GetMapping(type, name);
+                var obj = InitializeComponent(mapped.ShouldInitialize, mapped.Instance ?? CreateInstance(mapped.Type),
+                    parameters);
+                mapped.ShouldInitialize = mapped.Instance == null;
+                return obj;
+            }
         }
 
         private object InitializeComponent(bool shouldInitialize, object component, IEnumerable<object> parameters)

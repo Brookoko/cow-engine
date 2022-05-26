@@ -10,20 +10,25 @@ namespace Cowject
 
         public Mapping Create(Type type)
         {
-            if (mappings.TryGetValue(type, out var map) && map.Any(m => m.Name == null))
-            {
-                throw new BindingException($"Multiple bindings for: {type}");
-            }
             var mapping = new Mapping { Type = type };
-            if (map == null)
-            {
-                mappings.Add(type, new List<Mapping>() { mapping });
-            }
-            else
+            if (mappings.TryGetValue(type, out var map))
             {
                 map.Add(mapping);
             }
+            else
+            {
+                mappings.Add(type, new List<Mapping>() { mapping });
+            }
             return mapping;
+        }
+
+        public List<Mapping> GetAllMapping(Type type)
+        {
+            if (TryGetAllMapping(type, out var implementation))
+            {
+                return implementation;
+            }
+            throw new BindingException($"No bindings for type: {type}");
         }
 
         public Mapping GetMapping(Type type, object name)
@@ -36,15 +41,20 @@ namespace Cowject
             throw new BindingException($"No binding for type: {type}{nameInfo}");
         }
 
-        public bool TryGetMapping(Type type, object name, out Mapping mapping)
+        private bool TryGetMapping(Type type, object name, out Mapping mapping)
         {
-            if (mappings.TryGetValue(type, out var map))
+            if (TryGetAllMapping(type, out var map))
             {
-                mapping = map.FirstOrDefault(m => name == null || name.Equals(m.Name));
+                mapping = map.First(m => name == null || name.Equals(m.Name));
                 return true;
             }
             mapping = null;
             return false;
+        }
+
+        private bool TryGetAllMapping(Type type, out List<Mapping> mapping)
+        {
+            return mappings.TryGetValue(type, out mapping);
         }
 
         public void RemoveBindingFor(Type type)

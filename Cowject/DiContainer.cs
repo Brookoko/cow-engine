@@ -24,6 +24,23 @@ namespace Cowject
             return new Binder(type, mapping);
         }
 
+        public IBinder BindInterfacesTo<T>()
+        {
+            return BindInterfacesTo(typeof(T));
+        }
+
+        public IBinder BindInterfacesTo(Type type)
+        {
+            var interfaces = type.GetInterfaces();
+            var binder = new Binder(interfaces[0], mapping);
+            for (var i = 1; i < interfaces.Length; i++)
+            {
+                binder.Bind(interfaces[i]);
+            }
+            binder.To(type);
+            return binder;
+        }
+
         public void Unbind<T>()
         {
             Unbind(typeof(T));
