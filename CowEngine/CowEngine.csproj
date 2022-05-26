@@ -20,6 +20,7 @@
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
       <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
       <ProjectReference Include="..\CowRenderer\CowRenderer.csproj" />
+      <ProjectReference Include="..\CpuRenderer\CpuRenderer.csproj" />
       <ProjectReference Include="..\ILGPURenderer\ILGPURenderer.csproj" />
       <ProjectReference Include="..\ImageWorker\ImageWorker.csproj" />
       <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
