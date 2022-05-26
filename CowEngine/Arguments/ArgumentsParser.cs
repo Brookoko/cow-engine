@@ -11,20 +11,28 @@ namespace CowEngine
     public class ArgumentsParser : IArgumentsParser
     {
         [Inject]
-        public IFlow<CpuOption> CpuFlow { get; set; }
-
-        [Inject]
-        public IFlow<GpuOption> GpuFlow { get; set; }
+        public IFlow[] Flows { get; set; }
 
         public void Parse(string[] args)
         {
             Parser.Default
-                .ParseArguments<CpuOption, GpuOption>(args)
-                .MapResult<CpuOption, GpuOption, int>(
-                    CpuFlow.Process,
-                    GpuFlow.Process,
+                .ParseArguments<Option>(args)
+                .MapResult(
+                    Process,
                     _ => 1
                 );
+        }
+
+        private int Process(Option option)
+        {
+            foreach (var flow in Flows)
+            {
+                if (flow.CanWorkWithProcess(option))
+                {
+                    return flow.Process(option);
+                }
+            }
+            return 1;
         }
     }
 }

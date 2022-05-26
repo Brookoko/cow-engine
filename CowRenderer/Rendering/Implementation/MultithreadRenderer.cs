@@ -16,6 +16,8 @@ namespace CowRenderer.Rendering
         [Inject]
         public IRaycaster Raycaster { get; set; }
 
+        public string Tag => "cpu-threads";
+
         public Image Render(Scene scene)
         {
             Raycaster.Init(scene);

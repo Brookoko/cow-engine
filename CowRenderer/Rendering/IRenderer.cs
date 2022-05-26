@@ -4,6 +4,8 @@ namespace CowRenderer
 
     public interface IRenderer
     {
+        string Tag { get; }
+
         Image Render(Scene scene);
     }
 }

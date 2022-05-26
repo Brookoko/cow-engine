@@ -13,9 +13,11 @@ namespace CowRenderer
             container.Bind<ISamplerProvider>().To<SamplerProvider>().ToSingleton();
             container.Bind<IIntegrator>().To<MaterialIntegrator>().ToSingleton();
             container.Bind<IRaycaster>().To<SimpleRaycaster>().ToSingleton();
-            container.Bind<IRenderer>().WithName(KernelMode.Cpu).To<MultithreadRenderer>().ToSingleton();
             container.Bind<ThreadRenderer>().To<MultiRayThreadRenderer>();
             container.Bind<RenderConfig>().To<RenderConfig>().ToSingleton();
+            
+            container.BindInterfacesTo<SimpleRenderer>().ToSingleton();
+            container.BindInterfacesTo<MultithreadRenderer>().ToSingleton();
         }
     }
 }

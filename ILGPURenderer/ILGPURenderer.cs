@@ -13,6 +13,8 @@
         [Inject]
         public ISceneConverter SceneConverter { get; set; }
 
+        public string Tag => "ilgpu";
+
         public Image Render(Scene scene)
         {
             var sceneData = SceneConverter.Convert(scene);

@@ -1,7 +1,9 @@
 namespace CowEngine
 {
-    public interface IFlow<in T> where T : Option
+    public interface IFlow
     {
-        public int Process(T option);
+        public bool CanWorkWithProcess(Option option);
+
+        public int Process(Option option);
     }
 }

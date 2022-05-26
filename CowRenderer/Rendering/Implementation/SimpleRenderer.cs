@@ -16,6 +16,8 @@ namespace CowRenderer.Rendering
         [Inject]
         public RenderConfig RenderConfig { get; set; }
 
+        public string Tag => "cpu-simple";
+
         public Image Render(Scene scene)
         {
             Raycaster.Init(scene);
