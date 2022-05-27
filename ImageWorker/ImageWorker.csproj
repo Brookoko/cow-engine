@@ -8,7 +8,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
       <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
-      <ProjectReference Include="..\PngWorker\PngWorker.csproj" />
     </ItemGroup>
 
 </Project>

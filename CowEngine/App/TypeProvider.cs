@@ -35,7 +35,8 @@ public class TypeProvider : ITypeProvider, ITypeLoader
         var info = new DirectoryInfo(directory);
         var dlls = info.EnumerateFiles()
             .Where(f => f.Name.EndsWith(".dll") && assemblyRegex.IsMatch(f.Name))
-            .Select(f => f.FullName);
+            .Select(f => f.FullName)
+            .ToArray();
         foreach (var dll in dlls)
         {
             LoadAssembly(dll);

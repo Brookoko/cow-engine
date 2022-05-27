@@ -2,16 +2,22 @@ namespace CowEngine.ImageWorker.Png
 {
     using System.Linq;
     using CowEngine.ImageWorker;
+    using Cowject;
     using CowLibrary;
 
     public class PngWorker : IImageEncoder
     {
-        private static string pngFormatHeader = "89504E470D0A1A0A";
+        private const string PngFormatHeader = "89504E470D0A1A0A";
 
-        private readonly Deflate deflate = new Deflate();
-        private readonly IByteFilterer byteFilterer = new ByteFilterer();
-        private readonly IImageByteConverter imageByteConverter = new ImageByteConverter();
+        [Inject]
+        public Deflate Deflate { get; set; }
 
+        [Inject]
+        internal IByteFilterer ByteFilterer { get; set; }
+        
+        [Inject]
+        internal IImageByteConverter ImageByteConverter { get; set; }
+        
         public bool CanWorkWith(string extension)
         {
             return extension == "png";
@@ -20,13 +26,13 @@ namespace CowEngine.ImageWorker.Png
         public byte[] Encode(in Image image)
         {
             var header = CreateHeader(in image);
-            var data = imageByteConverter.ToBytes(in image);
-            var filtered = byteFilterer.Filter(data, FilterType.None);
-            var encoded = deflate.Encode(filtered);
+            var data = ImageByteConverter.ToBytes(in image);
+            var filtered = ByteFilterer.Filter(data, FilterType.None);
+            var encoded = Deflate.Encode(filtered);
 
             var chunks = new[] { header.ToChunk(), CreateDataChunk(encoded), CreateEndChunk() };
             var content = chunks.SelectMany(c => c.ToBytes());
-            var pngHeader = pngFormatHeader.FromHexString();
+            var pngHeader = PngFormatHeader.FromHexString();
 
             return pngHeader.Concat(content).ToArray();
         }

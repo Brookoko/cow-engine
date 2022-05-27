@@ -12,6 +12,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
       <ProjectReference Include="..\CowRenderer\CowRenderer.csproj" />
+      <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
     </ItemGroup>
 
 </Project>

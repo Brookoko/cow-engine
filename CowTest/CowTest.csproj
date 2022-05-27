@@ -14,7 +14,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
-      <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
     </ItemGroup>
 
 </Project>
