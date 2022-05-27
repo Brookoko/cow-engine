@@ -13,7 +13,7 @@
             container.Bind<IRenderKernel>().To<RenderKernel>().ToSingleton();
             container.Bind<ILocalSamplerProvider>().To<LocalSamplerProvider>().ToSingleton();
             container.Bind<ISceneConverter>().To<SceneConverter>().ToSingleton();
-            
+
             container.BindInterfacesTo<ILGPURenderer>().ToSingleton();
         }
     }

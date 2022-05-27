@@ -5,6 +5,8 @@ namespace CowEngine
 
     public class CoreModule : IModule
     {
+        public Priority Priority => Priority.Highest;
+
         public void Prepare(DiContainer container)
         {
             container.BindInterfacesTo<ArgumentsParser>().ToSingleton();
