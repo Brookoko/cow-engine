@@ -32,9 +32,8 @@ public readonly struct Bound : IIntersectable
     {
         if (Check(in ray, out var tmin, out var tmax))
         {
-            var t = tmin;
-            t = t < 0 ? tmax : t;
-            if (t > 0 || t < best.t)
+            var t = tmin < 0 ? tmax : tmin;
+            if (t < best.t)
             {
                 best = new RayHit(t, ray.GetPoint(t), Vector3.Zero, Id);
             }
