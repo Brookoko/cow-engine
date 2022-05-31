@@ -24,37 +24,38 @@ public readonly struct RealisticCameraModel : ICameraModel
 
     public Ray ScreenPointToRay(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in Vector2 sample)
     {
-        var focusPoint = GetFocusPoint(in screenPoint);
+        var focusPoint = GetPerspectiveDirection(in screenPoint);
         return Sample(in localToWorldMatrix, in sample, in focusPoint);
     }
 
     public Ray[] Sample(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in Vector2[] samples)
     {
-        var focusPoint = GetFocusPoint(in screenPoint);
+        var direction = GetPerspectiveDirection(in screenPoint);
         var rays = new Ray[samples.Length];
         for (var i = 0; i < samples.Length; i++)
         {
-            rays[i] = Sample(in localToWorldMatrix, in samples[i], in focusPoint);
+            rays[i] = Sample(in localToWorldMatrix, in samples[i], in direction);
         }
         return rays;
     }
 
-    private Ray Sample(in Matrix4x4 localToWorldMatrix, in Vector2 sample, in Vector3 focusPoint)
+    private Ray Sample(in Matrix4x4 localToWorldMatrix, in Vector2 sample, in Vector3 focusDirection)
     {
-        var sampleDisk = Mathf.ConcentricSampleDisk(sample).Normalize();
-        var lensPoint = lensCenter + new Vector3(sampleDisk * lens.radius, 0);
+        var sampleDisk = Mathf.ConcentricSampleDisk(sample);
+        var lensPoint = new Vector3(sampleDisk * lens.radius, 0);
+        var ft = lens.distance / -focusDirection.Z;
+        var focusPoint = ft * focusDirection;
         var direction = focusPoint - lensPoint;
-        lensPoint.Z = 0;
         var position = localToWorldMatrix.MultiplyPoint(lensPoint);
         direction = localToWorldMatrix.MultiplyVector(direction).Normalize();
         return new Ray(position, direction);
     }
 
-    private Vector3 GetFocusPoint(in Vector2 screenPoint)
+    private Vector3 GetPerspectiveDirection(in Vector2 screenPoint)
     {
         var point = ViewportPoint(in screenPoint);
-        var dir = (point - lensCenter).Normalize();
-        return lensCenter + dir * lens.focus;
+        point.Z = -lens.focus;
+        return point.Normalize();
     }
 
     private Vector3 ViewportPoint(in Vector2 screenPoint)
