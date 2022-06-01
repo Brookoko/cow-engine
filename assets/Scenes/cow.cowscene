@@ -33,9 +33,9 @@
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 0.7,
-            "g": 0,
-            "b": 0.8
+            "r": 1,
+            "g": 1,
+            "b": 1
           }
         }
       },
