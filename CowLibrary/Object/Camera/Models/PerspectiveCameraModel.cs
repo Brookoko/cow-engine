@@ -22,9 +22,8 @@ public readonly struct PerspectiveCameraModel : ICameraModel
     
     public Ray ScreenPointToRay(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in Vector2 sample)
     {
-        var point = screenPoint + sample - 0.5f * Vector2.One;
-        var x = (2 * (point.X + 0.5f) / width - 1) * tan;
-        var y = (1 - 2 * (point.Y + 0.5f) / height) / aspectRatio * tan;
+        var x = (2 * screenPoint.X / width - 1) * tan;
+        var y = (1 - 2 * screenPoint.Y / height) / aspectRatio * tan;
         var dir = new Vector3(x, y, -nearPlane);
         dir = localToWorldMatrix.MultiplyVector(dir).Normalize();
         return new Ray(localToWorldMatrix.ExtractTranslation(), dir);

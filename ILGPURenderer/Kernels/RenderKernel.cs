@@ -175,15 +175,24 @@ public class RenderKernel : IRenderKernel
         var w = colors.IntExtent.X;
         var x = index / w;
         var y = index % w;
+
         var point = new Vector2(x + 0.5f, y + 0.5f);
+        var samples = renderData.numberOfRayPerPixelDimension;
+        var step = 1f / (samples + 1);
+        var centerIndex = (samples - 1) / 2f;
+
         var color = Color.Black;
-        for (var i = 0; i < renderData.numberOfRayPerPixel; i++)
+        for (var i = 0; i < samples; i++)
         {
-            var sample = sampler.CreateSample();
-            var ray = camera.ScreenPointToRay(in point, in cameraLocalToWorld, in sample);
-            var raycast = raycaster.Raycast(in sceneView.mesh, in ray);
-            color += integrator.GetColor(in sceneView, in renderData, in raycast);
+            for (var j = 0; j < samples; j++)
+            {
+                var samplePoint = point + new Vector2((i - centerIndex) * step, (j - centerIndex) * step);
+                var sample = sampler.CreateSample();
+                var ray = camera.ScreenPointToRay(in samplePoint, in cameraLocalToWorld, in sample);
+                var raycast = raycaster.Raycast(in sceneView.mesh, in ray);
+                color += integrator.GetColor(in sceneView, in renderData, in raycast);
+            }
         }
-        colors[y, x] = color / renderData.numberOfRayPerPixel;
+        colors[y, x] = color / (samples * samples);
     }
 }

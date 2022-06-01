@@ -17,11 +17,12 @@ public readonly struct OrthographicCameraModel : ICameraModel
 
     public Ray ScreenPointToRay(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in Vector2 sample)
     {
-        var point = screenPoint + sample - 0.5f * Vector2.One;
-        var x = (2 * (point.X + 0.5f) / width - 1) * aspectRatio;
-        var y = 1 - 2 * (point.Y + 0.5f) / height;
+        var x = (2 * screenPoint.X / width - 1) * aspectRatio;
+        var y = 1 - 2 * screenPoint.Y / height;
         var origin = new Vector3(x, y, 0);
-        return new Ray(origin, Vector3.UnitZ);
+        var position = localToWorldMatrix.MultiplyPoint(origin);
+        var direction = localToWorldMatrix.MultiplyVector(-Vector3.UnitZ);
+        return new Ray(position, direction);
     }
 
     public Ray[] Sample(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in Vector2[] samples)

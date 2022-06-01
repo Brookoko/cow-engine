@@ -28,14 +28,22 @@ namespace CowLibrary
             return Model.ScreenPointToRay(in screenPoint, Transform.LocalToWorldMatrix, sampler.CreateSample());
         }
 
-        public Ray[] Sample(in Vector2 screenPoint, int samples)
+        public Ray[] Sample(in Vector2 screenPoint, int samplesPerDimension)
         {
-            var generatedSamples = new Vector2[samples];
-            for (var i = 0; i < samples; i++)
+            var rays = new Ray[samplesPerDimension * samplesPerDimension];
+            var step = 1f / (samplesPerDimension + 1);
+            var centerIndex = (samplesPerDimension - 1) / 2f;
+            for (var i = 0; i < samplesPerDimension; i++)
             {
-                generatedSamples[i] = sampler.CreateSample();
+                for (var j = 0; j < samplesPerDimension; j++)
+                {
+                    var offset = new Vector2((i - centerIndex) * step + 0.5f, (j - centerIndex) * step + 0.5f);
+                    var point = screenPoint + offset;
+                    rays[i * samplesPerDimension + j] =
+                        Model.ScreenPointToRay(in point, Transform.LocalToWorldMatrix, sampler.CreateSample());
+                }
             }
-            return Model.Sample(in screenPoint, Transform.LocalToWorldMatrix, in generatedSamples);
+            return rays;
         }
     }
 }

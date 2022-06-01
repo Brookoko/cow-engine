@@ -40,7 +40,7 @@ namespace CowRenderer.Rendering
 
         private Surfel[] Raycast(Camera camera, Vector2 point)
         {
-            var numberOfRay = RenderConfig.numberOfRayPerPixel;
+            var numberOfRay = RenderConfig.numberOfRayPerPixelDimension;
             var surfels = new Surfel[numberOfRay];
             var rays = camera.Sample(point, numberOfRay);
             for (var i = 0; i < numberOfRay; i++)
