@@ -7,8 +7,8 @@ namespace CowRenderer
         public int fov = 60;
 
         public int numberOfThreadPerDimension = 8;
-        public int numberOfRayPerPixelDimension = 4;
-        public int rayDepth = 2;
-        public int numberOfRayPerMaterial = 2;
+        public int numberOfRayPerPixelDimension = 8;
+        public int rayDepth = 3;
+        public int numberOfRayPerMaterial = 1;
     }
 }

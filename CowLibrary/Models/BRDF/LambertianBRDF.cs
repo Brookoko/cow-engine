@@ -24,8 +24,13 @@ namespace CowLibrary
             {
                 wi.Z *= -1;
             }
-            pdf = sample.X;
+            pdf = Pdf(in wo, in wi, in normal);
             return Evaluate(wo, wi);
+        }
+
+        private float Pdf(in Vector3 wo, in Vector3 wi, in Vector3 normal)
+        {
+            return Mathf.SameHemisphere(in wo, in wi, in normal) ? Mathf.AbsCosTheta(in wi, in normal) : 0;
         }
     }
 }
