@@ -73,9 +73,8 @@ public readonly struct LocalIntegrator
         {
             var f = sceneView.material.Sample(in raycast.hit.id, in raycast.hit.normal, in raycast.ray.direction,
                 sampler.CreateSample(), out var wi, out var pdf);
-            var matColor = sceneView.material.GetMaterialRawColor(in raycast.hit.id);
-            beta *= f * matColor * XMath.Abs(Vector3.Dot(wi, raycast.hit.normal)) / pdf;
-            if (f == 0 || pdf == 0)
+            beta *= f * XMath.Abs(Vector3.Dot(wi, raycast.hit.normal)) / pdf;
+            if (f == Color.Black || pdf == 0)
             {
                 break;
             }

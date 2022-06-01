@@ -20,7 +20,7 @@ namespace CowLibrary
             fresnel = new DielectricFresnel(etaA, etaB);
         }
 
-        public float Evaluate(in Vector3 wo, in Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi, in Vector3 normal)
         {
             return 0;
         }

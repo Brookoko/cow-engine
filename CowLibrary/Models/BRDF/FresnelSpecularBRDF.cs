@@ -15,7 +15,7 @@ namespace CowLibrary
             transmission = new SpecularTransmissionBrdf(t, etaA, etaB, mode);
         }
 
-        public float Evaluate(in Vector3 wo, in Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi, in Vector3 normal)
         {
             return 0;
         }

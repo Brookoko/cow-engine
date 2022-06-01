@@ -12,25 +12,20 @@ namespace CowLibrary
             this.r = Math.Clamp(r, 0, 1);
         }
 
-        public float Evaluate(in Vector3 wo, in Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi, in Vector3 normal)
         {
             return r * Const.InvPi;
         }
 
         public float Sample(in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
         {
-            wi = Mathf.CosineSampleHemisphere(normal, sample);
-            if (Vector3.Dot(wo, normal) < 0)
-            {
-                wi.Z *= -1;
-            }
-            pdf = Pdf(in wo, in wi, in normal);
-            return Evaluate(wo, wi);
-        }
-
-        private float Pdf(in Vector3 wo, in Vector3 wi, in Vector3 normal)
-        {
-            return Mathf.SameHemisphere(in wo, in wi, in normal) ? Mathf.AbsCosTheta(in wi, in normal) : 0;
+            wi = Mathf.CosineSampleHemisphere(in sample);
+            var (toLocal, toWorld) = Mathf.GetMatrices(in normal, in wo);
+            var woL = toLocal.MultiplyVector(wo);
+            pdf = Mathf.Pdf(in woL, in wi);
+            var f = Evaluate(in woL, in wi, in normal);
+            wi = toWorld.MultiplyVector(wi);
+            return f;
         }
     }
 }
