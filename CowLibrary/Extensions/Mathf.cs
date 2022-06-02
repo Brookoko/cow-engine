@@ -284,7 +284,7 @@ namespace CowLibrary
             var x = (float)Math.Log(roughness);
             return 1.62142f + 0.819955f * x + 0.1734f * x * x + 0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
         }
-        
+
         public static float Clamp(float x, float min, float max)
         {
             return Math.Min(Math.Max(x, min), max);
@@ -293,6 +293,11 @@ namespace CowLibrary
         public static Vector3 FaceForward(Vector3 v, Vector3 n)
         {
             return Vector3.Dot(v, n) < 0 ? -v : v;
+        }
+
+        public static float Pow5(float v)
+        {
+            return (v * v) * (v * v) * v;
         }
     }
 }

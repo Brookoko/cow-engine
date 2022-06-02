@@ -93,6 +93,17 @@ namespace CowLibrary
                 color1.a + color2.a
             );
         }
+        
+        public static Color operator -(Color color1, Color color2)
+        {
+            return new Color
+            (
+                color1.r - color2.r,
+                color1.g - color2.g,
+                color1.b - color2.b,
+                color1.a - color2.a
+            );
+        }
 
         public bool Equals(Color other)
         {

@@ -14,7 +14,7 @@ namespace CowLibrary
         public static readonly float SqrtPiInv = 1f / (float)Math.Sqrt(Math.PI);
 
         public const float Epsilon = 1e-10f;
-
+        public const float OneMinusEpsilon = 0.99999994f;
         public const float Bias = 0.0001f;
 
         public static readonly RayHit Miss = new();

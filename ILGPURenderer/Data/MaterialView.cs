@@ -12,6 +12,7 @@ public readonly struct MaterialView
     public readonly ArrayView<TransmissionMaterial> transmissionMaterials;
     public readonly ArrayView<MetalMaterial> metalMaterials;
     public readonly ArrayView<PlasticMaterial> plasticMaterials;
+    public readonly ArrayView<BlendMaterial> blendMaterials;
 
     public MaterialView(
         ArrayView<DiffuseMaterial> diffuseMaterials,
@@ -19,7 +20,8 @@ public readonly struct MaterialView
         ArrayView<ReflectionMaterial> reflectionMaterials,
         ArrayView<TransmissionMaterial> transmissionMaterials,
         ArrayView<MetalMaterial> metalMaterials,
-        ArrayView<PlasticMaterial> plasticMaterials)
+        ArrayView<PlasticMaterial> plasticMaterials,
+        ArrayView<BlendMaterial> blendMaterials)
     {
         this.diffuseMaterials = diffuseMaterials;
         this.fresnelMaterials = fresnelMaterials;
@@ -27,6 +29,7 @@ public readonly struct MaterialView
         this.transmissionMaterials = transmissionMaterials;
         this.metalMaterials = metalMaterials;
         this.plasticMaterials = plasticMaterials;
+        this.blendMaterials = blendMaterials;
     }
 
     public Color Sample(in int id, in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
@@ -40,6 +43,7 @@ public readonly struct MaterialView
         Sample(in transmissionMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
         Sample(in metalMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
         Sample(in plasticMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in blendMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
         return f;
     }
 
