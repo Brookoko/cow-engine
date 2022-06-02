@@ -60,9 +60,9 @@
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 0.4,
-            "g": 0.4,
-            "b": 0.4
+            "r": 0.7,
+            "g": 0.7,
+            "b": 0.7
           }
         }
       },
