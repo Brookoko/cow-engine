@@ -5,14 +5,11 @@ using System.Numerics;
 
 public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
 {
-    public bool SampleVisibleArea { get; }
-
     private readonly float alphaX;
     private readonly float alphaY;
 
-    public TrowbridgeReitzDistribution(float alphaX, float alphaY, bool sampleVisibleArea)
+    public TrowbridgeReitzDistribution(float alphaX, float alphaY)
     {
-        SampleVisibleArea = sampleVisibleArea;
         this.alphaX = alphaX;
         this.alphaY = alphaY;
     }
@@ -20,7 +17,7 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
     public float D(in Vector3 w)
     {
         var tan2Theta = Mathf.Tan2Theta(in w);
-        if (float.IsFinite(tan2Theta))
+        if (float.IsInfinity(tan2Theta))
         {
             return 0;
         }
@@ -43,7 +40,7 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
 
     public Vector3 Sample(in Vector3 wo, in Vector2 sample)
     {
-        if (!SampleVisibleArea)
+        if (!Const.SampleVisibleArea)
         {
             return SampleNotVisible(in wo, in sample);
         }
@@ -80,7 +77,7 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
             var tanTheta2 = alpha2 * sample.X / (1 - sample.X);
             cosTheta = 1 / (float)Math.Sqrt(1 * tanTheta2);
         }
-        var sinTheta = (float)Math.Sqrt(Math.Max(0, 1 - cosTheta * cosTheta));
+        var sinTheta = (float)Math.Sqrt(1 - cosTheta * cosTheta);
         var wh = Mathf.SphericalDirection(sinTheta, cosTheta, phi);
         if (!Mathf.SameHemisphere(wo, wh))
         {
@@ -141,5 +138,24 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
         var z = (v * (v * (v * 0.27385f - 0.73369f) + 0.46341f)) /
                 (v * (v * (v * 0.093073f + 0.309420f) - 1.000000f) + 0.597999f);
         slopeY = s * z * (float)Math.Sqrt(1 + slopeX * slopeX);
+    }
+
+    public float G1(in Vector3 w)
+    {
+        return 1 / (1 + Lambda(in w));
+    }
+
+    public float G(in Vector3 wo, in Vector3 wi)
+    {
+        return 1 / (1 + Lambda(in wo) + Lambda(in wi));
+    }
+
+    public float Pdf(in Vector3 wo, in Vector3 wi)
+    {
+        if (Const.SampleVisibleArea)
+        {
+            return D(in wi) * G1(in wo) * Mathf.AbsDot(in wo, in wi) / Mathf.AbsCosTheta(in wo);
+        }
+        return D(in wi) * Mathf.AbsCosTheta(in wi);
     }
 }

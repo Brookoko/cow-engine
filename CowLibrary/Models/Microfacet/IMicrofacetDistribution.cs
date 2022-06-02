@@ -4,8 +4,6 @@ using System.Numerics;
 
 public interface IMicrofacetDistribution
 {
-    bool SampleVisibleArea { get; }
-
     float D(in Vector3 w);
 
     float Lambda(in Vector3 w);
@@ -24,7 +22,7 @@ public interface IMicrofacetDistribution
 
     float Pdf(in Vector3 wo, in Vector3 wi)
     {
-        if (SampleVisibleArea)
+        if (Const.SampleVisibleArea)
         {
             return D(wi) * G1(wo) * Mathf.AbsDot(wo, wi) / Mathf.AbsCosTheta(wo);
         }

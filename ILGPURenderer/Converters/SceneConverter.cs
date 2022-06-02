@@ -110,7 +110,8 @@ public class SceneConverter : ISceneConverter
         var fresnel = LoadDerived<FresnelMaterial, IMaterial>(materials);
         var reflection = LoadDerived<ReflectionMaterial, IMaterial>(materials);
         var transmission = LoadDerived<TransmissionMaterial, IMaterial>(materials);
-        return new MaterialView(diffuse, fresnel, reflection, transmission);
+        var metal = LoadDerived<MetalMaterial, IMaterial>(materials);
+        return new MaterialView(diffuse, fresnel, reflection, transmission, metal);
     }
 
     private LightView CreateLightData(Scene scene)

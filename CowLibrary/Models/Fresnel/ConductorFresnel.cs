@@ -17,7 +17,7 @@ namespace CowLibrary
 
         public float Evaluate(float cosThetaI)
         {
-            cosThetaI = Math.Clamp(cosThetaI, -1, 1);
+            cosThetaI = Mathf.Clamp(cosThetaI, -1, 1);
             var eta = etaT / etaI;
             var etaK = k / etaI;
 

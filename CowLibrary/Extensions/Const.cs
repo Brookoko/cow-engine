@@ -22,5 +22,7 @@ namespace CowLibrary
         public const int KdNodeCount = 3;
         public const int MinNumberOfTriangles = 16;
         public const int MaxDepth = 17;
+
+        public const bool SampleVisibleArea = true;
     }
 }

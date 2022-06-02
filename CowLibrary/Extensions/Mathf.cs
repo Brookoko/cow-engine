@@ -80,7 +80,7 @@ namespace CowLibrary
 
         public static float CosPhi(in Vector3 w, float sinTheta)
         {
-            return sinTheta == 0 ? 1 : Math.Clamp(w.X / sinTheta, -1, 1);
+            return sinTheta == 0 ? 1 : Clamp(w.X / sinTheta, -1, 1);
         }
 
         public static float Cos2Phi(in Vector3 w)
@@ -97,7 +97,7 @@ namespace CowLibrary
 
         public static float SinPhi(in Vector3 w, float sinTheta)
         {
-            return sinTheta == 0 ? 1 : Math.Clamp(w.Z / sinTheta, -1, 1);
+            return sinTheta == 0 ? 1 : Clamp(w.Z / sinTheta, -1, 1);
         }
 
         public static float Sin2Phi(in Vector3 w)
@@ -118,7 +118,7 @@ namespace CowLibrary
 
         public static float Pdf(in Vector3 wo, in Vector3 wi)
         {
-            return !SameHemisphere(in wo, in wi) ? AbsCosTheta(in wi) * Const.InvPi : 0;
+            return SameHemisphere(in wo, in wi) ? AbsCosTheta(in wi) * Const.InvPi : 0;
         }
 
         public static bool SameHemisphere(in Vector3 wo, in Vector3 wi)
@@ -242,7 +242,7 @@ namespace CowLibrary
         public static float ErfInv(float x)
         {
             float w, p;
-            x = Math.Clamp(x, -0.99999f, 0.99999f);
+            x = Clamp(x, -0.99999f, 0.99999f);
             w = (float)Math.Log((1 - x) * (1 + x));
             if (w < 5)
             {
@@ -283,6 +283,16 @@ namespace CowLibrary
             roughness = Math.Max(roughness, 1e-3f);
             var x = (float)Math.Log(roughness);
             return 1.62142f + 0.819955f * x + 0.1734f * x * x + 0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
+        }
+        
+        public static float Clamp(float x, float min, float max)
+        {
+            return Math.Min(Math.Max(x, min), max);
+        }
+
+        public static Vector3 FaceForward(Vector3 v, Vector3 n)
+        {
+            return Vector3.Dot(v, n) < 0 ? -v : v;
         }
     }
 }

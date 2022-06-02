@@ -5,14 +5,11 @@ using System.Numerics;
 
 public readonly struct BeckmannDistribution : IMicrofacetDistribution
 {
-    public bool SampleVisibleArea { get; }
-
     private readonly float alphaX;
     private readonly float alphaY;
 
-    public BeckmannDistribution(float alphaX, float alphaY, bool sampleVisibleArea)
+    public BeckmannDistribution(float alphaX, float alphaY)
     {
-        SampleVisibleArea = sampleVisibleArea;
         this.alphaX = alphaX;
         this.alphaY = alphaY;
     }
@@ -49,7 +46,7 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
 
     public Vector3 Sample(in Vector3 wo, in Vector2 sample)
     {
-        if (!SampleVisibleArea)
+        if (!Const.SampleVisibleArea)
         {
             return SampleNotVisible(in wo, in sample);
         }
@@ -174,7 +171,7 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
 
     public float Pdf(in Vector3 wo, in Vector3 wi)
     {
-        if (SampleVisibleArea)
+        if (Const.SampleVisibleArea)
         {
             return D(wi) * G1(wo) * Mathf.AbsDot(wo, wi) / Mathf.AbsCosTheta(wo);
         }

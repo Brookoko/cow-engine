@@ -55,9 +55,9 @@
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 1,
-            "g": 0,
-            "b": 0
+            "r": 0.4,
+            "g": 0.4,
+            "b": 0.4
           }
         }
       },
@@ -70,9 +70,9 @@
     {
       "id": 4,
       "color": {
-        "r": 3,
-        "g": 3,
-        "b": 3
+        "r": 1,
+        "g": 1,
+        "b": 1
       },
       "environment": {}
     }
