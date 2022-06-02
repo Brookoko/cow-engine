@@ -5,6 +5,11 @@ namespace CowLibrary
 
     public static class Mathf
     {
+        public static float AbsDot(in Vector3 wo, in Vector3 wi)
+        {
+            return Math.Abs(Vector3.Dot(wo, wi));
+        }
+
         public static (float a, float b) Swap(float a, float b)
         {
             return (b, a);
@@ -78,6 +83,12 @@ namespace CowLibrary
             return sinTheta == 0 ? 1 : Math.Clamp(w.X / sinTheta, -1, 1);
         }
 
+        public static double Cos2Phi(in Vector3 w)
+        {
+            var cosPhi = CosPhi(in w);
+            return cosPhi * cosPhi;
+        }
+
         public static float SinPhi(in Vector3 w)
         {
             var sinTheta = SinTheta(in w);
@@ -87,6 +98,22 @@ namespace CowLibrary
         public static float SinPhi(in Vector3 w, float sinTheta)
         {
             return sinTheta == 0 ? 1 : Math.Clamp(w.Z / sinTheta, -1, 1);
+        }
+
+        public static double Sin2Phi(in Vector3 w)
+        {
+            var sinPhi = SinPhi(in w);
+            return sinPhi * sinPhi;
+        }
+
+        public static float TanTheta(in Vector3 w)
+        {
+            return SinTheta(in w) / CosTheta(in w);
+        }
+
+        public static float Tan2Theta(in Vector3 w)
+        {
+            return Sin2Theta(in w) / Cos2Theta(in w);
         }
 
         public static float Pdf(in Vector3 wo, in Vector3 wi)
@@ -108,14 +135,12 @@ namespace CowLibrary
 
         public static Vector3 ToWorld(in Vector3 normal, in Vector3 w)
         {
-            var m = GetWorld(in normal, in w);
-            return m.MultiplyVector(w).Normalize();
+            return GetWorld(in normal, in w).MultiplyVector(w);
         }
 
         public static Vector3 ToLocal(in Vector3 normal, in Vector3 w)
         {
-            var m = GetWorld(in normal, in w);
-            return Invert(in m).MultiplyVector(w).Normalize();
+            return GetLocal(in normal, in w).MultiplyVector(w);
         }
 
         public static (Matrix4x4 toLocal, Matrix4x4 toWorld) GetMatrices(in Vector3 normal, in Vector3 w)
@@ -125,11 +150,17 @@ namespace CowLibrary
             return (toLocal, toWorld);
         }
 
-        private static Matrix4x4 GetWorld(in Vector3 normal, in Vector3 w)
+        public static Matrix4x4 GetWorld(in Vector3 normal, in Vector3 w)
         {
             var right = Vector3.Cross(normal, w).Normalize();
             var forward = Vector3.Cross(right, normal).Normalize();
             return Matrix4x4Extensions.FromBasis(right, normal, forward, Vector3.Zero);
+        }
+
+        public static Matrix4x4 GetLocal(in Vector3 normal, in Vector3 w)
+        {
+            var m = GetWorld(in normal, in w);
+            return Invert(in m);
         }
 
         private static Matrix4x4 Invert(in Matrix4x4 matrix)
@@ -191,6 +222,60 @@ namespace CowLibrary
             result.M44 = +(a * fk_gj - b * ek_gi + c * ej_fi) * invDet;
 
             return result;
+        }
+
+        public static float Erf(float x)
+        {
+            const float a1 = 0.254829592f;
+            const float a2 = -0.284496736f;
+            const float a3 = 1.421413741f;
+            const float a4 = -1.453152027f;
+            const float a5 = 1.061405429f;
+            const float p = 0.3275911f;
+            var sign = x < 0 ? -1 : 1;
+            x = Math.Abs(x);
+            var t = 1 / (1 + p * x);
+            var y = 1 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * (float)Math.Exp(-x * x);
+            return sign * y;
+        }
+
+        public static float ErfInv(float x)
+        {
+            float w, p;
+            x = Math.Clamp(x, -0.99999f, 0.99999f);
+            w = (float)Math.Log((1 - x) * (1 + x));
+            if (w < 5)
+            {
+                w = w - 2.5f;
+                p = 2.81022636e-08f;
+                p = 3.43273939e-07f + p * w;
+                p = -3.5233877e-06f + p * w;
+                p = -4.39150654e-06f + p * w;
+                p = 0.00021858087f + p * w;
+                p = -0.00125372503f + p * w;
+                p = -0.00417768164f + p * w;
+                p = 0.246640727f + p * w;
+                p = 1.50140941f + p * w;
+            }
+            else
+            {
+                w = (float)Math.Sqrt(w) - 3;
+                p = -0.000200214257f;
+                p = 0.000100950558f + p * w;
+                p = 0.00134934322f + p * w;
+                p = -0.00367342844f + p * w;
+                p = 0.00573950773f + p * w;
+                p = -0.0076224613f + p * w;
+                p = 0.00943887047f + p * w;
+                p = 1.00167406f + p * w;
+                p = 2.83297682f + p * w;
+            }
+            return p * x;
+        }
+
+        public static Vector3 SphericalDirection(float sinTheta, float cosTheta, float phi)
+        {
+            return new Vector3(sinTheta * (float)Math.Cos(phi), sinTheta * (float)Math.Sin(phi), cosTheta);
         }
     }
 }

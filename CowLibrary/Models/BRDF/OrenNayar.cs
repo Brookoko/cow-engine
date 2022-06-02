@@ -21,7 +21,7 @@ public class OrenNayar : IBrdf
 
     public float Evaluate(in Vector3 wo, in Vector3 wi, in Vector3 normal)
     {
-        var (toLocal, _) = Mathf.GetMatrices(normal, wi);
+        var toLocal = Mathf.GetLocal(in normal, in wi);
         var wiL = toLocal.MultiplyVector(wi);
         var woL = toLocal.MultiplyVector(wo);
         return EvaluateInternal(in woL, in wiL);
