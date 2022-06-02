@@ -17,7 +17,7 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
     public float D(in Vector3 w)
     {
         var tan2Theta = Mathf.Tan2Theta(in w);
-        if (float.IsFinite(tan2Theta))
+        if (float.IsInfinity(tan2Theta))
         {
             return 0;
         }
@@ -173,8 +173,8 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
     {
         if (Const.SampleVisibleArea)
         {
-            return D(wi) * G1(wo) * Mathf.AbsDot(wo, wi) / Mathf.AbsCosTheta(wo);
+            return D(in wi) * G1(in wo) * Mathf.AbsDot(in wo, in wi) / Mathf.AbsCosTheta(in wo);
         }
-        return D(wi) * Mathf.AbsCosTheta(wi);
+        return D(in wi) * Mathf.AbsCosTheta(in wi);
     }
 }

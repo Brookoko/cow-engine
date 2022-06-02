@@ -2,8 +2,8 @@
   "version": 1,
   "renderOptions": {
     "cameraId": 1,
-    "width": 1920,
-    "height": 1080
+    "width": 100,
+    "height": 100
   },
   "cameras": [
     {
