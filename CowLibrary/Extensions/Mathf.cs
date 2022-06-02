@@ -83,7 +83,7 @@ namespace CowLibrary
             return sinTheta == 0 ? 1 : Math.Clamp(w.X / sinTheta, -1, 1);
         }
 
-        public static double Cos2Phi(in Vector3 w)
+        public static float Cos2Phi(in Vector3 w)
         {
             var cosPhi = CosPhi(in w);
             return cosPhi * cosPhi;
@@ -100,7 +100,7 @@ namespace CowLibrary
             return sinTheta == 0 ? 1 : Math.Clamp(w.Z / sinTheta, -1, 1);
         }
 
-        public static double Sin2Phi(in Vector3 w)
+        public static float Sin2Phi(in Vector3 w)
         {
             var sinPhi = SinPhi(in w);
             return sinPhi * sinPhi;
@@ -276,6 +276,13 @@ namespace CowLibrary
         public static Vector3 SphericalDirection(float sinTheta, float cosTheta, float phi)
         {
             return new Vector3(sinTheta * (float)Math.Cos(phi), sinTheta * (float)Math.Sin(phi), cosTheta);
+        }
+
+        public static float RoughnessToAlpha(float roughness)
+        {
+            roughness = Math.Max(roughness, 1e-3f);
+            var x = (float)Math.Log(roughness);
+            return 1.62142f + 0.819955f * x + 0.1734f * x * x + 0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
         }
     }
 }

@@ -47,21 +47,11 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
         return (1 - 1.259f * a + 0.396f * a * a) / (3.535f * a + 2.181f * a * a);
     }
 
-    public float G1(in Vector3 w)
-    {
-        return 1 / (1 + Lambda(in w));
-    }
-
-    public float G(in Vector3 wo, in Vector3 wi)
-    {
-        return 1 / (1 + Lambda(in wo) + Lambda(in wi));
-    }
-
     public Vector3 Sample(in Vector3 wo, in Vector2 sample)
     {
-        if (SampleVisibleArea)
+        if (!SampleVisibleArea)
         {
-            return SampleVisible(in wo, in sample);
+            return SampleNotVisible(in wo, in sample);
         }
         var flip = wo.Y < 0;
         var wh = BackmanSample(flip ? -wo : wo, sample.X, sample.Y);
@@ -72,7 +62,7 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
         return wh;
     }
 
-    private Vector3 SampleVisible(in Vector3 wo, in Vector2 sample)
+    private Vector3 SampleNotVisible(in Vector3 wo, in Vector2 sample)
     {
         float tan2Theta, phi;
         var logSample = (float)Math.Log(1 - sample.X);
@@ -118,9 +108,9 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
         return new Vector3(-slopeX, -slopeY, 1).Normalize();
     }
 
-    private void BackmanSample11(float cosThetaI, float u, float v, out float slopeX, out float slopeY)
+    private void BackmanSample11(float cosTheta, float u, float v, out float slopeX, out float slopeY)
     {
-        if (cosThetaI > .9999)
+        if (cosTheta > .9999)
         {
             var r = (float)Math.Sqrt(-Math.Log(1.0f - u));
             var sinPhi = (float)Math.Sin(2 * Const.Pi * v);
@@ -130,18 +120,18 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
             return;
         }
 
-        var sinThetaI = (float)Math.Sqrt(Math.Max(0, 1 - cosThetaI * cosThetaI));
-        var tanThetaI = sinThetaI / cosThetaI;
-        var cotThetaI = 1 / tanThetaI;
+        var sinTheta = (float)Math.Sqrt(Math.Max(0, 1 - cosTheta * cosTheta));
+        var tanTheta = sinTheta / cosTheta;
+        var cotTheta = 1 / tanTheta;
 
         var a = -1f;
-        var c = Mathf.Erf(cosThetaI);
+        var c = Mathf.Erf(cosTheta);
         var sampleX = Math.Max(u, 1e-6f);
 
-        var thetaI = (float)Math.Acos(cosThetaI);
+        var thetaI = (float)Math.Acos(cosTheta);
         var fit = 1 + thetaI * (-0.876f + thetaI * (0.4265f - 0.0594f * thetaI));
         var b = c - (1 + c) * (float)Math.Pow(1 - sampleX, fit);
-        var normalization = 1 / (1 + c + Const.SqrtPiInv * tanThetaI * (float)Math.Exp(-cotThetaI * cotThetaI));
+        var normalization = 1 / (1 + c + Const.SqrtPiInv * tanTheta * (float)Math.Exp(-cotTheta * cotTheta));
         for (var i = 0; i < 10; i++)
         {
             if (!(b >= a && b <= c))
@@ -149,9 +139,9 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
                 b = 0.5f * (a + c);
             }
             var invErf = Mathf.ErfInv(b);
-            var value = normalization * (1 + b + Const.SqrtPiInv * tanThetaI * (float)Math.Exp(-invErf * invErf)) -
+            var value = normalization * (1 + b + Const.SqrtPiInv * tanTheta * (float)Math.Exp(-invErf * invErf)) -
                         sampleX;
-            var derivative = normalization * (1 - invErf * tanThetaI);
+            var derivative = normalization * (1 - invErf * tanTheta);
 
             if (Math.Abs(value) < 1e-5f)
             {
@@ -172,6 +162,16 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
         slopeY = Mathf.ErfInv(2 * Math.Max(v, 1e-6f) - 1);
     }
 
+    public float G1(in Vector3 w)
+    {
+        return 1 / (1 + Lambda(in w));
+    }
+
+    public float G(in Vector3 wo, in Vector3 wi)
+    {
+        return 1 / (1 + Lambda(in wo) + Lambda(in wi));
+    }
+
     public float Pdf(in Vector3 wo, in Vector3 wi)
     {
         if (SampleVisibleArea)
@@ -179,12 +179,5 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
             return D(wi) * G1(wo) * Mathf.AbsDot(wo, wi) / Mathf.AbsCosTheta(wo);
         }
         return D(wi) * Mathf.AbsCosTheta(wi);
-    }
-
-    private float RoughnessToAlpha(float roughness)
-    {
-        roughness = Math.Max(roughness, 1e-3f);
-        var x = (float)Math.Log(roughness);
-        return 1.62142f + 0.819955f * x + 0.1734f * x * x + 0.0171201f * x * x * x + 0.000640711f * x * x * x * x;
     }
 }
