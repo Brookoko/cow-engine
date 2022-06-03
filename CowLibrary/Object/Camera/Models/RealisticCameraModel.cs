@@ -10,7 +10,6 @@ public readonly struct RealisticCameraModel : ICameraModel
     private readonly float aspectRatio;
     private readonly float tan;
     private readonly Lens lens;
-    private readonly Vector3 lensCenter;
 
     public RealisticCameraModel(int width, int height, float fov, Lens lens)
     {
@@ -19,7 +18,6 @@ public readonly struct RealisticCameraModel : ICameraModel
         aspectRatio = (float)width / height;
         tan = (float)Math.Tan(Const.Deg2Rad * fov / 2);
         this.lens = lens;
-        lensCenter = new Vector3(0, 0, lens.distance);
     }
 
     public Ray ScreenPointToRay(in Vector2 screenPoint, in Matrix4x4 localToWorldMatrix, in Vector2 sample)
@@ -43,7 +41,7 @@ public readonly struct RealisticCameraModel : ICameraModel
     {
         var sampleDisk = Mathf.ConcentricSampleDisk(sample);
         var lensPoint = new Vector3(sampleDisk * lens.radius, 0);
-        var ft = lens.distance / -focusDirection.Z;
+        var ft = lens.focus / -focusDirection.Z;
         var focusPoint = ft * focusDirection;
         var direction = focusPoint - lensPoint;
         var position = localToWorldMatrix.MultiplyPoint(lensPoint);
@@ -54,7 +52,7 @@ public readonly struct RealisticCameraModel : ICameraModel
     private Vector3 GetPerspectiveDirection(in Vector2 screenPoint)
     {
         var point = ViewportPoint(in screenPoint);
-        point.Z = -lens.focus;
+        point.Z = -lens.distance;
         return point.Normalize();
     }
 

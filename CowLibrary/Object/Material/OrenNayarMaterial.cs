@@ -1,24 +1,20 @@
 ﻿namespace CowLibrary;
 
 using System.Numerics;
-using Models.Microfacet;
 
-public readonly struct MetalMaterial : IMaterial
+public readonly struct OrenNayarMaterial : IMaterial
 {
     public Color Color { get; }
+
     public int Id { get; }
 
-    private readonly MetalBrdf brdf;
+    private readonly OrenNayar brdf;
 
-    public MetalMaterial(Color color, float r, float eta, float k, float rough, int id)
+    public OrenNayarMaterial(Color color, float r, float sigma, int id) : this(color, new OrenNayar(r, sigma), id)
     {
-        var fresnel = new ConductorFresnel(1, eta, k);
-        var distribution = new TrowbridgeReitzDistribution(rough, rough);
-        var brdf = new MetalBrdf(r, fresnel, distribution);
-        this = new MetalMaterial(brdf, color, id);
     }
 
-    private MetalMaterial(MetalBrdf brdf, Color color, int id)
+    private OrenNayarMaterial(Color color, OrenNayar brdf, int id)
     {
         Color = color;
         this.brdf = brdf;
@@ -37,6 +33,6 @@ public readonly struct MetalMaterial : IMaterial
 
     public IMaterial Copy(int id)
     {
-        return new MetalMaterial(brdf, Color, id);
+        return new OrenNayarMaterial(Color, brdf, id);
     }
 }
