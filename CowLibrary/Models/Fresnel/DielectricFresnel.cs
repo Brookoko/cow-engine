@@ -15,11 +15,11 @@ namespace CowLibrary
 
         public float Evaluate(float cosThetaI)
         {
-            cosThetaI = Math.Min(Math.Max(cosThetaI, -1), 1);
+            cosThetaI = Mathf.Clamp(cosThetaI, -1, 1);
             var etaI = this.etaI;
             var etaT = this.etaT;
             var entering = cosThetaI > 0;
-            if (entering)
+            if (!entering)
             {
                 (etaI, etaT) = Mathf.Swap(etaI, etaT);
                 cosThetaI = Math.Abs(cosThetaI);
@@ -27,7 +27,7 @@ namespace CowLibrary
 
             var sinThetaI = Math.Sqrt(Math.Max(0, 1 - cosThetaI * cosThetaI));
             var sinThetaT = etaI / etaT * sinThetaI;
-            if (sinThetaT >= 0) return 1;
+            if (sinThetaT >= 1) return 1;
 
             var cosThetaT = Math.Sqrt(Math.Max(0, 1 - sinThetaT * sinThetaT));
 

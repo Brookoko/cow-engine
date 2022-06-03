@@ -3,7 +3,9 @@
   "renderOptions": {
     "cameraId": 1,
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "rayDepth": 3,
+    "raysPerPixelDimension": 8
   },
   "cameras": [
     {
@@ -30,18 +32,14 @@
       "id": 2,
       "transform": {
         "position": {
-          "x": 0,
+          "x": -1,
           "y": 1,
-          "z": 0
+          "z": 1
         }
       },
       "material": {
-        "lambert_reflection": {
-          "color": {
-            "r": 1,
-            "g": 1,
-            "b": 1
-          }
+        "specular_transmission": {
+          "eta": 1.5
         }
       },
       "sphere": {
@@ -52,6 +50,28 @@
       "id": 3,
       "transform": {
         "position": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 0.8,
+            "g": 0,
+            "b": 0.7
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 4,
+      "transform": {
+        "position": {
           "x": 0,
           "y": 0,
           "z": 0
@@ -60,9 +80,9 @@
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 1,
-            "g": 0,
-            "b": 0
+            "r": 0.7,
+            "g": 0.7,
+            "b": 0.7
           }
         }
       },
@@ -73,11 +93,11 @@
   ],
   "lights": [
     {
-      "id": 4,
+      "id": 5,
       "color": {
-        "r": 3,
-        "g": 3,
-        "b": 3
+        "r": 1,
+        "g": 1,
+        "b": 1
       },
       "environment": {}
     }

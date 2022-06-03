@@ -6,6 +6,8 @@ namespace CowRenderer
     {
         string Tag { get; }
 
+        void Prepare(Scene scene);
+        
         Image Render(Scene scene);
     }
 }

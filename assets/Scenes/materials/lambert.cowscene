@@ -2,8 +2,10 @@
   "version": 1,
   "renderOptions": {
     "cameraId": 1,
-    "width": 640,
-    "height": 360
+    "width": 1920,
+    "height": 1080,
+    "rayDepth": 3,
+    "raysPerPixelDimension": 8
   },
   "cameras": [
     {
@@ -30,16 +32,16 @@
       "id": 2,
       "transform": {
         "position": {
-          "x": 0,
+          "x": -1,
           "y": 1,
-          "z": 0
+          "z": 1
         }
       },
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 0,
-            "g": 0,
+            "r": 1,
+            "g": 1,
             "b": 1
           }
         }
@@ -52,14 +54,18 @@
       "id": 3,
       "transform": {
         "position": {
-          "x": 2,
+          "x": 1,
           "y": 1,
           "z": 1
         }
       },
       "material": {
-        "specular_reflection": {
-          "eta": 2
+        "lambert_reflection": {
+          "color": {
+            "r": 0.8,
+            "g": 0,
+            "b": 0.7
+          }
         }
       },
       "sphere": {
@@ -78,9 +84,9 @@
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 1,
-            "g": 0,
-            "b": 0
+            "r": 0.7,
+            "g": 0.7,
+            "b": 0.7
           }
         }
       },
@@ -93,9 +99,9 @@
     {
       "id": 5,
       "color": {
-        "r": 3,
-        "g": 3,
-        "b": 3
+        "r": 1,
+        "g": 1,
+        "b": 1
       },
       "environment": {}
     }

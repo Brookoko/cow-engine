@@ -18,9 +18,13 @@ namespace CowRenderer.Rendering
 
         public string Tag => "cpu-simple";
 
-        public Image Render(Scene scene)
+        public void Prepare(Scene scene)
         {
             Raycaster.Init(scene);
+        }
+
+        public Image Render(Scene scene)
+        {
             var camera = scene.MainCamera;
             var w = camera.Width;
             var h = camera.Height;

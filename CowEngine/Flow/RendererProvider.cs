@@ -7,7 +7,7 @@ using CowRenderer;
 
 public interface IRendererProvider
 {
-    IRenderer GetRenderer(string tag);
+    IRenderer GetRenderer(Scene scene, string tag);
 }
 
 public class RendererProvider : IRendererProvider
@@ -15,7 +15,7 @@ public class RendererProvider : IRendererProvider
     [Inject]
     public IRenderer[] Renderers { get; set; }
 
-    public IRenderer GetRenderer(string tag)
+    public IRenderer GetRenderer(Scene scene, string tag)
     {
         var uniformTag = Uniform(tag);
         var renderer = Renderers.FirstOrDefault(r => r.Tag == uniformTag);
@@ -23,6 +23,7 @@ public class RendererProvider : IRendererProvider
         {
             throw new Exception($"No renderer with tag: {tag}");
         }
+        renderer.Prepare(scene);
         return renderer;
     }
 

@@ -25,13 +25,16 @@ namespace CowLibrary
             return 0;
         }
 
-        public float Sample(in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+        public float Sample(in Vector3 normal, in Vector3 woW, in Vector2 sample, out Vector3 wi, out float pdf)
         {
-            var entering = Vector3.Dot(wo, normal) < 0;
+            var (toLocal, toWorld) = Mathf.GetMatrices(in normal, in woW);
+            var wo = -toLocal.MultiplyVector(woW);
+            
+            var entering = Mathf.CosTheta(wo) > 0;
             var etaI = entering ? etaA : etaB;
             var etaT = entering ? etaB : etaA;
             var eta = etaI / etaT;
-            var n = Vector3Extensions.Faceforward(normal, wo);
+            var n = Mathf.FaceForward(wo, Vector3.UnitY);
 
             if (!wo.Refract(n, eta, out wi))
             {
@@ -40,13 +43,14 @@ namespace CowLibrary
             }
 
             pdf = 1;
-            var cos = Vector3.Dot(wi, normal);
-            var ft = t * (1 - fresnel.Evaluate(cos));
+            var ft = t * (1 - fresnel.Evaluate(Mathf.CosTheta(wi)));
             if (mode == TransportMode.Radiance)
             {
                 ft *= (etaI * etaI) / (etaT * etaT);
             }
-            return ft / Math.Abs(cos);
+            var f = ft / Mathf.AbsCosTheta(wi);
+            wi = toWorld.MultiplyVector(wi);
+            return f;
         }
     }
 

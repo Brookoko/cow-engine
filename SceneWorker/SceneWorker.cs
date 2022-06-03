@@ -207,17 +207,18 @@
                     return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color),
                         (float)material.LambertReflection.R, id);
                 case SceneFormat.Material.MaterialOneofCase.SpecularReflection:
-                    return new ReflectionMaterial((float)material.LambertReflection.R,
+                    return new ReflectionMaterial((float)material.SpecularReflection.R,
                         (float)material.SpecularReflection.Eta, id);
                 case SceneFormat.Material.MaterialOneofCase.SpecularTransmission:
                     return new TransmissionMaterial((float)material.SpecularTransmission.T,
-                        (float)material.SpecularReflection.Eta, id);
+                        (float)material.SpecularTransmission.Eta, id);
                 case SceneFormat.Material.MaterialOneofCase.Fresnel:
                     return new FresnelMaterial((float)material.Fresnel.R,
                         (float)material.Fresnel.T,
                         (float)material.Fresnel.Eta, id);
                 case SceneFormat.Material.MaterialOneofCase.OrenNayar:
-                    return new OrenNayarMaterial(ConvertColor(material.OrenNayar.Color), (float)material.OrenNayar.R,
+                    return new OrenNayarMaterial(ConvertColor(material.OrenNayar.Color),
+                        (float)material.OrenNayar.R,
                         (float)material.OrenNayar.Roughness, id);
                 case SceneFormat.Material.MaterialOneofCase.MicrofacetReflection:
                     return new MicrofacetReflectionMaterial(ConvertColor(material.MicrofacetReflection.Color),

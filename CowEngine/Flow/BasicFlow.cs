@@ -1,5 +1,6 @@
 ﻿namespace CowEngine;
 
+using System;
 using Cowject;
 using CowLibrary;
 using ImageWorker;
@@ -25,29 +26,28 @@ public class BasicFlow : IFlow
 
     public int Process(Option option)
     {
+        var total = 0.0;
         Watch.Start();
         var scene = SceneLoader.LoadSceneFromOptions(option);
-        Watch.Stop("Loading scene");
-
-        var alpha = Mathf.RoughnessToAlpha(0.5f);
-        var car = scene.objects[0];
-        var metal = new MicrofacetReflectionMaterial(Color.White, 2, 1.5f, alpha, car.Material.Id);
-        car = new RenderableObject(car.Mesh, metal);
-        scene.objects[0] = car;
+        total += Watch.Stop("Loading scene");
 
         Watch.Start();
         scene.PrepareScene();
-        Watch.Stop("Preparing scene");
+        total += Watch.Stop("Preparing scene");
 
         Watch.Start();
-        var renderer = RendererProvider.GetRenderer(option.Mode);
+        var renderer = RendererProvider.GetRenderer(scene, option.Mode);
+        total += Watch.Stop("Preparing renderer");
+
+        Watch.Start();
         var image = renderer.Render(scene);
-        Watch.Stop("Rendering scene");
+        total += Watch.Stop("Rendering scene");
 
         Watch.Start();
         ImageWorker.SaveImage(in image, option.Output);
-        Watch.Stop("Saving render");
+        total += Watch.Stop("Saving render");
 
+        Console.WriteLine($"Total time: {total}");
         return 0;
     }
 }

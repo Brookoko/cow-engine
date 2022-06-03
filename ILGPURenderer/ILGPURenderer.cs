@@ -15,11 +15,15 @@
 
         public string Tag => "ilgpu";
 
+        public void Prepare(Scene scene)
+        {
+            RenderKernel.Prepare(scene);
+        }
+
         public Image Render(Scene scene)
         {
-            var sceneData = SceneConverter.Convert(scene);
             var camera = scene.MainCamera;
-            var colors = RenderKernel.Render(in sceneData, camera);
+            var colors = RenderKernel.Render(camera);
             return new Image(colors);
         }
     }

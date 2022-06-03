@@ -3,6 +3,7 @@
 using System;
 using System.Numerics;
 using System.Reflection;
+using Converters;
 using Cowject;
 using CowLibrary;
 using CowLibrary.Mathematics.Sampler;
@@ -16,7 +17,9 @@ using ILGPU.Runtime;
 
 public interface IRenderKernel
 {
-    Color[,] Render(in SceneView sceneView, Camera camera);
+    void Prepare(Scene scene);
+
+    Color[,] Render(Camera camera);
 }
 
 public class RenderKernel : IRenderKernel
@@ -28,7 +31,12 @@ public class RenderKernel : IRenderKernel
     public ILocalSamplerProvider LocalSamplerProvider { get; set; }
 
     [Inject]
+    public ISceneConverter SceneConverter { get; set; }
+
+    [Inject]
     public RenderConfig RenderConfig { get; set; }
+
+    private SceneView sceneView;
 
     private Action<
             AcceleratorStream,
@@ -69,44 +77,61 @@ public class RenderKernel : IRenderKernel
             RenderData>
         realisticAction;
 
-    [PostConstruct]
-    public void Initialize()
+    public void Prepare(Scene scene)
     {
-        orthographicAction = LoadKernel<OrthographicCameraModel>().CreateLauncherDelegate<Action<
-            AcceleratorStream,
-            KernelConfig,
-            ArrayView2D<Color, Stride2D.DenseX>,
-            SceneView,
-            LocalSampler,
-            LocalRaycaster,
-            LocalIntegrator,
-            OrthographicCameraModel,
-            Matrix4x4,
-            RenderData>>();
+        LoadScene(scene);
+        LoadKernel(scene.MainCamera.Model);
+    }
 
-        perspectiveAction = LoadKernel<PerspectiveCameraModel>().CreateLauncherDelegate<Action<
-            AcceleratorStream,
-            KernelConfig,
-            ArrayView2D<Color, Stride2D.DenseX>,
-            SceneView,
-            LocalSampler,
-            LocalRaycaster,
-            LocalIntegrator,
-            PerspectiveCameraModel,
-            Matrix4x4,
-            RenderData>>();
+    private void LoadScene(Scene scene)
+    {
+        sceneView = SceneConverter.Convert(scene);
+    }
 
-        realisticAction = LoadKernel<RealisticCameraModel>().CreateLauncherDelegate<Action<
-            AcceleratorStream,
-            KernelConfig,
-            ArrayView2D<Color, Stride2D.DenseX>,
-            SceneView,
-            LocalSampler,
-            LocalRaycaster,
-            LocalIntegrator,
-            RealisticCameraModel,
-            Matrix4x4,
-            RenderData>>();
+    private void LoadKernel(ICameraModel model)
+    {
+        switch (model)
+        {
+            case OrthographicCameraModel:
+                orthographicAction = LoadKernel<OrthographicCameraModel>().CreateLauncherDelegate<Action<
+                    AcceleratorStream,
+                    KernelConfig,
+                    ArrayView2D<Color, Stride2D.DenseX>,
+                    SceneView,
+                    LocalSampler,
+                    LocalRaycaster,
+                    LocalIntegrator,
+                    OrthographicCameraModel,
+                    Matrix4x4,
+                    RenderData>>();
+                break;
+            case PerspectiveCameraModel:
+                perspectiveAction = LoadKernel<PerspectiveCameraModel>().CreateLauncherDelegate<Action<
+                    AcceleratorStream,
+                    KernelConfig,
+                    ArrayView2D<Color, Stride2D.DenseX>,
+                    SceneView,
+                    LocalSampler,
+                    LocalRaycaster,
+                    LocalIntegrator,
+                    PerspectiveCameraModel,
+                    Matrix4x4,
+                    RenderData>>();
+                break;
+            case RealisticCameraModel:
+                realisticAction = LoadKernel<RealisticCameraModel>().CreateLauncherDelegate<Action<
+                    AcceleratorStream,
+                    KernelConfig,
+                    ArrayView2D<Color, Stride2D.DenseX>,
+                    SceneView,
+                    LocalSampler,
+                    LocalRaycaster,
+                    LocalIntegrator,
+                    RealisticCameraModel,
+                    Matrix4x4,
+                    RenderData>>();
+                break;
+        }
     }
 
     private Kernel LoadKernel<T>() where T : ICameraModel
@@ -121,16 +146,15 @@ public class RenderKernel : IRenderKernel
         return GpuKernel.Accelerator.LoadKernel(compiledKernel);
     }
 
-    public Color[,] Render(in SceneView sceneView, Camera camera)
+    public Color[,] Render(Camera camera)
     {
         var size = new LongIndex2D(camera.Height, camera.Width);
         var buffer = GpuKernel.Accelerator.Allocate2DDenseX<Color>(size);
-        Render(buffer, in sceneView, camera);
+        Render(buffer, camera);
         return buffer.GetAsArray2D();
     }
 
-    private void Render(MemoryBuffer2D<Color, Stride2D.DenseX> buffer, in SceneView sceneView,
-        Camera camera)
+    private void Render(MemoryBuffer2D<Color, Stride2D.DenseX> buffer, Camera camera)
     {
         var sampler = LocalSamplerProvider.GetSampler();
         var raycaster = new LocalRaycaster();

@@ -18,9 +18,13 @@ namespace CowRenderer.Rendering
 
         public string Tag => "cpu-threads";
 
-        public Image Render(Scene scene)
+        public void Prepare(Scene scene)
         {
             Raycaster.Init(scene);
+        }
+
+        public Image Render(Scene scene)
+        {
             var numberOfThread = RenderConfig.numberOfThreadPerDimension;
             var threads = new Thread[numberOfThread * numberOfThread];
 
