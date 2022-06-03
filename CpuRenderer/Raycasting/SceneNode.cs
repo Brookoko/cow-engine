@@ -39,7 +39,7 @@ namespace CowLibrary
             {
                 return null;
             }
-            if (!box.Check(in ray, out _, out _))
+            if (!box.Check(in ray, out _))
             {
                 return null;
             }

@@ -39,12 +39,7 @@ namespace CowLibrary
 
         public void Intersect(in Ray ray, in KdNode[] nodes, ref RayHit best)
         {
-            if (!bound.Check(in ray, out var tmin, out var tmax))
-            {
-                return;
-            }
-            var t = tmin < 0 ? tmax : tmin;
-            if (t > best.t)
+            if (!bound.Check(in ray, out var t) || t > best.t)
             {
                 return;
             }
