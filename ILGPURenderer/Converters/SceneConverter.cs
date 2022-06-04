@@ -114,7 +114,8 @@ public class SceneConverter : ISceneConverter
         var plastic = LoadDerived<PlasticMaterial, IMaterial>(materials);
         var blend = LoadDerived<BlendMaterial, IMaterial>(materials);
         var microfacet = LoadDerived<MicrofacetReflectionMaterial, IMaterial>(materials);
-        return new MaterialView(diffuse, fresnel, reflection, transmission, metal, plastic, blend, microfacet);
+        var orenNayar = LoadDerived<OrenNayarMaterial, IMaterial>(materials);
+        return new MaterialView(diffuse, fresnel, reflection, transmission, metal, plastic, blend, microfacet, orenNayar);
     }
 
     private LightView CreateLightData(Scene scene)

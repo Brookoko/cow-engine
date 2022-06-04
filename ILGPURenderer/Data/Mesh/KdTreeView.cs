@@ -80,7 +80,7 @@ public readonly struct KdTreeView
 
     private bool IsInBound(in Ray ray, in KdNodeView node, ref RayHit best)
     {
-        return node.bound.Check(in ray, out var t) && t < best.t;
+        return node.bound.Check(in ray, out var t);
     }
 
     private int GetChild(in ArrayView<KdNodeView> nodes, in int nodeIndex, in byte childNumber)

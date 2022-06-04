@@ -234,11 +234,11 @@
                 case SceneFormat.Material.MaterialOneofCase.Plastic:
                     return new PlasticMaterial(ConvertColor(material.Plastic.Color),
                         (float)material.Plastic.R,
-                        (float)material.Metal.Roughness, id);
+                        (float)material.Plastic.Roughness, id);
                 case SceneFormat.Material.MaterialOneofCase.Blend:
                     return new BlendMaterial(ConvertColor(material.Blend.Diffuse),
                         ConvertColor(material.Blend.Specular),
-                        (float)material.Metal.Roughness, id);
+                        (float)material.Blend.Roughness, id);
                 default:
                     throw new Exception("Unsupported material");
             }

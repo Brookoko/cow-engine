@@ -24,7 +24,7 @@ namespace CowLibrary
 
         public static Vector2 ConcentricSampleDisk(in Vector2 sample)
         {
-            var offset = 2 * sample - Vector2.One;
+            var offset = 2f * sample - Vector2.One;
 
             if (offset.X == 0 && offset.Y == 0)
             {
@@ -40,7 +40,7 @@ namespace CowLibrary
             }
             else
             {
-                r = offset.X;
+                r = offset.Y;
                 theta = Const.PiOver2 - Const.PiOver4 * (offset.X / offset.Y);
             }
 
@@ -69,7 +69,7 @@ namespace CowLibrary
 
         public static float Sin2Theta(in Vector3 w)
         {
-            return 1 - Cos2Theta(in w);
+            return Math.Max(0, 1 - Cos2Theta(in w));
         }
 
         public static float CosPhi(in Vector3 w)
@@ -97,7 +97,7 @@ namespace CowLibrary
 
         public static float SinPhi(in Vector3 w, float sinTheta)
         {
-            return sinTheta == 0 ? 1 : Clamp(w.Z / sinTheta, -1, 1);
+            return sinTheta == 0 ? 0 : Clamp(w.Z / sinTheta, -1, 1);
         }
 
         public static float Sin2Phi(in Vector3 w)
@@ -273,6 +273,19 @@ namespace CowLibrary
             return p * x;
         }
 
+        public static void CoordinateSystem(ref Vector3 v1, ref Vector3 v2, ref Vector3 v3)
+        {
+            if (Math.Abs(v1.X) > Math.Abs(v1.Y))
+            {
+                v2 = new Vector3(-v1.Z, 0, v1.X) / (float)Math.Sqrt(v1.X * v1.X + v1.Z * v1.Z);
+            }
+            else
+            {
+                v2 = new Vector3(0, v1.Z, -v1.Y) / (float)Math.Sqrt(v1.Y * v1.Y + v1.Z * v1.Z);
+            }
+            v3 = Vector3.Cross(v1, v2);
+        }
+
         public static Vector3 SphericalDirection(float sinTheta, float cosTheta, float phi)
         {
             return new Vector3(sinTheta * (float)Math.Cos(phi), sinTheta * (float)Math.Sin(phi), cosTheta);
@@ -290,9 +303,9 @@ namespace CowLibrary
             return Math.Min(Math.Max(x, min), max);
         }
 
-        public static Vector3 FaceForward(Vector3 v, Vector3 n)
+        public static Vector3 FaceForward(Vector3 v)
         {
-            return Vector3.Dot(v, n) < 0 ? -v : v;
+            return Vector3.Dot(v, Vector3.UnitY) < 0 ? -v : v;
         }
 
         public static float Pow5(float v)

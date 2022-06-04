@@ -14,6 +14,7 @@ public readonly struct MaterialView
     public readonly ArrayView<PlasticMaterial> plasticMaterials;
     public readonly ArrayView<BlendMaterial> blendMaterials;
     public readonly ArrayView<MicrofacetReflectionMaterial> microfacetMaterials;
+    public readonly ArrayView<OrenNayarMaterial> orenNayarMaterials;
 
     public MaterialView(
         ArrayView<DiffuseMaterial> diffuseMaterials,
@@ -23,7 +24,8 @@ public readonly struct MaterialView
         ArrayView<MetalMaterial> metalMaterials,
         ArrayView<PlasticMaterial> plasticMaterials,
         ArrayView<BlendMaterial> blendMaterials,
-        ArrayView<MicrofacetReflectionMaterial> microfacetMaterials)
+        ArrayView<MicrofacetReflectionMaterial> microfacetMaterials,
+        ArrayView<OrenNayarMaterial> orenNayarMaterials)
     {
         this.diffuseMaterials = diffuseMaterials;
         this.fresnelMaterials = fresnelMaterials;
@@ -33,25 +35,27 @@ public readonly struct MaterialView
         this.plasticMaterials = plasticMaterials;
         this.blendMaterials = blendMaterials;
         this.microfacetMaterials = microfacetMaterials;
+        this.orenNayarMaterials = orenNayarMaterials;
     }
 
-    public Color Sample(in int id, in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+    public Color Sample(in int id, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
     {
         var f = Color.Black;
         wi = Vector3.Zero;
         pdf = 0;
-        Sample(in diffuseMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
-        Sample(in fresnelMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
-        Sample(in reflectionMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
-        Sample(in transmissionMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
-        Sample(in metalMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
-        Sample(in plasticMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
-        Sample(in blendMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
-        Sample(in microfacetMaterials, in id, in normal, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in diffuseMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in fresnelMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in reflectionMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in transmissionMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in metalMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in plasticMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in blendMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in microfacetMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in orenNayarMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
         return f;
     }
 
-    private void Sample<T>(in ArrayView<T> materials, in int id, in Vector3 normal, in Vector3 wo, in Vector2 sample,
+    private void Sample<T>(in ArrayView<T> materials, in int id, in Vector3 wo, in Vector2 sample,
         ref Vector3 wi, ref float pdf, ref Color f)
         where T : unmanaged, IMaterial
     {
@@ -63,7 +67,7 @@ public readonly struct MaterialView
         {
             if (materials[i].Id == id)
             {
-                f = materials[i].Sample(in normal, in wo, in sample, out wi, out pdf);
+                f = materials[i].Sample(in wo, in sample, out wi, out pdf);
                 return;
             }
         }

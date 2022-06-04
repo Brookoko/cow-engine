@@ -1,5 +1,6 @@
 ﻿namespace CowLibrary.Views;
 
+using System;
 using System.Numerics;
 
 public readonly struct DiskView : IIntersectable
@@ -31,13 +32,18 @@ public readonly struct DiskView : IIntersectable
         {
             return;
         }
-        var p = ray.GetPoint(t);
-        var dist = Vector3.DistanceSquared(p, point);
+        var hit = ray.GetPoint(t);
+        var p = hit - point;
+        var dist = Vector3.Dot(p, p);
         if (dist > radius * radius)
         {
             return;
         }
 
-        best = new RayHit(t, p, normal, Id);
+        var rHit = (float)Math.Sqrt(dist);
+        var dpdu = new Vector3(-Const.PhiMax * p.Z, 0, Const.PhiMax * p.X);
+        var dpdv = new Vector3(p.X, 0, p.Z) * -radius / rHit;
+
+        best = new RayHit(t, hit, normal, dpdu, dpdv, Id);
     }
 }

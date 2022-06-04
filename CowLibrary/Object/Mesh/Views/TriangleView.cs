@@ -58,8 +58,47 @@ public readonly struct TriangleView : IIntersectable
         {
             return;
         }
+        if (!GetDerivatives(out var dpdu, out var dpdv))
+        {
+            return;
+        }
 
         var normal = n0 * (1 - u - v) + n1 * u + n2 * v;
-        best = new RayHit(t, ray.GetPoint(t), normal, Id);
+        best = new RayHit(t, ray.GetPoint(t), normal, dpdu, dpdv, Id);
+    }
+
+    private bool GetDerivatives(out Vector3 dpdu, out Vector3 dpdv)
+    {
+        dpdu = Vector3.Zero;
+        dpdv = Vector3.Zero;
+
+        var uv0 = new Vector2(0, 0);
+        var uv1 = new Vector2(1, 0);
+        var uv2 = new Vector2(1, 1);
+
+        var duv02 = uv0 - uv2;
+        var duv12 = uv1 - uv2;
+        var dp02 = v0 - v2;
+        var dp12 = v1 - v2;
+
+        var determinant = duv02.X * duv12.Y - duv02.Y * duv12.X;
+        var degenerateUv = Math.Abs(determinant) < 1e-8;
+        if (!degenerateUv)
+        {
+            var invdet = 1 / determinant;
+            dpdu = (duv12.Y * dp02 - duv02.Y * dp12) * invdet;
+            dpdv = (-duv12.X * dp02 + duv02.X * dp12) * invdet;
+        }
+        if (degenerateUv || Vector3.Cross(dpdu, dpdv).LengthSquared() == 0)
+        {
+            var ng = Vector3.Cross(v2 - v0, v1 - v0);
+            if (ng.LengthSquared() == 0)
+            {
+                return false;
+            }
+            var n = ng.Normalize();
+            Mathf.CoordinateSystem(ref n, ref dpdu, ref dpdv);
+        }
+        return true;
     }
 }

@@ -14,37 +14,13 @@ public readonly struct OrenNayar : IBrdf
     public OrenNayar(float r, float sigma)
     {
         this.r = r;
-        sigma = Mathf.Clamp(sigma, 0, 90);
-        sigma *= Const.Deg2Rad;
+        sigma *= Const.Pi * 0.5f;
         var sigma2 = sigma * sigma;
         a = 1 - sigma2 / (2 * (sigma2 + 0.33f));
         b = 0.45f * sigma2 / (sigma2 + 0.09f);
     }
 
-    public float Evaluate(in Vector3 wo, in Vector3 wi, in Vector3 normal)
-    {
-        var toLocal = Mathf.GetLocal(in normal, in wi);
-        var wiL = toLocal.MultiplyVector(wi);
-        var woL = toLocal.MultiplyVector(wo);
-        return EvaluateInternal(in woL, in wiL);
-    }
-
-    public float Sample(in Vector3 normal, in Vector3 woW, in Vector2 sample, out Vector3 wi, out float pdf)
-    {
-        wi = Mathf.CosineSampleHemisphere(in sample);
-        var (toLocal, toWorld) = Mathf.GetMatrices(in normal, in woW);
-        var wo = -toLocal.MultiplyVector(woW);
-        if (wo.Y < 0)
-        {
-            wi.Y *= -1;
-        }
-        pdf = Mathf.Pdf(in wo, in wi);
-        var f = Evaluate(in wo, in wi, in normal);
-        wi = toWorld.MultiplyVector(wi);
-        return f;
-    }
-
-    private float EvaluateInternal(in Vector3 wo, in Vector3 wi)
+    public float Evaluate(in Vector3 wo, in Vector3 wi)
     {
         var sinThetaI = Mathf.SinTheta(in wi);
         var sinThetaO = Mathf.SinTheta(in wo);
@@ -72,5 +48,16 @@ public readonly struct OrenNayar : IBrdf
 
         var f = r * Const.InvPi * (a + b * maxCos * sinAlpha * tanBeta);
         return Mathf.Clamp(f, 0, 1);
+    }
+
+    public float Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+    {
+        wi = Mathf.CosineSampleHemisphere(in sample);
+        if (wo.Z < 0)
+        {
+            wi.Z *= -1;
+        }
+        pdf = Mathf.Pdf(in wo, in wi);
+        return Evaluate(in wo, in wi);
     }
 }

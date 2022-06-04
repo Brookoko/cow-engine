@@ -65,6 +65,24 @@ public readonly struct SphereView : IIntersectable
         }
 
         var p = ray.GetPoint(t);
-        best = new RayHit(t, p, sign * (p - center).Normalize(), Id);
+        var (dpdu, dpdv) = GetDerivatives(p);
+        best = new RayHit(t, p, sign * (p - center).Normalize(), dpdu, dpdv, Id);
+    }
+
+    private (Vector3 dpdu, Vector3 dpdv) GetDerivatives(Vector3 point)
+    {
+        var p = (point - center).Normalize();
+        var theta = (float)Math.Acos(Mathf.Clamp(p.Y / radius, -1, 1));
+        var thetaMin = -1 / radius;
+        var thetaMax = 1 / radius;
+
+        var zRadius = (float)Math.Sqrt(p.X * p.X + p.Z * p.Z);
+        var invZRadius = 1 / zRadius;
+        var cosPhi = p.X * invZRadius;
+        var sinPhi = p.Z * invZRadius;
+
+        var dpdu = new Vector3(-Const.PhiMax * p.Z, 0, Const.PhiMax * p.X);
+        var dpdv = (thetaMax - thetaMin) * new Vector3(p.Y * cosPhi, -radius * (float)Math.Sin(theta), p.Y * sinPhi);
+        return (dpdu, dpdv);
     }
 }

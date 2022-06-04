@@ -20,21 +20,18 @@ namespace CowLibrary
             fresnel = new DielectricFresnel(etaA, etaB);
         }
 
-        public float Evaluate(in Vector3 wo, in Vector3 wi, in Vector3 normal)
+        public float Evaluate(in Vector3 wo, in Vector3 wi)
         {
             return 0;
         }
 
-        public float Sample(in Vector3 normal, in Vector3 woW, in Vector2 sample, out Vector3 wi, out float pdf)
+        public float Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
         {
-            var (toLocal, toWorld) = Mathf.GetMatrices(in normal, in woW);
-            var wo = -toLocal.MultiplyVector(woW);
-            
             var entering = Mathf.CosTheta(wo) > 0;
             var etaI = entering ? etaA : etaB;
             var etaT = entering ? etaB : etaA;
             var eta = etaI / etaT;
-            var n = Mathf.FaceForward(wo, Vector3.UnitY);
+            var n = Mathf.FaceForward(wo);
 
             if (!wo.Refract(n, eta, out wi))
             {
@@ -48,9 +45,7 @@ namespace CowLibrary
             {
                 ft *= (etaI * etaI) / (etaT * etaT);
             }
-            var f = ft / Mathf.AbsCosTheta(wi);
-            wi = toWorld.MultiplyVector(wi);
-            return f;
+            return ft / Mathf.AbsCosTheta(wi);
         }
     }
 

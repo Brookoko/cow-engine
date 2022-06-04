@@ -45,7 +45,10 @@ namespace CowRenderer.Integration
         private Color GetDirectLighting(in Surfel surfel, Light light)
         {
             var shading = light.GetShadingInfo(in surfel.hit);
-            var color = surfel.material.GetColor(in surfel.ray, in shading.direction, in surfel.hit.normal);
+            var basis = surfel.hit.ExtractBasis();
+            var wo = basis.WorldToLocal(in surfel.ray);
+            var wi = basis.WorldToLocal(in shading.direction);
+            var color = surfel.material.GetColor(in wo, in wi);
             var dot = Vector3.Dot(surfel.hit.normal, shading.direction);
             dot = Math.Max(dot, 0);
             var multiplier = TraceShadowRay(in surfel, shading.direction, shading.distance);
@@ -59,7 +62,9 @@ namespace CowRenderer.Integration
             for (var i = 0; i < n; i++)
             {
                 var sample = SamplerProvider.Sampler.CreateSample();
-                var f = surfel.material.Sample(in surfel.hit.normal, in surfel.ray, in sample, out var wi, out var pdf);
+                var basis = surfel.hit.ExtractBasis();
+                var wo = basis.WorldToLocal(in surfel.ray);
+                var f = surfel.material.Sample(in wo, in sample, out var wi, out var pdf);
                 if (pdf > 0 && f != Color.Black)
                 {
                     result += f * Trace(in surfel, light, wi, depth) / pdf;

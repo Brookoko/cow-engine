@@ -24,29 +24,39 @@ namespace CowLibrary
             view.Intersect(in ray, ref best);
             if (best.t < prevBest.t)
             {
-                best = new RayHit(best.t, best.point, GetNormal(best.point), Id);
+                var (n, dpdu, dpdv) = GetBasis(best.point);
+                best = new RayHit(best.t, best.point, n, dpdu, dpdv, Id);
             }
         }
 
-        private readonly Vector3 GetNormal(in Vector3 point)
+        private readonly (Vector3 normal, Vector3 dpdu, Vector3 dpdv) GetBasis(in Vector3 point)
         {
             var localPoint = point - view.Center;
             var min = Math.Abs(view.Size.X - Math.Abs(localPoint.X));
-            var normal = localPoint.X >= 0 ? Vector3.UnitX : -Vector3.UnitX;
+            var sign = localPoint.X >= 0 ? 1 : -1;
+            var normal = sign * Vector3.UnitX;
+            var dpdu = sign * Vector3.UnitZ;
+            var dpdv = sign * Vector3.UnitY;
 
             var dist = Math.Abs(view.Size.Y - Math.Abs(localPoint.Y));
             if (dist < min)
             {
                 min = dist;
-                normal = localPoint.Y >= 0 ? Vector3.UnitY : -Vector3.UnitY;
+                sign = localPoint.Y >= 0 ? 1 : -1;
+                normal = sign * Vector3.UnitY;
+                dpdu = sign * Vector3.UnitZ;
+                dpdv = sign * Vector3.UnitX;
             }
             dist = Math.Abs(view.Size.Z - Math.Abs(localPoint.Z));
             if (dist < min)
             {
                 min = dist;
-                normal = localPoint.Z >= 0 ? Vector3.UnitZ : -Vector3.UnitZ;
+                sign = localPoint.Y >= 0 ? 1 : -1;
+                normal = sign * Vector3.UnitZ;
+                dpdu = sign * Vector3.UnitY;
+                dpdv = sign * Vector3.UnitX;
             }
-            return normal;
+            return (normal, dpdu, dpdv);
         }
 
         public void Apply(in Matrix4x4 matrix)

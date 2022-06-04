@@ -1,6 +1,5 @@
 ﻿namespace ILGPURenderer;
 
-using System;
 using System.Numerics;
 using CowLibrary;
 using CowLibrary.Lights.Models;
@@ -71,8 +70,11 @@ public readonly struct LocalIntegrator
         var raycast = primaryRaycast;
         for (var bounces = 0; bounces < renderData.rayDepth; bounces++)
         {
-            var f = sceneView.material.Sample(in raycast.hit.id, in raycast.hit.normal, in raycast.ray.direction,
+            var basis = raycast.hit.ExtractBasis();
+            var wo = basis.WorldToLocal(-raycast.ray.direction);
+            var f = sceneView.material.Sample(in raycast.hit.id, in wo,
                 sampler.CreateSample(), out var wi, out var pdf);
+            wi = basis.LocalToWorld(wi);
             beta *= f * XMath.Abs(Vector3.Dot(wi, raycast.hit.normal)) / pdf;
             if (f == Color.Black || pdf == 0)
             {

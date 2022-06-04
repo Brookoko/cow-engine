@@ -14,6 +14,7 @@ public readonly struct PlasticMaterial : IMaterial
     public PlasticMaterial(Color color, float r, float rough, int id)
     {
         var fresnel = new DielectricFresnel(1.5f, 1);
+        rough = Mathf.RoughnessToAlpha(rough);
         var distribution = new TrowbridgeReitzDistribution(rough, rough);
         var brdf = new PlasticBrdf(r, fresnel, distribution);
         var diffuse = new LambertianBrdf(r);
@@ -28,21 +29,21 @@ public readonly struct PlasticMaterial : IMaterial
         this.diffuse = diffuse;
     }
 
-    public Color GetColor(in Vector3 wo, in Vector3 wi, in Vector3 normal)
+    public Color GetColor(in Vector3 wo, in Vector3 wi)
     {
-        var f = reflection.Evaluate(in wo, in wi, in normal) + diffuse.Evaluate(in wo, in wi, in normal);
+        var f = reflection.Evaluate(in wo, in wi) + diffuse.Evaluate(in wo, in wi);
         return f * Color;
     }
 
-    public Color Sample(in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+    public Color Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
     {
         var index = (int)(sample.X * 2);
         if (index == 0)
         {
-            return diffuse.Sample(in normal, in wo, in sample, out wi, out pdf) * Color;
+            return diffuse.Sample(in wo, in sample, out wi, out pdf) * Color;
 
         }
-        return reflection.Sample(in normal, in wo, in sample, out wi, out pdf) * Color;
+        return reflection.Sample(in wo, in sample, out wi, out pdf) * Color;
     }
 
     public IMaterial Copy(int id)

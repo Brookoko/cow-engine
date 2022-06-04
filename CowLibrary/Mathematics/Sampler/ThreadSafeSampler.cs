@@ -11,6 +11,6 @@ public class ThreadSafeSampler : ISampler
 
     public Vector2 CreateSample()
     {
-        return new Vector2((float)Random.Value.NextDouble(), (float)Random.Value.NextDouble());
+        return new Vector2(Random.Value.NextSingle(), Random.Value.NextSingle());
     }
 }

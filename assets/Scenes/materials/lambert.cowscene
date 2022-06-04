@@ -5,7 +5,7 @@
     "width": 1920,
     "height": 1080,
     "rayDepth": 3,
-    "raysPerPixelDimension": 8
+    "raysPerPixelDimension": 16
   },
   "cameras": [
     {
@@ -84,9 +84,9 @@
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 0.7,
-            "g": 0.7,
-            "b": 0.7
+            "r": 0.5,
+            "g": 0.5,
+            "b": 0.5
           }
         }
       },

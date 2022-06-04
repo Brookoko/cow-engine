@@ -4,7 +4,7 @@
     "cameraId": 1,
     "width": 1920,
     "height": 1080,
-    "rayDepth": 3,
+    "rayDepth": 5,
     "raysPerPixelDimension": 8
   },
   "cameras": [

@@ -88,16 +88,16 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
 
     private Vector3 TrowbridgeReitzSample(Vector3 w, float u, float v)
     {
-        var wiStretched = new Vector3(alphaX * w.X, alphaY * w.Y, w.Z).Normalize();
+        var wiStretched = new Vector3(alphaX * w.X, w.Y, alphaY * w.Z).Normalize();
         TrowbridgeReitzSample11(Mathf.CosTheta(w), u, v, out var slopeX, out var slopeY);
 
         var tmp = Mathf.CosPhi(wiStretched) * slopeX - Mathf.SinPhi(wiStretched) * slopeY;
         slopeY = Mathf.SinPhi(wiStretched) * slopeX + Mathf.CosPhi(wiStretched) * slopeY;
         slopeX = tmp;
 
-        slopeX *= alphaX;
-        slopeY *= alphaY;
-        return new Vector3(-slopeX, -slopeY, 1).Normalize();
+        slopeX = alphaX * slopeX;
+        slopeY = alphaY * slopeY;
+        return new Vector3(-slopeX, 1, -slopeY).Normalize();
     }
 
     private void TrowbridgeReitzSample11(float cosTheta, float u, float v, out float slopeX, out float slopeY)

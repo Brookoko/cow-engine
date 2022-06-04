@@ -12,6 +12,7 @@ public readonly struct BlendMaterial : IMaterial
 
     public BlendMaterial(Color diffuse, Color specular, float rough, int id)
     {
+        rough = Mathf.RoughnessToAlpha(rough);
         var distribution = new TrowbridgeReitzDistribution(rough, rough);
         var brdf = new FresnelBlend(diffuse, specular, distribution);
         this = new BlendMaterial(diffuse, brdf, id);
@@ -24,14 +25,14 @@ public readonly struct BlendMaterial : IMaterial
         this.brdf = brdf;
     }
 
-    public Color GetColor(in Vector3 wo, in Vector3 wi, in Vector3 normal)
+    public Color GetColor(in Vector3 wo, in Vector3 wi)
     {
-        return brdf.Evaluate(in wo, in wi, in normal);
+        return brdf.Evaluate(in wo, in wi);
     }
 
-    public Color Sample(in Vector3 normal, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+    public Color Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
     {
-        return brdf.Sample(in normal, in wo, in sample, out wi, out pdf);
+        return brdf.Sample(in wo, in sample, out wi, out pdf);
     }
 
     public IMaterial Copy(int id)

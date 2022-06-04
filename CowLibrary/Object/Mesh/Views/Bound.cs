@@ -34,7 +34,7 @@ public readonly struct Bound : IIntersectable
         {
             if (t < best.t)
             {
-                best = new RayHit(t, ray.GetPoint(t), Vector3.Zero, Id);
+                best = new RayHit(t, ray.GetPoint(t), Vector3.Zero, Vector3.Zero, Vector3.Zero, Id);
             }
         }
     }
@@ -61,6 +61,6 @@ public readonly struct Bound : IIntersectable
 
         t = tmin;
         t = t < 0 ? tmax : t;
-        return tmax > tmin && tmax > 0;
+        return tmax > tmin && t > 0;
     }
 }
