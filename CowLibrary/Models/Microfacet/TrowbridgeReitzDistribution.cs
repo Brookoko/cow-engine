@@ -29,7 +29,7 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
     public float Lambda(in Vector3 w)
     {
         var absTanTheta = Math.Abs(Mathf.TanTheta(in w));
-        if (float.IsFinite(absTanTheta))
+        if (float.IsInfinity(absTanTheta))
         {
             return 0;
         }
@@ -60,7 +60,7 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
         if (alphaX == alphaY)
         {
             var tanTheta2 = alphaX * alphaX * sample.X / (1f - sample.X);
-            cosTheta = 1 / (float)Math.Sqrt(1 * tanTheta2);
+            cosTheta = 1 / (float)Math.Sqrt(1 + tanTheta2);
         }
         else
         {
@@ -89,7 +89,7 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
     private Vector3 TrowbridgeReitzSample(Vector3 w, float u, float v)
     {
         var wiStretched = new Vector3(alphaX * w.X, w.Y, alphaY * w.Z).Normalize();
-        TrowbridgeReitzSample11(Mathf.CosTheta(w), u, v, out var slopeX, out var slopeY);
+        TrowbridgeReitzSample11(Mathf.CosTheta(wiStretched), u, v, out var slopeX, out var slopeY);
 
         var tmp = Mathf.CosPhi(wiStretched) * slopeX - Mathf.SinPhi(wiStretched) * slopeY;
         slopeY = Mathf.SinPhi(wiStretched) * slopeX + Mathf.CosPhi(wiStretched) * slopeY;
@@ -116,14 +116,14 @@ public readonly struct TrowbridgeReitzDistribution : IMicrofacetDistribution
         var alpha = 1 / tanTheta;
         var g1 = 2 / (1 + (float)Math.Sqrt(1 + 1 / (alpha * alpha)));
 
-        var a = 2 * v / g1 - 1;
+        var a = 2 * u / g1 - 1;
         var tmp = 1 / (a * a - 1);
         tmp = Math.Min(tmp, 1e10f);
         var b = tanTheta;
         var d = (float)Math.Sqrt(Math.Max(0, b * b * tmp * tmp - (a * a - b * b) * tmp));
         var slopeX1 = b * tmp - d;
         var slopeX2 = b * tmp + d;
-        slopeX = (a < 0 || slopeX1 > 1 / tanTheta) ? slopeX1 : slopeX2;
+        slopeX = (a < 0 || slopeX2 > 1 / tanTheta) ? slopeX1 : slopeX2;
         float s;
         if (v > 0.5f)
         {

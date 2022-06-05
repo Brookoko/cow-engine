@@ -16,20 +16,20 @@ public class BrdfTests
     private List<(IBrdf brdf, string description)> brdfs = new()
     {
         (new LambertianBrdf(1), "Lambertian"),
-        // (new OrenNayar(1, 0), "Oren-Nayar (0)"),
-        // (new OrenNayar(1, 2f / 9), "Oren-Nayar (20)"),
-        // (new MetalBrdf(1,
-        //     new ConductorFresnel(1, 1.5f, 2),
-        //     new TrowbridgeReitzDistribution(Mathf.RoughnessToAlpha(0.5f), Mathf.RoughnessToAlpha(0.5f))),
-        //     "Metal"),
-        // (new PlasticBrdf(1,
-        //         new DielectricFresnel(1.5f, 1),
-        //         new TrowbridgeReitzDistribution(Mathf.RoughnessToAlpha(0.5f), Mathf.RoughnessToAlpha(0.5f))),
-        //     "Plastic"),
-        // (new MicrofacetReflection(1,
-        //         new DielectricFresnel(1, 1.5f),
-        //         new TrowbridgeReitzDistribution(Mathf.RoughnessToAlpha(0.5f), Mathf.RoughnessToAlpha(0.5f))),
-        //     "Trowbridge-Reitz (roughness 0.5, sample visible mf area)")
+        (new OrenNayar(1, 0), "Oren-Nayar (0)"),
+        (new OrenNayar(1, 2f / 9), "Oren-Nayar (20)"),
+        (new MetalBrdf(1,
+            new ConductorFresnel(1, 1.5f, 2),
+            new TrowbridgeReitzDistribution(Mathf.RoughnessToAlpha(0.5f), Mathf.RoughnessToAlpha(0.5f))),
+            "Metal"),
+        (new PlasticBrdf(1,
+                new DielectricFresnel(1.5f, 1),
+                new TrowbridgeReitzDistribution(Mathf.RoughnessToAlpha(0.5f), Mathf.RoughnessToAlpha(0.5f))),
+            "Plastic"),
+        (new MicrofacetReflection(1,
+                new DielectricFresnel(1, 1.5f),
+                new TrowbridgeReitzDistribution(Mathf.RoughnessToAlpha(0.5f), Mathf.RoughnessToAlpha(0.5f))),
+            "Trowbridge-Reitz (roughness 0.5, sample visible mf area)")
     };
 
     [Test]
@@ -106,6 +106,7 @@ public class BrdfTests
             var radiance = sum / goodSamples;
             Console.WriteLine($"\n  final average : {average:F5} (error {error:F5})\n\n" +
                               $"  radiance = {radiance:F5}\n\n");
+            Assert.That(error, Is.LessThan(0.01));
         }
     }
 

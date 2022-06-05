@@ -288,7 +288,7 @@ namespace CowLibrary
 
         public static Vector3 SphericalDirection(float sinTheta, float cosTheta, float phi)
         {
-            return new Vector3(sinTheta * (float)Math.Cos(phi), sinTheta * (float)Math.Sin(phi), cosTheta);
+            return new Vector3(sinTheta * (float)Math.Cos(phi), cosTheta, sinTheta * (float)Math.Sin(phi));
         }
 
         public static float RoughnessToAlpha(float roughness)

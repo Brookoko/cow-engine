@@ -31,17 +31,13 @@ public readonly struct BeckmannDistribution : IMicrofacetDistribution
     public float Lambda(in Vector3 w)
     {
         var absTanTheta = Math.Abs(Mathf.TanTheta(in w));
-        if (float.IsFinite(absTanTheta))
+        if (float.IsInfinity(absTanTheta))
         {
             return 0;
         }
         var alpha = (float)Math.Sqrt(Mathf.Cos2Phi(in w) * alphaX * alphaX + Mathf.Sin2Phi(in w) * alphaY * alphaY);
-        var a = 1f / (alpha * absTanTheta);
-        if (a >= 1.6f)
-        {
-            return 0;
-        }
-        return (1 - 1.259f * a + 0.396f * a * a) / (3.535f * a + 2.181f * a * a);
+        var alpha2Tan2Theta = (alpha * absTanTheta) * (alpha * absTanTheta);
+        return (-1 + (float)Math.Sqrt(1 + alpha2Tan2Theta)) * 0.5f;
     }
 
     public Vector3 Sample(in Vector3 wo, in Vector2 sample)
