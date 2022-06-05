@@ -3,7 +3,9 @@
   "renderOptions": {
     "cameraId": 1,
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "rayDepth": 5,
+    "raysPerPixelDimension": 16
   },
   "cameras": [
     {
@@ -36,12 +38,13 @@
         }
       },
       "material": {
-        "lambert_reflection": {
+        "specular_reflection": {
           "color": {
             "r": 1,
             "g": 1,
             "b": 1
-          }
+          },
+          "eta": 2
         }
       },
       "meshed_object": {
@@ -80,8 +83,13 @@
         }
       },
       "material": {
-        "specular_reflection": {
-          "eta": 2
+        "mirror": {
+          "color": {
+            "r": 1,
+            "g": 0.95,
+            "b": 0.9
+          },
+          "r": 1
         }
       },
       "sphere": {
