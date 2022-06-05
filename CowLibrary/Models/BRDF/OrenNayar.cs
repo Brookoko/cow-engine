@@ -57,7 +57,12 @@ public readonly struct OrenNayar : IBrdf
         {
             wi.Z *= -1;
         }
-        pdf = Mathf.Pdf(in wo, in wi);
+        pdf = Pdf(in wo, in wi);
         return Evaluate(in wo, in wi);
+    }
+    
+    public float Pdf(in Vector3 wo, in Vector3 wi)
+    {
+        return Mathf.SameHemisphere(in wo, in wi) ? Mathf.AbsCosTheta(in wi) * Const.InvPi : 0;
     }
 }

@@ -44,6 +44,6 @@ public readonly struct DiskView : IIntersectable
         var dpdu = new Vector3(-Const.PhiMax * p.Z, 0, Const.PhiMax * p.X);
         var dpdv = new Vector3(p.X, 0, p.Z) * -radius / rHit;
 
-        best = new RayHit(t, hit, normal, dpdu, dpdv, Id);
+        best = new RayHit(t, hit, normal, dpdu, Id);
     }
 }

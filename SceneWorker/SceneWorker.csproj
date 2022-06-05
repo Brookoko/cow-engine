@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SceneFormat" Version="0.1.212" />
+      <PackageReference Include="SceneFormat" Version="0.1.216" />
     </ItemGroup>
 
     <ItemGroup>

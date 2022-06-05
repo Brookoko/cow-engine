@@ -31,9 +31,8 @@ public readonly struct PlaneView : IIntersectable
         }
 
         var p = ray.GetPoint(t);
-        var dpdu = new Vector3(-Const.PhiMax * p.Y, Const.PhiMax * p.X, 0);
-        var dpdv = Vector3.Cross(normal, dpdu);
+        var dpdu = new Vector3(-Const.PhiMax * p.Z, 0, Const.PhiMax * p.X);
 
-        best = new RayHit(t, p, normal, dpdu, dpdv, Id);
+        best = new RayHit(t, p, normal, dpdu, Id);
     }
 }

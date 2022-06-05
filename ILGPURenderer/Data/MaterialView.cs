@@ -15,6 +15,7 @@ public readonly struct MaterialView
     public readonly ArrayView<BlendMaterial> blendMaterials;
     public readonly ArrayView<MicrofacetReflectionMaterial> microfacetMaterials;
     public readonly ArrayView<OrenNayarMaterial> orenNayarMaterials;
+    public readonly ArrayView<MirrorMaterial> mirrorMaterials;
 
     public MaterialView(
         ArrayView<DiffuseMaterial> diffuseMaterials,
@@ -25,7 +26,8 @@ public readonly struct MaterialView
         ArrayView<PlasticMaterial> plasticMaterials,
         ArrayView<BlendMaterial> blendMaterials,
         ArrayView<MicrofacetReflectionMaterial> microfacetMaterials,
-        ArrayView<OrenNayarMaterial> orenNayarMaterials)
+        ArrayView<OrenNayarMaterial> orenNayarMaterials,
+        ArrayView<MirrorMaterial> mirrorMaterials)
     {
         this.diffuseMaterials = diffuseMaterials;
         this.fresnelMaterials = fresnelMaterials;
@@ -36,6 +38,7 @@ public readonly struct MaterialView
         this.blendMaterials = blendMaterials;
         this.microfacetMaterials = microfacetMaterials;
         this.orenNayarMaterials = orenNayarMaterials;
+        this.mirrorMaterials = mirrorMaterials;
     }
 
     public Color Sample(in int id, in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
@@ -52,6 +55,7 @@ public readonly struct MaterialView
         Sample(in blendMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
         Sample(in microfacetMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
         Sample(in orenNayarMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
+        Sample(in mirrorMaterials, in id, in wo, in sample, ref wi, ref pdf, ref f);
         return f;
     }
 

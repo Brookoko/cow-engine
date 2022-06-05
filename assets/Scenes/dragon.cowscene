@@ -4,8 +4,8 @@
     "cameraId": 1,
     "width": 1920,
     "height": 1080,
-    "rayDepth": 7,
-    "raysPerPixelDimension": 8
+    "rayDepth": 5,
+    "raysPerPixelDimension": 16
   },
   "cameras": [
     {
@@ -38,13 +38,13 @@
         }
       },
       "material": {
-        "oren_nayar": {
+        "plastic": {
           "color": {
-            "r": 1,
-            "g": 1,
-            "b": 1
+            "r": 0.62,
+            "g": 0.48,
+            "b": 0.95
           },
-          "roughness": 0.2
+          "roughness": 0.05
         }
       },
       "meshed_object": {
@@ -63,9 +63,9 @@
       "material": {
         "lambert_reflection": {
           "color": {
-            "r": 0.5,
-            "g": 0.5,
-            "b": 0.5
+            "r": 0.7,
+            "g": 0.7,
+            "b": 0.7
           }
         }
       },

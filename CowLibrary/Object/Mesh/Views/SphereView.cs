@@ -35,7 +35,6 @@ public readonly struct SphereView : IIntersectable
         }
 
         float t;
-        int sign = 1;
         if (discriminant == 0)
         {
             t = (float)Math.Sqrt(aCoeff * cCoeff);
@@ -45,10 +44,6 @@ public readonly struct SphereView : IIntersectable
             var sqrDiscriminant = Math.Sqrt(discriminant);
             var k1 = (-halfBCoeff + sqrDiscriminant) / aCoeff;
             var k2 = (-halfBCoeff - sqrDiscriminant) / aCoeff;
-            if (k1 < 0 || k2 < 0)
-            {
-                sign = -1;
-            }
 
             k1 = k1 > 0 ? k1 : k2;
             k2 = k2 > 0 ? k2 : k1;
@@ -65,8 +60,9 @@ public readonly struct SphereView : IIntersectable
         }
 
         var p = ray.GetPoint(t);
+        var normal = (p - center).Normalize();
         var (dpdu, dpdv) = GetDerivatives(p);
-        best = new RayHit(t, p, sign * (p - center).Normalize(), dpdu, dpdv, Id);
+        best = new RayHit(t, p, normal, dpdu, Id);
     }
 
     private (Vector3 dpdu, Vector3 dpdv) GetDerivatives(Vector3 point)

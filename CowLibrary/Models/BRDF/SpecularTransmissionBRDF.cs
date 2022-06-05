@@ -31,7 +31,7 @@ namespace CowLibrary
             var etaI = entering ? etaA : etaB;
             var etaT = entering ? etaB : etaA;
             var eta = etaI / etaT;
-            var n = Mathf.FaceForward(wo);
+            var n = Mathf.FaceForward(Vector3.UnitY, wo);
 
             if (!wo.Refract(n, eta, out wi))
             {
@@ -46,6 +46,11 @@ namespace CowLibrary
                 ft *= (etaI * etaI) / (etaT * etaT);
             }
             return ft / Mathf.AbsCosTheta(wi);
+        }
+        
+        public float Pdf(in Vector3 wo, in Vector3 wi)
+        {
+            return 0;
         }
     }
 

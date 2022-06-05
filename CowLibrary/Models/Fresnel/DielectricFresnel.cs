@@ -6,7 +6,7 @@ namespace CowLibrary
     {
         private readonly float etaI;
         private readonly float etaT;
-        
+
         public DielectricFresnel(float etaI, float etaT)
         {
             this.etaI = etaI;
@@ -31,8 +31,12 @@ namespace CowLibrary
 
             var cosThetaT = Math.Sqrt(Math.Max(0, 1 - sinThetaT * sinThetaT));
 
-            var rParl = (etaT * cosThetaI - etaI * cosThetaT) / (etaT * cosThetaI + etaI * cosThetaT);
-            var rPerp = (etaI * cosThetaI - etaT * cosThetaT) / (etaI * cosThetaI + etaT * cosThetaT);
+            var rParl =
+                (etaI * cosThetaI - etaT * cosThetaT) /
+                (etaI * cosThetaI + etaT * cosThetaT);
+            var rPerp =
+                (etaI * cosThetaT - etaT * cosThetaI) /
+                (etaI * cosThetaT + etaT * cosThetaI);
 
             return (float)(rParl * rParl + rPerp * rPerp) * 0.5f;
         }

@@ -1,5 +1,6 @@
 ﻿namespace CowLibrary;
 
+using System;
 using System.Numerics;
 using Models.Microfacet;
 
@@ -31,19 +32,25 @@ public readonly struct PlasticMaterial : IMaterial
 
     public Color GetColor(in Vector3 wo, in Vector3 wi)
     {
+        if (Mathf.CosTheta(wo) < 0)
+        {
+            return Color.Black;
+        }
         var f = reflection.Evaluate(in wo, in wi) + diffuse.Evaluate(in wo, in wi);
         return f * Color;
     }
 
     public Color Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
     {
-        var index = (int)(sample.X * 2);
-        if (index == 0)
-        {
-            return diffuse.Sample(in wo, in sample, out wi, out pdf) * Color;
-
-        }
-        return reflection.Sample(in wo, in sample, out wi, out pdf) * Color;
+        var index = Math.Min(sample.X * 2, 1);
+        var sampleMapped = new Vector2(Math.Min(sample.X * 2 - index, Const.OneMinusEpsilon), sample.Y);
+       var  f = index == 0
+            ? diffuse.Sample(in wo, in sampleMapped, out wi, out pdf)
+            : reflection.Sample(in wo, in sampleMapped, out wi, out pdf);
+        pdf += index == 0 ? reflection.Pdf(in wo, in wi) : diffuse.Pdf(in wo, in wi);
+        pdf /= 2;
+        f += index == 0 ? reflection.Evaluate(in wo, in wi) : diffuse.Evaluate(in wo, in wi);
+        return f * Color;
     }
 
     public IMaterial Copy(int id)

@@ -9,7 +9,6 @@ namespace CowLibrary
         public readonly Vector3 point;
         public readonly Vector3 normal;
         public readonly Vector3 dpdu;
-        public readonly Vector3 dpdv;
         public readonly float t;
         public readonly int id;
 
@@ -19,20 +18,18 @@ namespace CowLibrary
             point = Vector3.Zero;
             normal = Vector3.Zero;
             dpdu = Vector3.Zero;
-            dpdv = Vector3.Zero;
             id = -1;
         }
 
-        public RayHit(float t, Vector3 point, Vector3 normal, Vector3 dpdu, Vector3 dpdv, int id)
+        public RayHit(float t, Vector3 point, Vector3 normal, Vector3 dpdu, int id)
         {
             this.t = t;
             this.point = point;
             this.normal = normal;
             this.dpdu = dpdu;
-            this.dpdv = dpdv;
             this.id = id;
         }
-        
+
         public Basis ExtractBasis()
         {
             var ns = normal;

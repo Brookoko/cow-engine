@@ -25,7 +25,7 @@ namespace CowLibrary
             if (best.t < prevBest.t)
             {
                 var (n, dpdu, dpdv) = GetBasis(best.point);
-                best = new RayHit(best.t, best.point, n, dpdu, dpdv, Id);
+                best = new RayHit(best.t, best.point, n, dpdu, Id);
             }
         }
 

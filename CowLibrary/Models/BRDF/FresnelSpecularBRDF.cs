@@ -24,17 +24,25 @@ namespace CowLibrary
         {
             float res;
             var f = fresnel.Evaluate(Mathf.CosTheta(in wo));
-            if (sample.X < f)
+            var s = sample;
+            if (s.X < f)
             {
+                s.X = (f - sample.X) / f;
                 res = reflection.Sample(in wo, in sample, out wi, out pdf);
                 pdf = f;
             }
             else
             {
+                s.X = (sample.X - f) / f;
                 res = transmission.Sample(in wo, in sample, out wi, out pdf);
                 pdf = 1 - f;
             }
             return res;
+        }
+
+        public float Pdf(in Vector3 wo, in Vector3 wi)
+        {
+            return 0;
         }
     }
 }

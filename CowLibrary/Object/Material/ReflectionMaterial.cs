@@ -10,14 +10,14 @@ namespace CowLibrary
 
         private readonly SpecularReflectionBrdf brdf;
 
-        public ReflectionMaterial(float r, float eta, int id) :
-            this(new SpecularReflectionBrdf(r, new DielectricFresnel(1, eta)), id)
+        public ReflectionMaterial(Color color, float r, float eta, int id) :
+            this(color, new SpecularReflectionBrdf(r, new DielectricFresnel(1, eta)), id)
         {
         }
 
-        private ReflectionMaterial(SpecularReflectionBrdf brdf, int id)
+        private ReflectionMaterial(Color color, SpecularReflectionBrdf brdf, int id)
         {
-            Color = Color.White;
+            Color = color;
             this.brdf = brdf;
             Id = id;
         }
@@ -34,7 +34,7 @@ namespace CowLibrary
 
         public IMaterial Copy(int id)
         {
-            return new ReflectionMaterial(brdf, id);
+            return new ReflectionMaterial(Color, brdf, id);
         }
     }
 }

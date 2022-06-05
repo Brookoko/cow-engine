@@ -55,4 +55,14 @@ public readonly struct MicrofacetReflection : IBrdf
         pdf = distribution.Pdf(in wo, in wh) / (4 * Vector3.Dot(wo, wh));
         return Evaluate(in wo, in wi);
     }
+
+    public float Pdf(in Vector3 wo, in Vector3 wi)
+    {
+        if (!Mathf.SameHemisphere(wo, wi))
+        {
+            return 0;
+        }
+        var wh = (wo + wi).Normalize();
+        return distribution.Pdf(wo, wh) / (4 * Vector3.Dot(wo, wh));
+    }
 }

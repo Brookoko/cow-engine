@@ -25,5 +25,10 @@ namespace CowLibrary
             wi = new Vector3(-wo.X, wo.Y, -wo.Z);
             return fresnel.Evaluate(Mathf.CosTheta(wi)) * r / Mathf.AbsCosTheta(wi);
         }
+
+        public float Pdf(in Vector3 wo, in Vector3 wi)
+        {
+            return 0;
+        }
     }
 }

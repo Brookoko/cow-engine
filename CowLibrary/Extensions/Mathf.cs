@@ -116,11 +116,6 @@ namespace CowLibrary
             return Sin2Theta(in w) / Cos2Theta(in w);
         }
 
-        public static float Pdf(in Vector3 wo, in Vector3 wi)
-        {
-            return SameHemisphere(in wo, in wi) ? AbsCosTheta(in wi) * Const.InvPi : 0;
-        }
-
         public static bool SameHemisphere(in Vector3 wo, in Vector3 wi)
         {
             return wo.Y * wi.Y > 0;
@@ -305,7 +300,12 @@ namespace CowLibrary
 
         public static Vector3 FaceForward(Vector3 v)
         {
-            return Vector3.Dot(v, Vector3.UnitY) < 0 ? -v : v;
+            return FaceForward(v, Vector3.UnitY);
+        }
+        
+        public static Vector3 FaceForward(Vector3 v, Vector3 n)
+        {
+            return Vector3.Dot(v, n) < 0 ? -v : v;
         }
 
         public static float Pow5(float v)

@@ -10,14 +10,14 @@ namespace CowLibrary
 
         private readonly FresnelSpecularBrdf brdf;
 
-        public FresnelMaterial(float r, float t, float eta, int id) :
-            this(new FresnelSpecularBrdf(r, t, 1, eta, TransportMode.Importance), id)
+        public FresnelMaterial(Color color, float r, float t, float eta, int id) :
+            this(color, new FresnelSpecularBrdf(r, t, 1, eta, TransportMode.Importance), id)
         {
         }
 
-        private FresnelMaterial(FresnelSpecularBrdf brdf, int id)
+        private FresnelMaterial(Color color, FresnelSpecularBrdf brdf, int id)
         {
-            Color = Color.White;
+            Color = color;
             this.brdf = brdf;
             Id = id;
         }
@@ -34,7 +34,7 @@ namespace CowLibrary
 
         public IMaterial Copy(int id)
         {
-            return new FresnelMaterial(brdf, id);
+            return new FresnelMaterial(Color, brdf, id);
         }
     }
 }

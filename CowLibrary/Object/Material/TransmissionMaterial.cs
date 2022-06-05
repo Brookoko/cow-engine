@@ -10,14 +10,14 @@ namespace CowLibrary
 
         private readonly SpecularTransmissionBrdf brdf;
 
-        public TransmissionMaterial(float t, float eta, int id) :
-            this(new SpecularTransmissionBrdf(t, 1f, eta, TransportMode.Importance), id)
+        public TransmissionMaterial(Color color, float t, float eta, int id) :
+            this(color, new SpecularTransmissionBrdf(t, 1f, eta, TransportMode.Importance), id)
         {
         }
 
-        private TransmissionMaterial(SpecularTransmissionBrdf brdf, int id)
+        private TransmissionMaterial(Color color, SpecularTransmissionBrdf brdf, int id)
         {
-            Color = Color.White;
+            Color = color;
             this.brdf = brdf;
             Id = id;
         }
@@ -34,7 +34,7 @@ namespace CowLibrary
 
         public IMaterial Copy(int id)
         {
-            return new TransmissionMaterial(brdf, id);
+            return new TransmissionMaterial(Color, brdf, id);
         }
     }
 }

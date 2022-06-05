@@ -11,25 +11,7 @@
     using CowLibrary.Mathematics.Sampler;
     using CowRenderer;
     using Google.Protobuf.Collections;
-    using SceneFormat;
-    using BlendMaterial = CowLibrary.BlendMaterial;
-    using Camera = CowLibrary.Camera;
-    using Color = CowLibrary.Color;
-    using Disk = CowLibrary.Disk;
-    using FresnelMaterial = CowLibrary.FresnelMaterial;
-    using Light = CowLibrary.Lights.Light;
-    using MetalMaterial = CowLibrary.MetalMaterial;
-    using MicrofacetReflectionMaterial = CowLibrary.MicrofacetReflectionMaterial;
-    using OrenNayarMaterial = CowLibrary.OrenNayarMaterial;
-    using OrthographicCamera = CowLibrary.OrthographicCamera;
-    using PerspectiveCamera = CowLibrary.PerspectiveCamera;
     using Plane = CowLibrary.Plane;
-    using PlasticMaterial = CowLibrary.PlasticMaterial;
-    using RealisticCamera = CowLibrary.RealisticCamera;
-    using Scene = CowRenderer.Scene;
-    using Sphere = CowLibrary.Sphere;
-    using Transform = CowLibrary.Transform;
-    using Vector3 = System.Numerics.Vector3;
 
     public interface ISceneWorker
     {
@@ -69,7 +51,7 @@
             return scene;
         }
 
-        private void ParseRenderOptions(RenderOptions renderOptions)
+        private void ParseRenderOptions(SceneFormat.RenderOptions renderOptions)
         {
             RenderConfig.width = renderOptions.Width;
             RenderConfig.height = renderOptions.Height;
@@ -207,13 +189,16 @@
                     return new DiffuseMaterial(ConvertColor(material.LambertReflection.Color),
                         (float)material.LambertReflection.R, id);
                 case SceneFormat.Material.MaterialOneofCase.SpecularReflection:
-                    return new ReflectionMaterial((float)material.SpecularReflection.R,
+                    return new ReflectionMaterial(ConvertColor(material.SpecularReflection.Color),
+                        (float)material.SpecularReflection.R,
                         (float)material.SpecularReflection.Eta, id);
                 case SceneFormat.Material.MaterialOneofCase.SpecularTransmission:
-                    return new TransmissionMaterial((float)material.SpecularTransmission.T,
+                    return new TransmissionMaterial(ConvertColor(material.SpecularTransmission.Color),
+                        (float)material.SpecularTransmission.T,
                         (float)material.SpecularTransmission.Eta, id);
                 case SceneFormat.Material.MaterialOneofCase.Fresnel:
-                    return new FresnelMaterial((float)material.Fresnel.R,
+                    return new FresnelMaterial(ConvertColor(material.Fresnel.Color),
+                        (float)material.Fresnel.R,
                         (float)material.Fresnel.T,
                         (float)material.Fresnel.Eta, id);
                 case SceneFormat.Material.MaterialOneofCase.OrenNayar:
@@ -239,6 +224,9 @@
                     return new BlendMaterial(ConvertColor(material.Blend.Diffuse),
                         ConvertColor(material.Blend.Specular),
                         (float)material.Blend.Roughness, id);
+                case SceneFormat.Material.MaterialOneofCase.Mirror:
+                    return new MirrorMaterial(ConvertColor(material.Mirror.Color),
+                        (float)material.Mirror.R, id);
                 default:
                     throw new Exception("Unsupported material");
             }

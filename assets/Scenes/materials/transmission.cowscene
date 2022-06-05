@@ -39,6 +39,11 @@
       },
       "material": {
         "specular_transmission": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
           "eta": 1.5
         }
       },

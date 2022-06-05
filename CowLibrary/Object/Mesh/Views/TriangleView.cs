@@ -64,7 +64,7 @@ public readonly struct TriangleView : IIntersectable
         }
 
         var normal = n0 * (1 - u - v) + n1 * u + n2 * v;
-        best = new RayHit(t, ray.GetPoint(t), normal, dpdu, dpdv, Id);
+        best = new RayHit(t, ray.GetPoint(t), normal, dpdu, Id);
     }
 
     private bool GetDerivatives(out Vector3 dpdu, out Vector3 dpdv)

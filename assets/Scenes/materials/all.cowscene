@@ -1,0 +1,303 @@
+{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 1920,
+    "height": 1080,
+    "rayDepth": 7,
+    "raysPerPixelDimension": 100
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 9,
+          "y": 6,
+          "z": 18
+        },
+        "rotation": {
+          "x": -20,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 8,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 0.5,
+            "g": 0.5,
+            "b": 0.5
+          }
+        }
+      },
+      "disk": {
+        "radius": 20
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 4,
+      "transform": {
+        "position": {
+          "x": 2,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "specular_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "eta": 1.5
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 5,
+      "transform": {
+        "position": {
+          "x": 4,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "specular_transmission": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "eta": 1.5
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 6,
+      "transform": {
+        "position": {
+          "x": 6,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "fresnel": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "eta": 1.5
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 7,
+      "transform": {
+        "position": {
+          "x": 8,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "oren_nayar": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "roughness": 0.25
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 8,
+      "transform": {
+        "position": {
+          "x": 10,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "microfacet_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "r": 1,
+          "eta": 1.5,
+          "roughness": 0
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 9,
+      "transform": {
+        "position": {
+          "x": 12,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "metal": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "eta": 2.9304,
+          "k": 2.9996,
+          "roughness": 0.1
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 10,
+      "transform": {
+        "position": {
+          "x": 14,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "plastic": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "roughness": 0.5
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 11,
+      "transform": {
+        "position": {
+          "x": 16,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "blend": {
+          "diffuse": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "specular": {
+            "r": 1,
+            "g": 0,
+            "b": 0
+          },
+          "roughness": 0.9
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    },
+    {
+      "id": 12,
+      "transform": {
+        "position": {
+          "x": 18,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "material": {
+        "mirror": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          },
+          "r": 1
+        }
+      },
+      "sphere": {
+        "radius": 1
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 100,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "environment": {}
+    }
+  ]
+}
