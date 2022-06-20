@@ -3,100 +3,50 @@
   "renderOptions": {
     "cameraId": 1,
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "rayDepth": 5,
+    "raysPerPixelDimension": 32
   },
   "cameras": [
     {
       "id": 1,
       "transform": {
-        "position": {
-          "x": -3.7,
-          "y": 1.8,
-          "z": -1.5
-        },
-        "rotation": {
-          "x": -15,
-          "y": -120,
-          "z": 0
-        }
+        "position": { "x": 4, "y": 5, "z": 4 },
+        "rotation": { "x": -40, "y": 48, "z": 0 }
       },
-      "perspective": {
-        "fov": 80
-      }
+      "perspective": { "fov": 40 }
     }
   ],
   "sceneObjects": [
     {
-      "id": 2,
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
-      },
+      "id": 3,
+      "transform": {},
       "material": {
         "lambert_reflection": {
-          "color": {
-            "r": 1,
-            "g": 1,
-            "b": 1
-          }
+          "color": { "r": 1, "g": 1, "b": 1 }
         }
       },
       "meshed_object": {
-        "reference": "C:/Projects/cow-engine/assets/car.obj"
-      }
-    },
-    {
-      "id": 3,
-      "transform": {
-        "position": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        }
-      },
-      "material": {
-        "lambert_reflection": {
-          "color": {
-            "r": 0.7,
-            "g": 0.7,
-            "b": 0.7
-          }
-        }
-      },
-      "disk": {
-        "radius": 10
+        "reference": "C:/Projects/cow-engine/assets/dragon.obj"
       }
     },
     {
       "id": 4,
       "transform": {
-        "position": {
-          "x": -1.8,
-          "y": 0.3,
-          "z": 0.75
-        }
+        "position": { "x": 0, "y": 0, "z": 0 }
       },
       "material": {
-        "specular_reflection": {
-          "eta": 2
+        "lambert_reflection": {
+          "color": { "r": 0.7, "g": 0.7, "b": 0.7 }
         }
       },
-      "sphere": {
-        "radius": 0.3
-      }
+      "disk": { "radius": 20 }
     }
   ],
   "lights": [
     {
-      "id": 5,
-      "color": {
-        "r": 1,
-        "g": 1,
-        "b": 1
-      },
+      "id": 2,
+      "color": { "r": 1, "g": 1, "b": 1 },
       "environment": {}
     }
   ]
