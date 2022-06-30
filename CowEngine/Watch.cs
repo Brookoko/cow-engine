@@ -7,7 +7,7 @@ namespace CowEngine
     {
         void Start();
 
-        void Stop(string info);
+        double Stop(string info);
     }
 
     public class Watch : IWatch
@@ -19,11 +19,12 @@ namespace CowEngine
             watch.Restart();
         }
 
-        public void Stop(string info)
+        public double Stop(string info)
         {
             watch.Stop();
             var elapsed = watch.Elapsed;
             Console.WriteLine($"{info}: {elapsed.TotalSeconds}s");
+            return elapsed.TotalSeconds;
         }
     }
 }

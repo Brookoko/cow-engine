@@ -1,13 +1,31 @@
 namespace CowEngine.ImageWorker
 {
+    using Cowject;
+
+    public interface IBytesReader
+    {
+        byte[] Read(string path);
+    }
+
+    public interface IBytesWriter
+    {
+        void Write(byte[] bytes, string path);
+    }
+
+    public interface IIoWorker : IBytesReader, IBytesWriter
+    {
+    }
+
     public class IoWorker : IIoWorker
     {
-        private readonly IBytesReader bytesReader = new SimpleBytesReader();
+        [Inject]
+        public IBytesReader BytesReader { get; set; }
 
-        private readonly IBytesWriter bytesWriter = new FilesBypassingWriter("_");
+        [Inject]
+        public IBytesWriter BytesWriter { get; set; }
 
-        public byte[] Read(string path) => bytesReader.Read(path);
+        public byte[] Read(string path) => BytesReader.Read(path);
 
-        public void Write(byte[] bytes, string path) => bytesWriter.Write(bytes, path);
+        public void Write(byte[] bytes, string path) => BytesWriter.Write(bytes, path);
     }
 }

@@ -1,16 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
-    <ItemGroup>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Numerics" />
-        <Reference Include="System.Xml" />
-    </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Cowject\Cowject.csproj">
         <Project>{3a4444a4-a3df-43c6-82bd-d4efa98c83c1}</Project>
@@ -20,6 +14,5 @@
         <Project>{0f5fd226-ebc5-457c-b740-b2673fcb6b9b}</Project>
         <Name>CowLibrary</Name>
       </ProjectReference>
-      <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
     </ItemGroup>
 </Project>

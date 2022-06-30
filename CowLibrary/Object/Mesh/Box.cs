@@ -3,129 +3,69 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class Box : Mesh
+    public struct Box : IMesh<Box>
     {
-        public Vector3 center;
-        public Vector3 min;
-        public Vector3 max;
-        public Vector3 size;
+        public readonly int Id => view.Id;
 
-        public override Box BoundingBox => this;
+        public readonly Box View => this;
 
-        public Box(Vector3 min, Vector3 max)
+        public readonly Bound BoundingBox => view;
+
+        private Bound view;
+
+        public Box(Vector3 size, int id)
         {
-            this.min = min;
-            this.max = max;
-            center = new Vector3((min.X + max.X) * 0.5f, (min.Y + max.Y) * 0.5f, (min.Z + max.Z) * 0.5f);
-            size = max - center;
+            view = new Bound(-size, size, id);
         }
 
-        public Box(Vector3 center, float sideLength)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            this.center = center;
-            size = new Vector3(sideLength / 2);
-            min = center - size;
-            max = center + size;
+            var prevBest = best;
+            view.Intersect(in ray, ref best);
+            if (best.t < prevBest.t)
+            {
+                var (n, dpdu, dpdv) = GetBasis(best.point);
+                best = new RayHit(best.t, best.point, n, dpdu, Id);
+            }
         }
 
-        public Box(Vector3 size)
+        private readonly (Vector3 normal, Vector3 dpdu, Vector3 dpdv) GetBasis(in Vector3 point)
         {
-            this.size = size;
-            min = center - size;
-            max = center + size;
-        }
+            var localPoint = point - view.Center;
+            var min = Math.Abs(view.Size.X - Math.Abs(localPoint.X));
+            var sign = localPoint.X >= 0 ? 1 : -1;
+            var normal = sign * Vector3.UnitX;
+            var dpdu = sign * Vector3.UnitZ;
+            var dpdv = sign * Vector3.UnitY;
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
-        {
-            var invdir = new Vector3(1 / ray.direction.X, 1 / ray.direction.Y, 1 / ray.direction.Z);
-
-            var xmin = invdir.X >= 0 ? min.X : max.X;
-            var xmax = invdir.X >= 0 ? max.X : min.X;
-            var tmin = (xmin - ray.origin.X) * invdir.X;
-            var tmax = (xmax - ray.origin.X) * invdir.X;
-
-            var ymin = invdir.Y >= 0 ? min.Y : max.Y;
-            var ymax = invdir.Y >= 0 ? max.Y : min.Y;
-            var tymin = (ymin - ray.origin.Y) * invdir.Y;
-            var tymax = (ymax - ray.origin.Y) * invdir.Y;
-
-            if (tmin > tymax || tymin > tmax)
-            {
-                surfel = null;
-                return false;
-            }
-            tmin = Math.Max(tmin, tymin);
-            tmax = Math.Min(tmax, tymax);
-
-            var zmin = invdir.Z >= 0 ? min.Z : max.Z;
-            var zmax = invdir.Z >= 0 ? max.Z : min.Z;
-            var tzmin = (zmin - ray.origin.Z) * invdir.Z;
-            var tzmax = (zmax - ray.origin.Z) * invdir.Z;
-
-            if (tmin > tzmax || tzmin > tmax)
-            {
-                surfel = null;
-                return false;
-            }
-            tmin = Math.Max(tmin, tzmin);
-            tmax = Math.Min(tmax, tzmax);
-
-            float t;
-            if (tmin < 0)
-            {
-                if (tmax < 0)
-                {
-                    surfel = null;
-                    return false;
-                }
-                t = tmax;
-            }
-            else
-            {
-                t = Math.Min(tmin, tmax);
-            }
-
-            var p = ray.GetPoint(t);
-
-            surfel = new Surfel()
-            {
-                t = t,
-                point = p,
-                normal = GetNormal(p),
-            };
-            return true;
-        }
-
-        private Vector3 GetNormal(Vector3 point)
-        {
-            var localPoint = point - center;
-            var min = Math.Abs(size.X - Math.Abs(localPoint.X));
-            var normal = Vector3.UnitX;
-            normal *= Math.Sign(localPoint.X);
-
-            var dist = Math.Abs(size.Y - Math.Abs(localPoint.Y));
+            var dist = Math.Abs(view.Size.Y - Math.Abs(localPoint.Y));
             if (dist < min)
             {
                 min = dist;
-                normal = Vector3.UnitY;
-                normal *= Math.Sign(localPoint.Y);
+                sign = localPoint.Y >= 0 ? 1 : -1;
+                normal = sign * Vector3.UnitY;
+                dpdu = sign * Vector3.UnitZ;
+                dpdv = sign * Vector3.UnitX;
             }
-            dist = Math.Abs(size.Z - Math.Abs(localPoint.Z));
+            dist = Math.Abs(view.Size.Z - Math.Abs(localPoint.Z));
             if (dist < min)
             {
                 min = dist;
-                normal = Vector3.UnitZ;
-                normal *= Math.Sign(localPoint.Z);
+                sign = localPoint.Y >= 0 ? 1 : -1;
+                normal = sign * Vector3.UnitZ;
+                dpdu = sign * Vector3.UnitY;
+                dpdv = sign * Vector3.UnitX;
             }
-            return normal;
+            return (normal, dpdu, dpdv);
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
-            center = matrix.MultiplyPoint(center);
-            size = matrix.MultiplyVector(size);
-            min = center - size;
-            max = center + size;
+            var center = matrix.MultiplyPoint(view.Center);
+            var size = matrix.MultiplyVector(view.Size);
+            var min = center - size;
+            var max = center + size;
+            view = new Bound(min, max, Id);
         }
     }
 }

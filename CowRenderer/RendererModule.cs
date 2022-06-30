@@ -1,18 +1,15 @@
 namespace CowRenderer
 {
     using Cowject;
-    using Integration;
-    using Raycasting;
-    using Rendering;
+    using CowLibrary.Mathematics.Sampler;
 
     public class RendererModule : IModule
     {
+        public Priority Priority => Priority.High;
+
         public void Prepare(DiContainer container)
         {
-            container.Bind<IIntegrator>().To<MaterialIntegrator>().ToSingleton();
-            container.Bind<IRaycaster>().To<TreeRaycaster>().ToSingleton();
-            container.Bind<IRenderer>().To<MultithreadRenderer>().ToSingleton();
-            container.Bind<ThreadRenderer>().To<MultiRayThreadRenderer>();
+            container.Bind<ISamplerProvider>().To<SamplerProvider>().ToSingleton();
             container.Bind<RenderConfig>().To<RenderConfig>().ToSingleton();
         }
     }

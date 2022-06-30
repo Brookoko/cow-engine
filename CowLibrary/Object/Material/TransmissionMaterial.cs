@@ -2,23 +2,39 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class TransmissionMaterial : Material
+    public readonly struct TransmissionMaterial : IMaterial
     {
-        private readonly IBrdf brdf;
+        public Color Color { get; }
 
-        public TransmissionMaterial(float t, float eta) : base(Color.White)
+        public int Id { get; }
+
+        private readonly SpecularTransmissionBrdf brdf;
+
+        public TransmissionMaterial(Color color, float t, float eta, int id) :
+            this(color, new SpecularTransmissionBrdf(t, 1f, eta, TransportMode.Importance), id)
         {
-            brdf = new SpecularTransmissionBrdf(t, 1f, eta, TransportMode.Importance);
         }
 
-        public override Color GetColor(Vector3 wo, Vector3 wi)
+        private TransmissionMaterial(Color color, SpecularTransmissionBrdf brdf, int id)
         {
-            return brdf.Evaluate(wo, wi) * Color;
+            Color = color;
+            this.brdf = brdf;
+            Id = id;
         }
 
-        public override float Sample(Surfel surfel, out Vector3 wi, out float pdf)
+        public Color GetColor(in Vector3 wo, in Vector3 wi)
         {
-            return brdf.Sample(surfel, out wi, Mathf.CreateSample(), out pdf);
+            return brdf.Evaluate(in wo, in wi) * Color;
+        }
+
+        public Color Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+        {
+            return brdf.Sample(in wo, in sample, out wi, out pdf) * Color;
+        }
+
+        public IMaterial Copy(int id)
+        {
+            return new TransmissionMaterial(Color, brdf, id);
         }
     }
 }

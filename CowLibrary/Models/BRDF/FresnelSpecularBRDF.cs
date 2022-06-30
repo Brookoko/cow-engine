@@ -2,11 +2,11 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class FresnelSpecularBrdf : IBrdf
+    public readonly struct FresnelSpecularBrdf : IBrdf
     {
         private readonly DielectricFresnel fresnel;
-        private readonly IBrdf reflection;
-        private readonly IBrdf transmission;
+        private readonly SpecularReflectionBrdf reflection;
+        private readonly SpecularTransmissionBrdf transmission;
 
         public FresnelSpecularBrdf(float r, float t, float etaA, float etaB, TransportMode mode)
         {
@@ -15,26 +15,34 @@ namespace CowLibrary
             transmission = new SpecularTransmissionBrdf(t, etaA, etaB, mode);
         }
 
-        public float Evaluate(Vector3 wo, Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi)
         {
             return 0;
         }
 
-        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
+        public float Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
         {
             float res;
-            var f = fresnel.Evaluate(Vector3.Dot(surfel.normal, surfel.ray));
-            if (sample.X < f)
+            var f = fresnel.Evaluate(Mathf.CosTheta(in wo));
+            var s = sample;
+            if (s.X < f)
             {
-                res = reflection.Sample(surfel, out wi, sample, out pdf);
+                s.X = (f - sample.X) / f;
+                res = reflection.Sample(in wo, in sample, out wi, out pdf);
                 pdf = f;
             }
             else
             {
-                res = transmission.Sample(surfel, out wi, sample, out pdf);
+                s.X = (sample.X - f) / f;
+                res = transmission.Sample(in wo, in sample, out wi, out pdf);
                 pdf = 1 - f;
             }
             return res;
+        }
+
+        public float Pdf(in Vector3 wo, in Vector3 wi)
+        {
+            return 0;
         }
     }
 }

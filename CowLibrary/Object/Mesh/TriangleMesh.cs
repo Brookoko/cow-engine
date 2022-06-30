@@ -1,65 +1,45 @@
 namespace CowLibrary
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Numerics;
 
-    public class TriangleMesh : Mesh
+    public struct TriangleMesh : IMesh
     {
-        public readonly List<Triangle> triangles;
+        public int Id { get; }
 
-        public override Box BoundingBox => box;
+        public readonly Bound BoundingBox => bound;
 
-        private Box box;
+        public readonly Triangle[] triangles;
+        private Bound bound;
 
-        public TriangleMesh(List<Triangle> triangles)
+        public TriangleMesh()
+        {
+            triangles = new Triangle[0];
+            bound = new Bound();
+            Id = -1;
+        }
+
+        public TriangleMesh(Triangle[] triangles, int id) : this()
         {
             this.triangles = triangles;
-            box = CreateBox();
+            bound = IntersectionHelper.CreateBound(triangles, id);
+            Id = id;
         }
 
-        private Box CreateBox()
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            var min = Vector3.One * float.MaxValue;
-            var max = Vector3.One * float.MinValue;
-            foreach (var box in triangles.Select(t => t.BoundingBox))
+            for (var i = 0; i < triangles.Length; i++)
             {
-                min.X = Math.Min(min.X, box.min.X);
-                min.Y = Math.Min(min.Y, box.min.Y);
-                min.Z = Math.Min(min.Z, box.min.Z);
-                max.X = Math.Max(max.X, box.max.X);
-                max.Y = Math.Max(max.Y, box.max.Y);
-                max.Z = Math.Max(max.Z, box.max.Z);
+                triangles[i].Intersect(in ray, ref best);
             }
-            return new Box(min, max);
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
-        {
-            surfel = null;
-            var intersected = false;
-            foreach (var t in triangles)
-            {
-                if (t.Intersect(ray, out var s))
-                {
-                    if (surfel == null || surfel.t > s.t)
-                    {
-                        surfel = s;
-                        intersected = true;
-                    }
-                }
-            }
-            return intersected;
-        }
-
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
             foreach (var triangle in triangles)
             {
-                triangle.Apply(matrix);
+                triangle.Apply(in matrix);
             }
-            box = CreateBox();
+            bound = IntersectionHelper.CreateBound(triangles, Id);
         }
     }
 }

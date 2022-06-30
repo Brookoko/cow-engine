@@ -1,63 +1,42 @@
 namespace CowLibrary
 {
     using System.Numerics;
+    using Views;
 
-    public class Disk : Mesh
+    public struct Disk : IMesh<DiskView>
     {
-        private const float e = 1e-10f;
+        public readonly int Id => view.Id;
 
-        public override Box BoundingBox => box;
+        public readonly DiskView View => view;
 
-        private Box box;
+        public readonly Bound BoundingBox => bound;
 
-        private Vector3 normal = -Vector3.UnitY;
-        private Vector3 point = Vector3.Zero;
-        private float radius;
+        private Bound bound;
+        private DiskView view;
 
-        public Disk(float radius)
+        public Disk(float radius, int id) : this()
         {
-            this.radius = radius;
-            box = CreateBox();
+            view = new DiskView(Vector3.Zero, Vector3.UnitY, radius, id);
+            bound = CreateBound();
         }
 
-        private Box CreateBox()
+        private Bound CreateBound()
         {
-            return new Box(point, 2 * radius);
+            return new Bound(view.point, 2 * view.radius, Id);
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            var dot = Vector3.Dot(normal, ray.direction);
-            if (dot > e)
-            {
-                var dir = point - ray.origin;
-                var t = Vector3.Dot(dir, normal) / dot;
-                if (t > 0)
-                {
-                    var p = ray.GetPoint(t);
-                    var dist = Vector3.DistanceSquared(p, point);
-                    if (dist <= radius * radius)
-                    {
-                        surfel = new Surfel()
-                        {
-                            t = t,
-                            point = p,
-                            normal = -normal
-                        };
-                        return true;
-                    }
-                }
-            }
-            surfel = null;
-            return false;
+            view.Intersect(in ray, ref best);
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
-            point = matrix.MultiplyPoint(point);
-            radius = matrix.ExtractScale().Min() * radius;
-            normal = matrix.MultiplyVector(normal).Normalize();
-            box = CreateBox();
+            var point = matrix.MultiplyPoint(view.point);
+            var radius = matrix.ExtractScale().Min() * view.radius;
+            var normal = matrix.MultiplyVector(view.normal).Normalize();
+            view = new DiskView(point, normal, radius, Id);
+            bound = CreateBound();
         }
     }
 }

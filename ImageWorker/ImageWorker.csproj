@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
       <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
-      <ProjectReference Include="..\PngWorker\PngWorker.csproj" />
     </ItemGroup>
 
 </Project>

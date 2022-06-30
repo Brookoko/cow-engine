@@ -1,0 +1,82 @@
+﻿{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 1920,
+    "height": 1080,
+    "rayDepth": 3,
+    "raysPerPixelDimension": 8
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0.3,
+          "z": 1.2
+        }
+      },
+      "perspective": {
+        "fov": 60
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1
+          }
+        }
+      },
+      "meshed_object": {
+        "reference": "C:/Projects/cow-engine/assets/cow2.obj"
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 0.8,
+            "g": 0.8,
+            "b": 0.8
+          }
+        }
+      },
+      "disk": {
+        "radius": 10
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 4,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "environment": {}
+    }
+  ]
+}

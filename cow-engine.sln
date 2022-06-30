@@ -22,6 +22,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowRenderer", "CowRenderer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SceneWorker", "SceneWorker\SceneWorker.csproj", "{791D222A-C614-4E58-BBA6-04501D0062C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ILGPURenderer", "ILGPURenderer\ILGPURenderer.csproj", "{997AE9A0-427A-44CE-AD75-74A8A9C529F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CpuRenderer", "CpuRenderer\CpuRenderer.csproj", "{187F6DDE-BD06-4294-AEEA-47099E19C3EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +76,13 @@ Global
 		{791D222A-C614-4E58-BBA6-04501D0062C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{791D222A-C614-4E58-BBA6-04501D0062C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{791D222A-C614-4E58-BBA6-04501D0062C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{997AE9A0-427A-44CE-AD75-74A8A9C529F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{997AE9A0-427A-44CE-AD75-74A8A9C529F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{997AE9A0-427A-44CE-AD75-74A8A9C529F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{997AE9A0-427A-44CE-AD75-74A8A9C529F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{187F6DDE-BD06-4294-AEEA-47099E19C3EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{187F6DDE-BD06-4294-AEEA-47099E19C3EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{187F6DDE-BD06-4294-AEEA-47099E19C3EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{187F6DDE-BD06-4294-AEEA-47099E19C3EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,13 +1,24 @@
-namespace CowLibrary
-{
-    using System.Numerics;
+﻿namespace CowLibrary;
 
-    public class Surfel
+using System.Numerics;
+
+public readonly struct Surfel
+{
+    public readonly RayHit hit;
+    public readonly Vector3 ray;
+    public readonly IMaterial material;
+
+    public Surfel(Vector3 ray)
     {
-        public float t;
-        public Vector3 ray;
-        public Vector3 point;
-        public Vector3 normal;
-        public Material material;
+        hit = Const.Miss;
+        this.ray = ray;
+        material = default;
+    }
+
+    public Surfel(RayHit hit, Vector3 ray, IMaterial material)
+    {
+        this.hit = hit;
+        this.ray = ray;
+        this.material = material;
     }
 }

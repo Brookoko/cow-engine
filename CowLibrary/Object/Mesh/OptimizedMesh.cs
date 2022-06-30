@@ -1,29 +1,32 @@
 namespace CowLibrary
 {
-    using System.Collections.Generic;
     using System.Numerics;
 
-    public class OptimizedMesh : Mesh
+    public struct OptimizedMesh : IMesh
     {
-        public override Box BoundingBox => mesh.BoundingBox;
+        public readonly TriangleMesh mesh;
+        public KdTree tree;
 
-        private readonly TriangleMesh mesh;
-        private KdTree tree;
+        public int Id { get; }
 
-        public OptimizedMesh(List<Triangle> triangles)
+        public readonly Bound BoundingBox => mesh.BoundingBox;
+
+        public OptimizedMesh(Triangle[] triangles, int id)
         {
-            mesh = new TriangleMesh(triangles);
+            mesh = new TriangleMesh(triangles, id);
+            tree = default;
+            Id = id;
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            return tree.Intersect(ray, out surfel);
+            tree.Intersect(in ray, ref best);
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public void Apply(in Matrix4x4 matrix)
         {
-            mesh.Apply(matrix);
-            tree = new KdTree(mesh.triangles);
+            mesh.Apply(in matrix);
+            tree = KdTreeBuilder.Build(mesh.triangles, Id);
         }
     }
 }

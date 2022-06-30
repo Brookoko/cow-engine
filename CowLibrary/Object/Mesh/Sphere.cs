@@ -1,78 +1,41 @@
 namespace CowLibrary
 {
-    using System;
     using System.Numerics;
+    using Object.Mesh.Views;
 
-    public class Sphere : Mesh
+    public struct Sphere : IMesh<SphereView>
     {
-        public override Box BoundingBox => box;
+        public readonly int Id => view.Id;
 
-        private Box box;
+        public readonly SphereView View => view;
 
-        private float radius;
-        private Vector3 center = Vector3.Zero;
+        public readonly Bound BoundingBox => bound;
 
-        public Sphere(float radius)
+        private Bound bound;
+        private SphereView view;
+
+        public Sphere(float radius, int id) : this()
         {
-            this.radius = radius;
-            box = new Box(center, radius * 2);
+            view = new SphereView(Vector3.Zero, radius, id);
+            bound = CreateBound();
         }
 
-        public override bool Intersect(Ray ray, out Surfel surfel)
+        private Bound CreateBound()
         {
-            var f1 = ray.origin.X - center.X;
-            var f2 = ray.origin.Y - center.Y;
-            var f3 = ray.origin.Z - center.Z;
-            var aCoeff = ray.direction.X * ray.direction.X +
-                         ray.direction.Y * ray.direction.Y +
-                         ray.direction.Z * ray.direction.Z;
-            var halfBCoeff = ray.direction.X * f1 + ray.direction.Y * f2 + ray.direction.Z * f3;
-            var cCoeff = f1 * f1 + f2 * f2 + f3 * f3 - radius * radius;
-
-            var discriminant = halfBCoeff * halfBCoeff - aCoeff * cCoeff;
-            if (discriminant < 0)
-            {
-                surfel = null;
-                return false;
-            }
-
-            float t;
-            if (discriminant == 0)
-            {
-                t = (float)Math.Sqrt(aCoeff * cCoeff);
-            }
-            else
-            {
-                var sqrDiscriminant = Math.Sqrt(discriminant);
-                var k1 = (-halfBCoeff + sqrDiscriminant) / aCoeff;
-                var k2 = (-halfBCoeff - sqrDiscriminant) / aCoeff;
-
-                k1 = k1 > 0 ? k1 : k2;
-                k2 = k2 > 0 ? k2 : k1;
-                if (k2 < 0)
-                {
-                    surfel = null;
-                    return false;
-                }
-
-                t = (float)Math.Min(k1, k2);
-            }
-
-            var p = ray.GetPoint(t);
-            surfel = new Surfel()
-            {
-                point = p,
-                normal = (p - center).Normalize(),
-                t = t
-            };
-            return true;
+            return new Bound(view.center, view.radius * 2, Id);
         }
 
-        public override void Apply(Matrix4x4 matrix)
+        public readonly void Intersect(in Ray ray, ref RayHit best)
         {
-            center = matrix.MultiplyPoint(center);
-            radius = matrix.ExtractScale().Min() * radius;
-            box = new Box(center, radius * 2);
+            view.Intersect(in ray, ref best);
+        }
+
+        public void Apply(in Matrix4x4 matrix)
+        {
+            var center = matrix.MultiplyPoint(view.center);
+            var radius = matrix.ExtractScale().Min() * view.radius;
+            view = new SphereView(center, radius, Id);
+            bound = CreateBound();
         }
     }
 }

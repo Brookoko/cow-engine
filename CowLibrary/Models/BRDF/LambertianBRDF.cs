@@ -3,7 +3,7 @@ namespace CowLibrary
     using System;
     using System.Numerics;
 
-    public class LambertianBrdf : IBrdf
+    public readonly struct LambertianBrdf : IBrdf
     {
         private readonly float r;
 
@@ -12,22 +12,25 @@ namespace CowLibrary
             this.r = Math.Clamp(r, 0, 1);
         }
 
-        public float Evaluate(Vector3 wo, Vector3 wi)
+        public float Evaluate(in Vector3 wo, in Vector3 wi)
         {
             return r * Const.InvPi;
         }
 
-        public float Sample(Surfel surfel, out Vector3 wi, Vector2 sample, out float pdf)
+        public float Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
         {
-            var wo = surfel.ray;
-            var up = surfel.normal;
-            wi = Mathf.CosineSampleHemisphere(up, sample);
-            if (Vector3.Dot(wo, up) < 0)
+            wi = Mathf.CosineSampleHemisphere(in sample);
+            if (wo.Y < 0)
             {
-                wi.Z *= -1;
+                wi.Y *= -1;
             }
-            pdf = sample.X;
-            return Evaluate(wo, wi);
+            pdf = Pdf(in wo, in wi);
+            return Evaluate(in wo, in wi);
+        }
+
+        public float Pdf(in Vector3 wo, in Vector3 wi)
+        {
+            return Mathf.SameHemisphere(in wo, in wi) ? Mathf.AbsCosTheta(in wi) * Const.InvPi : 0;
         }
     }
 }

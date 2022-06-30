@@ -1,18 +1,28 @@
 namespace CowLibrary.Lights
 {
     using System.Numerics;
+    using Mathematics.Sampler;
+    using Models;
 
     public abstract class Light : SceneObject
     {
-        public abstract ShadingInfo GetShadingInfo(Surfel surfel);
+        public abstract ILightModel Model { get; }
 
-        public abstract Color Sample(Vector3 wi);
-    }
+        private readonly ISampler sampler;
 
-    public class ShadingInfo
-    {
-        public Vector3 direction;
-        public float distance;
-        public Color color;
+        protected Light(ISampler sampler)
+        {
+            this.sampler = sampler;
+        }
+
+        public ShadingInfo GetShadingInfo(in RayHit rayHit)
+        {
+            return Model.GetShadingInfo(in rayHit, Transform.LocalToWorldMatrix, sampler.CreateSample());
+        }
+
+        public Color Sample(in Vector3 wi)
+        {
+            return Model.Sample(in wi, sampler.CreateSample());
+        }
     }
 }

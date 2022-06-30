@@ -1,15 +1,19 @@
 namespace CowLibrary
 {
-    public class Image
+    public readonly struct Image
     {
         public int Height => data.GetLength(0);
         public int Width => data.GetLength(1);
 
         private readonly Color[,] data;
 
-        public Image(int w, int h)
+        public Image(int w, int h) : this(new Color[h, w])
         {
-            data = new Color[h, w];
+        }
+
+        public Image(Color[,] colors)
+        {
+            data = colors;
         }
 
         public Color this[int i, int j]

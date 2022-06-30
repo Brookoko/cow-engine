@@ -2,37 +2,18 @@ namespace CowEngine
 {
     using CommandLine;
 
-    [Verb("compiled", HelpText = "Render compiled scene")]
-    public class CompiledOptions
+    public class Option
     {
-        [Option('o', "output", Required = true, HelpText = "Output image")]
-        public string Output { get; set; }
-    }
+        [Option('m', "mode", Required = true, HelpText = "Source model")]
+        public string Mode { get; set; }
 
-    [Verb("model", HelpText = "Render model")]
-    public class ModelOptions
-    {
-        [Option('s', "source", Required = true, HelpText = "Source model")]
-        public string Source { get; set; }
+        [Option("model", Required = false, HelpText = "Source model", Group = "Source")]
+        public string Model { get; set; }
 
-        [Option('o', "output", Required = true, HelpText = "Output image")]
-        public string Output { get; set; }
-    }
-
-    [Verb("scene", HelpText = "Render scene")]
-    public class SceneOptions
-    {
-        [Option('s', "source", Required = true, HelpText = "Source scene")]
-        public string Source { get; set; }
+        [Option('s', "source", Required = false, HelpText = "Source scene", Group = "Source")]
+        public string Scene { get; set; }
 
         [Option('o', "output", Required = true, HelpText = "Output image")]
         public string Output { get; set; }
-    }
-
-    public enum Options
-    {
-        Model,
-        Compiled,
-        Scene
     }
 }

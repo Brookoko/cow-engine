@@ -2,17 +2,16 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public abstract class Material
+    public interface IMaterial
     {
         public Color Color { get; }
 
-        protected Material(Color color)
-        {
-            Color = color;
-        }
+        public int Id { get; }
 
-        public abstract Color GetColor(Vector3 wo, Vector3 wi);
+        public Color GetColor(in Vector3 wo, in Vector3 wi);
 
-        public abstract float Sample(Surfel surfel, out Vector3 wi, out float pdf);
+        public Color Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf);
+
+        IMaterial Copy(int id);
     }
 }

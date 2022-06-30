@@ -2,23 +2,39 @@ namespace CowLibrary
 {
     using System.Numerics;
 
-    public class FresnelMaterial : Material
+    public readonly struct FresnelMaterial : IMaterial
     {
-        private readonly IBrdf brdf;
+        public Color Color { get; }
 
-        public FresnelMaterial(float r, float t, float eta) : base(Color.White)
+        public int Id { get; }
+
+        private readonly FresnelSpecularBrdf brdf;
+
+        public FresnelMaterial(Color color, float r, float t, float eta, int id) :
+            this(color, new FresnelSpecularBrdf(r, t, 1, eta, TransportMode.Importance), id)
         {
-            brdf = new FresnelSpecularBrdf(r, t, 1, eta, TransportMode.Importance);
         }
 
-        public override Color GetColor(Vector3 wo, Vector3 wi)
+        private FresnelMaterial(Color color, FresnelSpecularBrdf brdf, int id)
         {
-            return brdf.Evaluate(wo, wi) * Color;
+            Color = color;
+            this.brdf = brdf;
+            Id = id;
         }
 
-        public override float Sample(Surfel surfel, out Vector3 wi, out float pdf)
+        public Color GetColor(in Vector3 wo, in Vector3 wi)
         {
-            return brdf.Sample(surfel, out wi, Mathf.CreateSample(), out pdf);
+            return brdf.Evaluate(in wo, in wi) * Color;
+        }
+
+        public Color Sample(in Vector3 wo, in Vector2 sample, out Vector3 wi, out float pdf)
+        {
+            return brdf.Sample(in wo, in sample, out wi, out pdf) * Color;
+        }
+
+        public IMaterial Copy(int id)
+        {
+            return new FresnelMaterial(Color, brdf, id);
         }
     }
 }

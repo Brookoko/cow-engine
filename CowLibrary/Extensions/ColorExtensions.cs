@@ -44,5 +44,15 @@ namespace CowLibrary
                 Math.Min(color1.b, color2.b)
             );
         }
+        
+        public static Color Clamp(Color color, Color min, Color max)
+        {
+            return new Color
+            (
+                Mathf.Clamp(color.r, min.r, max.r),
+                Mathf.Clamp(color.g, min.g, max.g),
+                Mathf.Clamp(color.b, min.b, max.b)
+            );
+        }
     }
 }

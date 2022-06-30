@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net5.0</TargetFramework>
-        <PublishSingleFile>true</PublishSingleFile>
+        <TargetFramework>net6.0</TargetFramework>
+        <PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
         <RuntimeIdentifier>win-x64</RuntimeIdentifier>
         <PublishTrimmed>true</PublishTrimmed>
         <PublishReadyToRun>true</PublishReadyToRun>
@@ -13,14 +13,14 @@
         <Authors>CowEngine</Authors>
         <Company>CowEngine</Company>
         <Product>CowEngine</Product>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Cowject\Cowject.csproj" />
-      <ProjectReference Include="..\CowLibrary\CowLibrary.csproj" />
-      <ProjectReference Include="..\CowRenderer\CowRenderer.csproj" />
+      <ProjectReference Include="..\CpuRenderer\CpuRenderer.csproj" />
+      <ProjectReference Include="..\ILGPURenderer\ILGPURenderer.csproj" />
       <ProjectReference Include="..\ImageWorker\ImageWorker.csproj" />
-      <ProjectReference Include="..\ObjWorker\ObjWorker.csproj" />
       <ProjectReference Include="..\PngWorker\PngWorker.csproj" />
       <ProjectReference Include="..\SceneWorker\SceneWorker.csproj" />
     </ItemGroup>

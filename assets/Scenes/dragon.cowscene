@@ -1,0 +1,88 @@
+﻿{
+  "version": 1,
+  "renderOptions": {
+    "cameraId": 1,
+    "width": 1920,
+    "height": 1080,
+    "rayDepth": 5,
+    "raysPerPixelDimension": 16
+  },
+  "cameras": [
+    {
+      "id": 1,
+      "transform": {
+        "position": {
+          "x": 2.5,
+          "y": 4,
+          "z": 4
+        },
+        "rotation": {
+          "x": -36,
+          "y": 41,
+          "z": 0
+        }
+      },
+      "perspective": {
+        "fov": 40
+      }
+    }
+  ],
+  "sceneObjects": [
+    {
+      "id": 2,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "plastic": {
+          "color": {
+            "r": 0.62,
+            "g": 0.48,
+            "b": 0.95
+          },
+          "roughness": 0.05
+        }
+      },
+      "meshed_object": {
+        "reference": "C:/Projects/cow-engine/assets/dragon.obj"
+      }
+    },
+    {
+      "id": 3,
+      "transform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "material": {
+        "lambert_reflection": {
+          "color": {
+            "r": 0.7,
+            "g": 0.7,
+            "b": 0.7
+          }
+        }
+      },
+      "disk": {
+        "radius": 10
+      }
+    }
+  ],
+  "lights": [
+    {
+      "id": 4,
+      "color": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "environment": {}
+    }
+  ]
+}

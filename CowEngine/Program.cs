@@ -1,48 +1,39 @@
 ﻿namespace CowEngine
 {
     using System;
-    using System.Collections.Generic;
-    using Cowject;
-    using CowRenderer;
-    using ImageWorker;
 
     public class Program
     {
-        private static readonly List<IModule> Modules = new()
-        {
-            new CoreModule(),
-            new ImageModule(),
-            new RendererModule(),
-            new ObjModule(),
-            new SceneModule()
-        };
+        private static readonly AppContext Context = new();
+        private static readonly TypeProvider TypeProvider = new();
 
         public static void Main(string[] args)
         {
-            var container = SetupContainer();
+            Initialize();
+            Process(args);
+        }
 
-            var argumentParser = container.Get<IArgumentsParser>();
+        private static void Initialize()
+        {
+            var watch = new Watch();
+            watch.Start();
+            TypeProvider.LoadTypes();
+            Context.Launch(TypeProvider);
+            watch.Stop("Launch");
+        }
 
+        private static void Process(string[] args)
+        {
+            var argumentParser = Context.Get<IArgumentsParser>();
             try
             {
                 argumentParser.Parse(args);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Failed to render. See next log for more details");
-                Console.WriteLine(e);
+                Console.WriteLine("Failed to render. See next exception for more details");
                 throw;
             }
-        }
-
-        private static DiContainer SetupContainer()
-        {
-            var container = new DiContainer();
-            foreach (var module in Modules)
-            {
-                module.Prepare(container);
-            }
-            return container;
         }
     }
 }

@@ -1,48 +1,68 @@
 namespace CowLibrary
 {
-    using System.Collections.Generic;
-
-    public class KdNode
+    public readonly struct KdNode
     {
         public readonly TriangleMesh mesh;
-        public readonly List<KdNode> children = new();
+        public readonly Bound bound;
+        public readonly int leftIndex;
+        public readonly int middleIndex;
+        public readonly int rightIndex;
 
-        public KdNode(List<Triangle> triangles)
+        public int Id => mesh.Id;
+
+        public KdNode(Triangle[] triangles, int id)
         {
-            mesh = new TriangleMesh(triangles);
+            mesh = new TriangleMesh(triangles, id);
+            bound = mesh.BoundingBox;
+            leftIndex = -1;
+            middleIndex = -1;
+            rightIndex = -1;
         }
 
-        public bool Intersect(Ray ray, out Surfel surfel)
+        public KdNode(in Triangle[] triangles, int leftIndex, int middleIndex, int rightIndex)
         {
-            if (children.Count == 0 && mesh.triangles.Count == 0)
-            {
-                surfel = null;
-                return false;
-            }
-            if (!mesh.BoundingBox.Intersect(ray, out surfel))
-            {
-                surfel = null;
-                return false;
-            }
-            return children.Count > 0 ? IntersectChildren(ray, out surfel) : mesh.Intersect(ray, out surfel);
+            mesh = new TriangleMesh();
+            bound = IntersectionHelper.CreateBound(triangles, -1);
+            this.leftIndex = leftIndex;
+            this.middleIndex = middleIndex;
+            this.rightIndex = rightIndex;
         }
 
-        private bool IntersectChildren(Ray ray, out Surfel surfel)
+        private KdNode(TriangleMesh mesh, Bound bound, int leftIndex, int middleIndex, int rightIndex)
         {
-            surfel = null;
-            var intersected = false;
-            foreach (var node in children)
+            this.mesh = mesh;
+            this.bound = bound;
+            this.leftIndex = leftIndex;
+            this.middleIndex = middleIndex;
+            this.rightIndex = rightIndex;
+        }
+
+        public void Intersect(in Ray ray, in KdNode[] nodes, ref RayHit best)
+        {
+            if (!bound.Check(in ray, out var t) || t > best.t)
             {
-                if (node.Intersect(ray, out var s))
-                {
-                    if (surfel == null || surfel.t > s.t)
-                    {
-                        intersected = true;
-                        surfel = s;
-                    }
-                }
+                return;
             }
-            return intersected;
+            if (leftIndex >= 0)
+            {
+                IntersectChildren(in ray, in nodes, ref best);
+            }
+            else
+            {
+                mesh.Intersect(in ray, ref best);
+            }
+        }
+
+        private void IntersectChildren(in Ray ray, in KdNode[] nodes, ref RayHit best)
+        {
+            nodes[rightIndex].Intersect(in ray, in nodes, ref best);
+            nodes[middleIndex].Intersect(in ray, in nodes, ref best);
+            nodes[leftIndex].Intersect(in ray, in nodes, ref best);
+        }
+
+        public KdNode Copy(int leftIndex, int middleIndex, int rightIndex)
+        {
+            return new KdNode(mesh, bound, leftIndex, middleIndex, rightIndex);
         }
     }
 }
